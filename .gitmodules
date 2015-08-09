@@ -1,0 +1,3 @@
+[submodule "module/platgen"]
+	path = module/platgen
+	url = git@github.com:alesegdia/platgen.git
