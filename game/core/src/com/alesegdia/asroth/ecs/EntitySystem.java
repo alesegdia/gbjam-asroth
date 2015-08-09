@@ -15,7 +15,7 @@ public abstract class EntitySystem implements IEntityListener {
 	}
 	
 	public void setComponentsFamily(Class<? extends Component>... componentClasses) {
-		familyBits = new BitSet(32);
+		familyBits = new BitSet(64);
 		for( Class<? extends Component> c : componentClasses ) {
 			familyBits.set(ComponentType.getIndexFor(c));
 		}

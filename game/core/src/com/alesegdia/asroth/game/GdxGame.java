@@ -58,7 +58,7 @@ public class GdxGame extends ApplicationAdapter {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, (w / h) * 320, 320);
 		camera.update();
-		camera.zoom = 0.50f;
+		camera.zoom = 1.f;
 		//camera.zoom = 4f;
 
 		font = new BitmapFont();
@@ -80,7 +80,7 @@ public class GdxGame extends ApplicationAdapter {
 		gp.getLogicMap().regionTree.visit(mpbv);
 
 		sprBatch = new SpriteBatch();
-		gameWorld = new GameWorld(physics, sprBatch);
+		gameWorld = new GameWorld(physics, sprBatch, camera);
 	}
 	
 	@Override
@@ -106,19 +106,6 @@ public class GdxGame extends ApplicationAdapter {
 		batch.begin();
 		font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
 		batch.end();
-		int dx = 0; int dy = 0;
-		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			dx = -1;
-		} else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			dx = 1;
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			dy = -1;
-		} else if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			dy = 1;
-		}
-		
-		camera.translate(new Vector2(dx*5*camera.zoom,dy*5*camera.zoom));
 		physics.render(camera);
 	}
 }

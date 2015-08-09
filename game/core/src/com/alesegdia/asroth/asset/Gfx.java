@@ -3,6 +3,7 @@ package com.alesegdia.asroth.asset;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import com.alesegdia.asroth.asset.Spritesheet;
@@ -24,6 +25,7 @@ public class Gfx {
 		
 		playerStand = new Animation(0.2f, playerTiles.get(0));
 		playerWalk = new Animation(0.2f, playerTiles.getRange(1, 3));
+		playerWalk.setPlayMode(PlayMode.LOOP);
 	}
 	
 }
