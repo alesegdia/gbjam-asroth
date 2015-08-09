@@ -1,5 +1,6 @@
-package com.alesegdia.asroth;
+package com.alesegdia.asroth.map;
 
+import com.alesegdia.asroth.game.Physics;
 import com.alesegdia.platgen.generator.IRegionTreeVisitor;
 import com.alesegdia.platgen.generator.RegionTree;
 import com.alesegdia.platgen.generator.Sector;

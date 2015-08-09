@@ -1,5 +1,8 @@
-package com.alesegdia.asroth;
+package com.alesegdia.asroth.game;
 
+import com.alesegdia.asroth.asset.Gfx;
+import com.alesegdia.asroth.map.MapPhysicsBuilderVisitor;
+import com.alesegdia.asroth.map.TiledTileMapConverter;
 import com.alesegdia.platgen.generator.ERegionGenerator;
 import com.alesegdia.platgen.generator.GeneratorPipeline;
 import com.alesegdia.platgen.generator.IRegionGenerator;
@@ -39,6 +42,9 @@ public class GdxGame extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
+		
+		Gfx.Initialize();
+		
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 

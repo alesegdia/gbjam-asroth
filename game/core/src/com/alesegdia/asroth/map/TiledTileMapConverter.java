@@ -1,5 +1,6 @@
-package com.alesegdia.asroth;
+package com.alesegdia.asroth.map;
 
+import com.alesegdia.asroth.asset.Gfx;
 import com.alesegdia.platgen.tilemap.TileMap;
 import com.alesegdia.platgen.tilemap.TileType;
 import com.alesegdia.platgen.util.RNG;
@@ -17,7 +18,6 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 public class TiledTileMapConverter {
 	
 	private AssetManager assetManager;
-	private Texture tiles;
 	private Texture texture;
 	private TiledMap map;
 	private TileMap tm;
@@ -35,9 +35,8 @@ public class TiledTileMapConverter {
 				tm.Get(currentTile.y+1, currentTile.x) == verB;
 	}
 
-	TiledMap process() {
-		tiles = new Texture(Gdx.files.internal("flyinGB_tiles.png"));
-		TextureRegion[][] splitTiles = TextureRegion.split(tiles, 10, 10);
+	public TiledMap process() {
+		TextureRegion[][] splitTiles = TextureRegion.split(Gfx.mapTiles, 10, 10);
 		map = new TiledMap();
 		MapLayers layers = map.getLayers();
 		RNG rng = new RNG();
