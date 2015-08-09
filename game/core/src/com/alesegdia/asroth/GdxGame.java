@@ -46,7 +46,7 @@ public class GdxGame extends ApplicationAdapter {
 		camera.setToOrtho(false, (w / h) * 320, 320);
 		camera.update();
 		//camera.zoom = 0.50f;
-		camera.zoom = 5f;
+		camera.zoom = 4f;
 
 		font = new BitmapFont();
 		batch = new SpriteBatch();
@@ -62,7 +62,11 @@ public class GdxGame extends ApplicationAdapter {
 		renderer = new OrthogonalTiledMapRenderer(map);
 		
 		physics = new Physics();
-		player = physics.createCircleBody(0, 0, 10, true);
+		//player = physics.createCircleBody(0, 0, 10, true);
+		player = physics.createRectBody(0, 0, 10, 10, true);
+		
+		MapPhysicsBuilderVisitor mpbv = new MapPhysicsBuilderVisitor(physics);
+		gp.getLogicMap().regionTree.visit(mpbv);
 	}
 
 	@Override
@@ -91,7 +95,7 @@ public class GdxGame extends ApplicationAdapter {
 			dy = 1;
 		}
 		
-		camera.translate(new Vector2(dx*2*camera.zoom,dy*2*camera.zoom));
+		camera.translate(new Vector2(dx*5*camera.zoom,dy*5*camera.zoom));
 		physics.render(camera);
 	}
 }

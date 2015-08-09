@@ -42,7 +42,7 @@ public class Physics {
 		debugRenderer.render(world, cam.combined);
 	}
 	
-	Body createBody(int x, int y, boolean dynamic) {
+	Body createBody(float x, float y, boolean dynamic) {
 		BodyDef bodyDef = new BodyDef();
 		if( dynamic ) {
 			bodyDef.type = BodyType.DynamicBody;
@@ -62,7 +62,7 @@ public class Physics {
 		return body.createFixture(fd);
 	}
 	
-	public Body createCircleBody(int x, int y, float radius, boolean dynamic) {
+	public Body createCircleBody(float x, float y, float radius, boolean dynamic) {
 		Body b = createBody(x,y,dynamic);
 		CircleShape cs = new CircleShape();
 		cs.setRadius(radius);
@@ -71,7 +71,7 @@ public class Physics {
 		return b;
 	}
 	
-	public Body createRectBody(int x, int y, int w, int h, boolean dynamic) {
+	public Body createRectBody(float x, float y, float w, float h, boolean dynamic) {
 		Body b = createBody(x,y,dynamic);
 		PolygonShape ps = new PolygonShape();
 		ps.setAsBox(w, h);
