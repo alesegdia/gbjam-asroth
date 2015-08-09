@@ -7,25 +7,17 @@ import com.alesegdia.platgen.generator.RegionGeneratorBalanced;
 import com.alesegdia.platgen.generator.SectorCreatorVisitor;
 import com.alesegdia.platgen.generator.SectorGenerator;
 import com.alesegdia.platgen.tilemap.TileMap;
-import com.alesegdia.platgen.tilemap.TileMapRenderer;
-import com.alesegdia.platgen.tilemap.TileType;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public class GdxGame extends ApplicationAdapter {
@@ -35,9 +27,6 @@ public class GdxGame extends ApplicationAdapter {
 	private TiledMap map;
 	private TiledMapRenderer renderer;
 	private OrthographicCamera camera;
-	private AssetManager assetManager;
-	private Texture tiles;
-	private Texture texture;
 	private BitmapFont font;
 	private SpriteBatch batch;
 	
@@ -49,6 +38,7 @@ public class GdxGame extends ApplicationAdapter {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, (w / h) * 320, 320);
 		camera.update();
+		camera.zoom = 0.50f;
 
 		font = new BitmapFont();
 		batch = new SpriteBatch();
@@ -62,29 +52,8 @@ public class GdxGame extends ApplicationAdapter {
 		MapRasterizer mr = new MapRasterizer(lm);
 		TileMap tm = mr.raster();
 
-		tiles = new Texture(Gdx.files.internal("flyinGB_tiles.png"));
-		TextureRegion[][] splitTiles = TextureRegion.split(tiles, 10, 10);
-		map = new TiledMap();
-		MapLayers layers = map.getLayers();
-		for (int l = 0; l < 1; l++) {
-			TiledMapTileLayer layer = new TiledMapTileLayer(tm.cols, tm.rows, 10, 10);
-			for (int x = 0; x < tm.cols; x++) {
-				for (int y = 0; y < tm.rows; y++) {
-					int tt = tm.Get(y, x);
-					int ty = 0;
-					int tx = 0;
-					Cell cell = new Cell();
-					if( tt == TileType.WALL ) {
-						tx = 1; ty = 1;
-					} else {
-						tx = 0; ty = 0;
-					}
-					cell.setTile(new StaticTiledMapTile(splitTiles[ty][tx]));
-					layer.setCell(x, y, cell);
-				}
-			}
-			layers.add(layer);
-		}
+		TiledTileMapConverter ttmc = new TiledTileMapConverter(tm);
+		map = ttmc.process();
 		renderer = new OrthogonalTiledMapRenderer(map);		
 	}
 
