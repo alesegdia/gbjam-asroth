@@ -8,6 +8,7 @@ public abstract class EntitySystem implements IEntityListener {
 
 	private BitSet familyBits;
 	private List<Entity> entities = new LinkedList<Entity>();
+	public String name;
 	
 	public EntitySystem(Class<? extends Component>... componentClasses) {
 		setComponentsFamily(componentClasses);
@@ -43,7 +44,13 @@ public abstract class EntitySystem implements IEntityListener {
 	}
 	
 	public void process() {
-		
+		for( Entity e : entities ) {
+			process(e);
+		}
+	}
+
+	public void process(Entity e) {
+		// TODO Auto-generated method stub	
 	}
 	
 }

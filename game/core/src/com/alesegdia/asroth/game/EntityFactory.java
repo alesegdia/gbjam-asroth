@@ -1,6 +1,7 @@
-package com.alesegdia.asroth.ecs;
+package com.alesegdia.asroth.game;
 
 import com.alesegdia.asroth.asset.Gfx;
+import com.alesegdia.asroth.ecs.Entity;
 
 public class EntityFactory {
 

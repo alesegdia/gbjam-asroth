@@ -58,20 +58,13 @@ public class Test_ECS {
 		eng.addEntity(e2);
 		eng.addEntity(e3);
 		
-		try {
-			eng.step();
-			e1.isDead = true;
-			eng.step();
-			e4.isDead = true;
-			eng.step();
-			e2.isDead = true;
-			eng.step();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
+		eng.step();
+		e1.isDead = true;
+		eng.step();
+		e4.isDead = true;
+		eng.step();
+		e2.isDead = true;
+		eng.step();
 		
 	}
 

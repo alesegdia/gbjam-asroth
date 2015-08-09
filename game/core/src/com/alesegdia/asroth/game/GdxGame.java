@@ -1,8 +1,14 @@
 package com.alesegdia.asroth.game;
 
 import com.alesegdia.asroth.asset.Gfx;
+import com.alesegdia.asroth.components.PhysicsComponent;
+import com.alesegdia.asroth.ecs.Engine;
+import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.map.MapPhysicsBuilderVisitor;
 import com.alesegdia.asroth.map.TiledTileMapConverter;
+import com.alesegdia.asroth.systems.AnimationSystem;
+import com.alesegdia.asroth.systems.DrawingSystem;
+import com.alesegdia.asroth.systems.UpdatePhysicsSystem;
 import com.alesegdia.platgen.generator.ERegionGenerator;
 import com.alesegdia.platgen.generator.GeneratorPipeline;
 import com.alesegdia.platgen.generator.IRegionGenerator;
@@ -36,10 +42,11 @@ public class GdxGame extends ApplicationAdapter {
 	private OrthographicCamera camera;
 	private BitmapFont font;
 	private SpriteBatch batch;
+	private SpriteBatch sprBatch;
 	
 	Physics physics;
-	Body player;
-	
+	GameWorld gameWorld;
+
 	@Override
 	public void create () {
 		
@@ -51,8 +58,8 @@ public class GdxGame extends ApplicationAdapter {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, (w / h) * 320, 320);
 		camera.update();
-		//camera.zoom = 0.50f;
-		camera.zoom = 4f;
+		camera.zoom = 0.50f;
+		//camera.zoom = 4f;
 
 		font = new BitmapFont();
 		batch = new SpriteBatch();
@@ -68,24 +75,34 @@ public class GdxGame extends ApplicationAdapter {
 		renderer = new OrthogonalTiledMapRenderer(map);
 		
 		physics = new Physics();
-		//player = physics.createCircleBody(0, 0, 10, true);
-		player = physics.createRectBody(0, 0, 10, 10, true);
 		
 		MapPhysicsBuilderVisitor mpbv = new MapPhysicsBuilderVisitor(physics);
 		gp.getLogicMap().regionTree.visit(mpbv);
-	}
 
+		sprBatch = new SpriteBatch();
+		gameWorld = new GameWorld(physics, sprBatch);
+	}
+	
 	@Override
 	public void render () {
 		
 		float dt = Gdx.graphics.getRawDeltaTime();
 		physics.step(dt);
+
+		gameWorld.step();
 		
 		Gdx.gl.glClearColor(100f / 255f, 100f / 255f, 250f / 255f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();
 		renderer.setView(camera);
 		renderer.render();
+
+		sprBatch.setProjectionMatrix(camera.combined);
+		sprBatch.begin();
+		gameWorld.render();
+		sprBatch.end();
+
+		
 		batch.begin();
 		font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
 		batch.end();

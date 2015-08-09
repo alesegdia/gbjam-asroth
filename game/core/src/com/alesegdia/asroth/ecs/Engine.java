@@ -8,6 +8,8 @@ public class Engine {
 
 	List<EntitySystem> systems = new ArrayList<EntitySystem>();
 	List<Entity> entities = new LinkedList<Entity>();
+	private List<EntitySystem> renderingSystems = new ArrayList<EntitySystem>();
+	private List<EntitySystem> stepSystems = new ArrayList<EntitySystem>();
 	
 	public void addEntity(Entity e) {
 		entities.add(e);
@@ -16,12 +18,17 @@ public class Engine {
 		}
 	}
 	
-	public void step() throws InterruptedException {
-		System.out.println("engine step!");
-		for( EntitySystem es : systems ) {
+	public void step() {
+		for( EntitySystem es : stepSystems ) {
 			es.process();
 		}
 		cleanupEntities();
+	}
+	
+	public void render() {
+		for( EntitySystem es : renderingSystems ) {
+			es.process();
+		}
 	}
 	
 	void cleanupEntities() {
@@ -41,8 +48,18 @@ public class Engine {
 	}
 	
 	public void addSystem(EntitySystem es) {
+		addSystem(es, false);
+	}
+	
+	public void addSystem(EntitySystem es, boolean rendering) {
 		for( Entity e : entities ) {
 			es.entityAdded(e);
+		}
+		if( rendering ) {
+			System.out.println("adding to rendersys");
+			renderingSystems.add(es);
+		} else {
+			stepSystems.add(es);
 		}
 		systems.add(es);
 	}
