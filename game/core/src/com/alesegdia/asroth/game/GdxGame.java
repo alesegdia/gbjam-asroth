@@ -1,27 +1,14 @@
 package com.alesegdia.asroth.game;
 
 import com.alesegdia.asroth.asset.Gfx;
-import com.alesegdia.asroth.components.PhysicsComponent;
-import com.alesegdia.asroth.ecs.Engine;
-import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.map.MapPhysicsBuilderVisitor;
 import com.alesegdia.asroth.map.TiledTileMapConverter;
-import com.alesegdia.asroth.systems.AnimationSystem;
-import com.alesegdia.asroth.systems.DrawingSystem;
-import com.alesegdia.asroth.systems.UpdatePhysicsSystem;
 import com.alesegdia.platgen.generator.ERegionGenerator;
 import com.alesegdia.platgen.generator.GeneratorPipeline;
-import com.alesegdia.platgen.generator.IRegionGenerator;
-import com.alesegdia.platgen.generator.LogicMap;
-import com.alesegdia.platgen.generator.MapRasterizer;
-import com.alesegdia.platgen.generator.RegionGeneratorBalanced;
-import com.alesegdia.platgen.generator.SectorCreatorVisitor;
-import com.alesegdia.platgen.generator.SectorGenerator;
 import com.alesegdia.platgen.tilemap.TileMap;
 import com.alesegdia.platgen.util.Vec2;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -29,8 +16,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public class GdxGame extends ApplicationAdapter {
