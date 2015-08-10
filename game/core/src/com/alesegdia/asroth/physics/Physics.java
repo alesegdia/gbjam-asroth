@@ -24,6 +24,7 @@ public class Physics {
 	
 	public Physics() {
 		world = new World(new Vector2(0, -10), false);
+		world.setContactListener(new GameContactListener());
 		debugRenderer = new Box2DDebugRenderer();
 	}
 	
