@@ -9,11 +9,14 @@ import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.PositionComponent;
 import com.alesegdia.asroth.ecs.Engine;
 import com.alesegdia.asroth.ecs.Entity;
+import com.alesegdia.asroth.physics.Physics;
 import com.alesegdia.asroth.systems.AnimationSystem;
 import com.alesegdia.asroth.systems.DrawingSystem;
 import com.alesegdia.asroth.systems.HumanControllerSystem;
 import com.alesegdia.asroth.systems.MovementSystem;
 import com.alesegdia.asroth.systems.UpdatePhysicsSystem;
+import com.alesegdia.platgen.tilemap.TileMap;
+import com.alesegdia.platgen.tilemap.TileType;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -23,7 +26,7 @@ public class GameWorld {
 	private Physics physics;
 	private Camera cam;
 	
-	public GameWorld( Physics physics, SpriteBatch batch, Camera cam ) {
+	public GameWorld( Physics physics, SpriteBatch batch, Camera cam, TileMap tm ) {
 		this.physics = physics;
 		this.cam = cam;
 		engine = new Engine();
@@ -32,15 +35,31 @@ public class GameWorld {
 		engine.addSystem(new HumanControllerSystem());
 		engine.addSystem(new MovementSystem());
 		engine.addSystem(new DrawingSystem(batch), true);
-		makePlayer();
+		
+		int x = -1;
+		int y = -1;
+		for( int i = 0; i < tm.cols; i++ ) {
+			for( int j = tm.rows-1; j >= 0; j-- ) {
+				int tt = tm.Get(j, i);
+				if( tt == TileType.WALL ) {
+					x = i+3;
+					y = j+1;
+					break;
+				}
+			}
+			if( x != -1 ) break;
+		}
+		System.out.println(x);
+		System.out.println(y);
+		makePlayer(x*10, y*10);
 	}
 	
 	PositionComponent playerPositionComponent;
 	
-	public void makePlayer() {
+	public void makePlayer(int x, int y) {
 		Entity player = new Entity();
 		PhysicsComponent pc = (PhysicsComponent) player.addComponent(new PhysicsComponent());
-		pc.body = physics.createCircleBody(50, 1000, 10, true);
+		pc.body = physics.createPlayerBody(x, y);
 		GraphicsComponent gc = (GraphicsComponent) player.addComponent(new GraphicsComponent());
 		gc.drawElement = Gfx.playerTiles.get(0);
 		playerPositionComponent = (PositionComponent) player.addComponent(new PositionComponent());
@@ -49,13 +68,16 @@ public class GameWorld {
 		ac.currentAnim = Gfx.playerWalk;
 		player.addComponent(new PlayerComponent());
 		LinearVelocityComponent lvc = (LinearVelocityComponent) player.addComponent(new LinearVelocityComponent());		
-		lvc.speed.set(20,20);
+		lvc.speed.set(5,5);
 		engine.addEntity(player);
 	}
 	
-	public void step() {
+	public void setCam() {
 		cam.position.x = playerPositionComponent.position.x;
 		cam.position.y = playerPositionComponent.position.y;
+	}
+	
+	public void step() {
 		engine.step();
 	}
 	

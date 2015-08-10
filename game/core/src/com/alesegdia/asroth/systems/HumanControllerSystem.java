@@ -30,6 +30,7 @@ public class HumanControllerSystem extends EntitySystem {
 		} else if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
 			dy = 1;
 		}
+
 		lvc.linearVelocity.x = dx * 5;
 		lvc.linearVelocity.y = dy * 5;
 		

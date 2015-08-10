@@ -3,9 +3,11 @@ package com.alesegdia.asroth.game;
 import com.alesegdia.asroth.asset.Gfx;
 import com.alesegdia.asroth.map.MapPhysicsBuilderVisitor;
 import com.alesegdia.asroth.map.TiledTileMapConverter;
+import com.alesegdia.asroth.physics.Physics;
 import com.alesegdia.platgen.generator.ERegionGenerator;
 import com.alesegdia.platgen.generator.GeneratorPipeline;
 import com.alesegdia.platgen.tilemap.TileMap;
+import com.alesegdia.platgen.tilemap.TileType;
 import com.alesegdia.platgen.util.Vec2;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -43,8 +45,7 @@ public class GdxGame extends ApplicationAdapter {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, (w / h) * 320, 320);
 		camera.update();
-		camera.zoom = 1.f;
-		//camera.zoom = 4f;
+		camera.zoom = 0.25f;
 
 		font = new BitmapFont();
 		batch = new SpriteBatch();
@@ -65,19 +66,19 @@ public class GdxGame extends ApplicationAdapter {
 		gp.getLogicMap().regionTree.visit(mpbv);
 
 		sprBatch = new SpriteBatch();
-		gameWorld = new GameWorld(physics, sprBatch, camera);
+		gameWorld = new GameWorld(physics, sprBatch, camera, tm);
 	}
 	
 	@Override
 	public void render () {
 		
 		float dt = Gdx.graphics.getRawDeltaTime();
-		physics.step(dt);
-
 		gameWorld.step();
+		physics.step(dt);
 		
 		Gdx.gl.glClearColor(100f / 255f, 100f / 255f, 250f / 255f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		gameWorld.setCam();
 		camera.update();
 		renderer.setView(camera);
 		renderer.render();
@@ -86,7 +87,6 @@ public class GdxGame extends ApplicationAdapter {
 		sprBatch.begin();
 		gameWorld.render();
 		sprBatch.end();
-
 		
 		batch.begin();
 		font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);

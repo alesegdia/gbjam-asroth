@@ -16,6 +16,9 @@ public class UpdatePhysicsSystem extends EntitySystem {
 		PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
 		PositionComponent posc = (PositionComponent) e.getComponent(PositionComponent.class);
 		posc.position.set(pc.body.getPosition());
+		posc.position.x = Math.round(posc.position.x);
+		posc.position.y = Math.round(posc.position.y);
+		
 	}
 	
 }

@@ -1,6 +1,7 @@
 package com.alesegdia.asroth.map;
 
-import com.alesegdia.asroth.game.Physics;
+import com.alesegdia.asroth.physics.CollisionLayers;
+import com.alesegdia.asroth.physics.Physics;
 import com.alesegdia.platgen.generator.IRegionTreeVisitor;
 import com.alesegdia.platgen.generator.RegionTree;
 import com.alesegdia.platgen.generator.Sector;
@@ -21,7 +22,8 @@ public class MapPhysicsBuilderVisitor implements IRegionTreeVisitor {
 				float x = s.position.x * 10 + w;
 				float h = s.size.y * 5;
 				float y = (s.position.y + s.height - s.region.position.y) * 10 + h;
-				physics.createRectBody(x, y, w, h, false);
+				physics.createRectBody(x, y, w, h,
+						CollisionLayers.CATEGORY_MAP, CollisionLayers.MASK_MAP, false);
 			}
 		}
 	}
