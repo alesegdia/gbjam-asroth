@@ -22,8 +22,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public class GdxGame extends ApplicationAdapter {
 
-	Texture img;
-	
 	private TiledMap map;
 	private TiledMapRenderer renderer;
 	private OrthographicCamera camera;
@@ -39,13 +37,10 @@ public class GdxGame extends ApplicationAdapter {
 		
 		Gfx.Initialize();
 		
-		float w = Gdx.graphics.getWidth();
-		float h = Gdx.graphics.getHeight();
-
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, (w / h) * 320, 320);
+		camera.setToOrtho(false, GameConfig.VIEWPORT_WIDTH, GameConfig.VIEWPORT_HEIGHT);
 		camera.update();
-		camera.zoom = 0.25f;
+		camera.zoom = 1f;
 
 		font = new BitmapFont();
 		batch = new SpriteBatch();
@@ -58,7 +53,7 @@ public class GdxGame extends ApplicationAdapter {
 
 		TiledTileMapConverter ttmc = new TiledTileMapConverter(tm);
 		map = ttmc.process();
-		renderer = new OrthogonalTiledMapRenderer(map);
+		renderer = new OrthogonalTiledMapRenderer(map, GameConfig.PIXELS_TO_METERS);
 		
 		physics = new Physics();
 		
@@ -67,6 +62,7 @@ public class GdxGame extends ApplicationAdapter {
 
 		sprBatch = new SpriteBatch();
 		gameWorld = new GameWorld(physics, sprBatch, camera, tm);
+		
 	}
 	
 	@Override

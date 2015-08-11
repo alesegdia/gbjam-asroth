@@ -7,6 +7,7 @@ import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
 
 public class HumanControllerSystem extends EntitySystem {
 
@@ -20,6 +21,7 @@ public class HumanControllerSystem extends EntitySystem {
 		LinearVelocityComponent lvc = (LinearVelocityComponent) e.getComponent(LinearVelocityComponent.class);
 		
 		int dx = 0; int dy = 0;
+		float prevYlinear = phc.body.getLinearVelocity().y;
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			dx = -1;
 		} else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
@@ -31,8 +33,13 @@ public class HumanControllerSystem extends EntitySystem {
 			dy = 1;
 		}
 
+		if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+			System.out.println("BLEH!");
+			//lvc.linearVelocity.y = 10;
+			//phc.body.applyForce(new Vector2(0,50), new Vector2(0,0), true);
+		}
 		lvc.linearVelocity.x = dx * 5;
-		lvc.linearVelocity.y = dy * 5;
+		//lvc.linearVelocity.y = prevYlinear;
 		
 	}
 	

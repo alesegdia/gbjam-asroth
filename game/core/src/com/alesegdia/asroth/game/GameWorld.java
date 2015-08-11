@@ -18,6 +18,7 @@ import com.alesegdia.asroth.systems.UpdatePhysicsSystem;
 import com.alesegdia.platgen.tilemap.TileMap;
 import com.alesegdia.platgen.tilemap.TileType;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameWorld {
@@ -62,19 +63,23 @@ public class GameWorld {
 		pc.body = physics.createPlayerBody(x, y);
 		GraphicsComponent gc = (GraphicsComponent) player.addComponent(new GraphicsComponent());
 		gc.drawElement = Gfx.playerTiles.get(0);
+		gc.sprite = new Sprite(gc.drawElement);
 		playerPositionComponent = (PositionComponent) player.addComponent(new PositionComponent());
 		playerPositionComponent.position = pc.body.getPosition();
+		playerPositionComponent.offset.x = -11;
+		playerPositionComponent.offset.y = -11 + GameConfig.PIXELS_TO_METERS;
+		
 		AnimationComponent ac = (AnimationComponent) player.addComponent(new AnimationComponent());
 		ac.currentAnim = Gfx.playerWalk;
 		player.addComponent(new PlayerComponent());
 		LinearVelocityComponent lvc = (LinearVelocityComponent) player.addComponent(new LinearVelocityComponent());		
-		lvc.speed.set(5,5);
+		lvc.speed.set(0.25f,0.25f);
 		engine.addEntity(player);
 	}
 	
 	public void setCam() {
-		cam.position.x = playerPositionComponent.position.x;
-		cam.position.y = playerPositionComponent.position.y;
+		cam.position.x = playerPositionComponent.position.x - playerPositionComponent.offset.x;
+		cam.position.y = playerPositionComponent.position.y - playerPositionComponent.offset.y;
 	}
 	
 	public void step() {

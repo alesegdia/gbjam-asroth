@@ -4,6 +4,7 @@ import com.alesegdia.asroth.components.AnimationComponent;
 import com.alesegdia.asroth.components.GraphicsComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
+import com.alesegdia.asroth.game.GameConfig;
 import com.badlogic.gdx.Gdx;
 
 public class AnimationSystem extends EntitySystem {
@@ -18,6 +19,7 @@ public class AnimationSystem extends EntitySystem {
 		GraphicsComponent gc = (GraphicsComponent) e.getComponent(GraphicsComponent.class);
 		ac.currentTime += Gdx.graphics.getDeltaTime();
 		gc.drawElement = ac.currentAnim.getKeyFrame(ac.currentTime, true);
+		gc.sprite.setRegion(gc.drawElement);
 	}
 	
 }

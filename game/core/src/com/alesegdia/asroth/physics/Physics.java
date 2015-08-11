@@ -1,5 +1,6 @@
 package com.alesegdia.asroth.physics;
 
+import com.alesegdia.asroth.game.GameConfig;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -19,24 +20,23 @@ public class Physics {
 	Box2DDebugRenderer debugRenderer;
 	private float accumulator = 0;
 	private static final float TIME_STEP = 1/60.f;
-	private static final int VELOCITY_ITERATIONS = 600;
-	private static final int POSITION_ITERATIONS = 200;
+	private static final int VELOCITY_ITERATIONS = 6000;
+	private static final int POSITION_ITERATIONS = 2000;
 	
 	public Physics() {
-		world = new World(new Vector2(0, -10), false);
+		world = new World(new Vector2(0, -10f), false);
 		world.setContactListener(new GameContactListener());
 		debugRenderer = new Box2DDebugRenderer();
 	}
 	
 	public void step(float deltaTime) {
-		/*
+
 	    accumulator += deltaTime;
 	    while (accumulator >= TIME_STEP) {
 	        world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 	        accumulator -= TIME_STEP;
 	    }
-	    */
-		world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+	    //world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 	}
 	
 	public void render(Camera cam) {
@@ -66,10 +66,11 @@ public class Physics {
 	}
 	
 	public Body createCircleBody(float x, float y, float radius, short catbits, short maskbits, boolean dynamic) {
-		Body b = createBody(x,y,dynamic);
+		Body b = createBody(x * GameConfig.PIXELS_TO_METERS, y* GameConfig.PIXELS_TO_METERS,dynamic);
 		CircleShape cs = new CircleShape();
-		cs.setRadius(radius);
-		createFixture(b, cs, catbits, maskbits, 0.5f, 0.4f, 0.0f);
+		cs.setRadius(radius * GameConfig.PIXELS_TO_METERS);
+		System.out.println("PLAYERBODY");
+		createFixture(b, cs, catbits, maskbits, 0.1f, 0f, 0f);
 		cs.dispose();
 		return b;
 	}
@@ -88,7 +89,7 @@ public class Physics {
 	}
 
 	public Body createPlayerBody(float x, float y) {
-		return createCircleBody(x, y, 10, CollisionLayers.CATEGORY_PLAYER, CollisionLayers.MASK_PLAYER, true);
+		return createCircleBody(x, y, 7, CollisionLayers.CATEGORY_PLAYER, CollisionLayers.MASK_PLAYER, true);
 	}
 
 }

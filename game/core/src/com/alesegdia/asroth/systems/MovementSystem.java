@@ -16,7 +16,7 @@ public class MovementSystem extends EntitySystem {
 	public void process(Entity e) {
 		LinearVelocityComponent lvc = (LinearVelocityComponent) e.getComponent(LinearVelocityComponent.class);
 		PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
-		pc.body.setLinearVelocity(lvc.linearVelocity.x * lvc.speed.x, lvc.linearVelocity.y * lvc.speed.y);
+		pc.body.setLinearVelocity(lvc.linearVelocity.x * lvc.speed.x, pc.body.getLinearVelocity().y);
 	}
 	
 }
