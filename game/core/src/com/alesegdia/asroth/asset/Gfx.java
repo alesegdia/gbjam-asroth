@@ -15,6 +15,11 @@ public class Gfx {
 	
 	public static Animation playerStand;
 	public static Animation playerWalk;
+	public static Animation playerFly;
+	
+	public static Animation playerJumpUp;
+	public static Animation playerJumpDown;
+	
 	
 	public static void Initialize() {
 		mapTiles = new Texture(Gdx.files.internal("flyinGB_tiles.png"));
@@ -26,6 +31,10 @@ public class Gfx {
 		playerStand = new Animation(0.2f, playerTiles.get(0));
 		playerWalk = new Animation(0.2f, playerTiles.getRange(1, 3));
 		playerWalk.setPlayMode(PlayMode.LOOP);
+		playerFly = new Animation(0.15f, playerTiles.getRange(6, 8));
+		playerJumpUp = new Animation(0.2f, playerTiles.get(7));
+		playerJumpDown = new Animation(0.2f, playerTiles.get(8));
+		
 	}
 	
 }

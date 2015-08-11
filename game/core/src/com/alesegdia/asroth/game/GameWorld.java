@@ -12,6 +12,7 @@ import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.physics.Physics;
 import com.alesegdia.asroth.systems.AnimationSystem;
 import com.alesegdia.asroth.systems.DrawingSystem;
+import com.alesegdia.asroth.systems.FlipSystem;
 import com.alesegdia.asroth.systems.HumanControllerSystem;
 import com.alesegdia.asroth.systems.MovementSystem;
 import com.alesegdia.asroth.systems.UpdatePhysicsSystem;
@@ -35,6 +36,7 @@ public class GameWorld {
 		engine.addSystem(new UpdatePhysicsSystem());
 		engine.addSystem(new HumanControllerSystem());
 		engine.addSystem(new MovementSystem());
+		engine.addSystem(new FlipSystem());
 		engine.addSystem(new DrawingSystem(batch), true);
 		
 		int x = -1;
@@ -61,6 +63,7 @@ public class GameWorld {
 		Entity player = new Entity();
 		PhysicsComponent pc = (PhysicsComponent) player.addComponent(new PhysicsComponent());
 		pc.body = physics.createPlayerBody(x, y);
+		pc.body.setUserData(player);
 		GraphicsComponent gc = (GraphicsComponent) player.addComponent(new GraphicsComponent());
 		gc.drawElement = Gfx.playerTiles.get(0);
 		gc.sprite = new Sprite(gc.drawElement);
@@ -73,7 +76,9 @@ public class GameWorld {
 		ac.currentAnim = Gfx.playerWalk;
 		player.addComponent(new PlayerComponent());
 		LinearVelocityComponent lvc = (LinearVelocityComponent) player.addComponent(new LinearVelocityComponent());		
-		lvc.speed.set(0.25f,0.25f);
+		lvc.speed.set(0.5f,0.25f);
+		lvc.cap.y = 2;
+		lvc.doCap[1] = true;
 		engine.addEntity(player);
 	}
 	

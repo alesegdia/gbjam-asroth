@@ -4,6 +4,7 @@ import com.alesegdia.asroth.asset.Gfx;
 import com.alesegdia.asroth.map.MapPhysicsBuilderVisitor;
 import com.alesegdia.asroth.map.TiledTileMapConverter;
 import com.alesegdia.asroth.physics.Physics;
+import com.alesegdia.platgen.generator.Config;
 import com.alesegdia.platgen.generator.ERegionGenerator;
 import com.alesegdia.platgen.generator.GeneratorPipeline;
 import com.alesegdia.platgen.tilemap.TileMap;
@@ -45,7 +46,7 @@ public class GdxGame extends ApplicationAdapter {
 		font = new BitmapFont();
 		batch = new SpriteBatch();
 
-		GeneratorPipeline.Config cfg = new GeneratorPipeline.Config();
+		Config cfg = new Config();
 		cfg.mapSize = new Vec2(400,200);
 		cfg.regionGeneratorType = ERegionGenerator.BALANCED;
 		GeneratorPipeline gp = new GeneratorPipeline();

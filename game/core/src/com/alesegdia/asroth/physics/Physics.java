@@ -70,7 +70,7 @@ public class Physics {
 		CircleShape cs = new CircleShape();
 		cs.setRadius(radius * GameConfig.PIXELS_TO_METERS);
 		System.out.println("PLAYERBODY");
-		createFixture(b, cs, catbits, maskbits, 0.1f, 0f, 0f);
+		createFixture(b, cs, catbits, maskbits, 1f, 0f, 0f);
 		cs.dispose();
 		return b;
 	}

@@ -23,6 +23,8 @@ public class DrawingSystem extends EntitySystem {
 
 		gc.sprite.setScale(GameConfig.PIXELS_TO_METERS);
 		gc.sprite.setPosition(pc.position.x, pc.position.y);
+
+		gc.sprite.flip(gc.flipX, false);
 		gc.sprite.draw(spriteBatch);
 	}
 	

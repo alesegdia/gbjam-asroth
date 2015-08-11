@@ -3,6 +3,9 @@ package com.alesegdia.asroth.physics;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alesegdia.asroth.components.PhysicsComponent;
+import com.alesegdia.asroth.components.PlayerComponent;
+import com.alesegdia.asroth.ecs.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -30,12 +33,22 @@ public class GameContactListener implements ContactListener {
 			
 			@Override
 			public void startCollision(Body player, Body map, Vector2 normal) {
-				System.out.println("START PLAYER MAP! normal: " + normal);
+				System.out.println("START PLAYER MAP! normal: " + normal.y);
+				if( normal.y == 1 ) {
+					Entity e = (Entity) player.getUserData();
+					PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
+					PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
+					plc.flying = false;
+					plc.jumping = false;
+					pc.grounded = true;
+				}
 			}
 
 			@Override
 			public void endCollision(Body player, Body map) {
-				
+				Entity e = (Entity) player.getUserData();
+				PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
+				pc.grounded = false;
 			}
 		});
 	}
@@ -91,7 +104,7 @@ public class GameContactListener implements ContactListener {
 		if( CheckCollision(cb1, cb2, icb.B1_CATEGORY, icb.B2_CATEGORY) ) {
 			icb.endCollision(b1, b2);
 			return true;
-		} else if( CheckCollision(cb2, cb2, icb.B1_CATEGORY, icb.B2_CATEGORY) ) {
+		} else if( CheckCollision(cb2, cb1, icb.B1_CATEGORY, icb.B2_CATEGORY) ) {
 			icb.endCollision(b2, b1);
 			return true;
 		}
