@@ -3,6 +3,9 @@
 .*.swp
 .DS_STORE
 
+.classpath
+*.log
+
 .gradle/
 build/
 bin/
