@@ -30,7 +30,7 @@ public abstract class EntitySystem implements IEntityListener {
 	@Override
 	public void entityAdded(Entity e) {
 		if( checkEntityBits(e) ) {
-			System.out.println("adding entity " + e + " from " + this);
+			//System.out.println("adding entity " + e + " from " + this);
 			entities.add(e);
 		}
 	}
@@ -38,7 +38,7 @@ public abstract class EntitySystem implements IEntityListener {
 	@Override
 	public void entityRemoved(Entity e) {
 		if( checkEntityBits(e) ) {
-			System.out.println("removing entity " + e + " from " + this);
+			//System.out.println("removing entity " + e + " from " + this);
 			entities.remove(e);
 		}
 	}
