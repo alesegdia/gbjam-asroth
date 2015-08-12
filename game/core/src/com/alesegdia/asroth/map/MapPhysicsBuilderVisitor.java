@@ -3,9 +3,9 @@ package com.alesegdia.asroth.map;
 import com.alesegdia.asroth.game.GameConfig;
 import com.alesegdia.asroth.physics.CollisionLayers;
 import com.alesegdia.asroth.physics.Physics;
-import com.alesegdia.platgen.generator.IRegionTreeVisitor;
-import com.alesegdia.platgen.generator.RegionTree;
-import com.alesegdia.platgen.generator.Sector;
+import com.alesegdia.platgen.region.IRegionTreeVisitor;
+import com.alesegdia.platgen.region.RegionTree;
+import com.alesegdia.platgen.sector.Sector;
 
 public class MapPhysicsBuilderVisitor implements IRegionTreeVisitor {
 

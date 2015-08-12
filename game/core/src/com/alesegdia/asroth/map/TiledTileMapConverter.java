@@ -1,8 +1,8 @@
 package com.alesegdia.asroth.map;
 
 import com.alesegdia.asroth.asset.Gfx;
-import com.alesegdia.platgen.tilemap.TileMap;
-import com.alesegdia.platgen.tilemap.TileType;
+import com.alesegdia.platgen.map.TileMap;
+import com.alesegdia.platgen.map.TileType;
 import com.alesegdia.platgen.util.RNG;
 import com.alesegdia.platgen.util.Vec2;
 import com.badlogic.gdx.Gdx;
@@ -36,7 +36,7 @@ public class TiledTileMapConverter {
 	}
 
 	public TiledMap process() {
-		TextureRegion[][] splitTiles = TextureRegion.split(Gfx.mapTiles, 10, 10);
+		TextureRegion[][] splitTiles = TextureRegion.split(Gfx.mapTilesTexture, 10, 10);
 		map = new TiledMap();
 		MapLayers layers = map.getLayers();
 		RNG rng = new RNG();
@@ -76,6 +76,8 @@ public class TiledTileMapConverter {
 								tx = 0; ty = 0;
 							}
 						}
+					} else if( tt == TileType.ONEWAYPLATFORM ) {
+						tx = 3; ty = 5;
 					} else {
 						if( tm.Get(y-1, x) == TileType.WALL ) {
 							tx = 2; ty = 0;
