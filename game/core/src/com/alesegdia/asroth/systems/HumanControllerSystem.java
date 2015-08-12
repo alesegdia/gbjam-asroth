@@ -3,10 +3,13 @@ package com.alesegdia.asroth.systems;
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
+import com.alesegdia.asroth.components.PositionComponent;
 import com.alesegdia.asroth.asset.Gfx;
 import com.alesegdia.asroth.components.AnimationComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
+import com.alesegdia.asroth.game.GameConfig;
+import com.alesegdia.asroth.game.GameWorld;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
@@ -25,6 +28,21 @@ public class HumanControllerSystem extends EntitySystem {
 		AnimationComponent ac = (AnimationComponent) e.getComponent(AnimationComponent.class);
 		PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
 		
+		if( plc.justLandedMashing ) {
+			GameWorld.instance.makeGroundExplosion(1, 1);
+			PositionComponent posc = (PositionComponent) e.getComponent(PositionComponent.class);
+			float x, y;
+			x = posc.position.x + 11;
+			y = posc.position.y + 11 - 3 * GameConfig.PIXELS_TO_METERS;
+			GameWorld.instance.makeGroundExplosion(x-0.6f, y);
+			GameWorld.instance.makeGroundExplosion(x-1.1f, y);
+			GameWorld.instance.makeGroundExplosion(x-1.6f, y);
+			GameWorld.instance.makeGroundExplosion(x+0.6f, y);
+			GameWorld.instance.makeGroundExplosion(x+1.1f, y);
+			GameWorld.instance.makeGroundExplosion(x+1.6f, y);
+			plc.justLandedMashing = false;
+		}
+		
 		if( phc.grounded ){
 			if( Math.abs(phc.body.getLinearVelocity().x) > 0 ) {
 				ac.currentAnim = Gfx.playerWalk;
@@ -38,10 +56,10 @@ public class HumanControllerSystem extends EntitySystem {
 				} else {
 					ac.currentAnim = Gfx.playerJumpDown;
 				}
-			}
-			
-			if( plc.flying ) {
+			} else if( plc.flying ) {
 				ac.currentAnim = Gfx.playerFly;
+			} else if( plc.mashing ) {
+				ac.currentAnim = Gfx.playerMashDown;
 			}
 		}
 
@@ -52,8 +70,11 @@ public class HumanControllerSystem extends EntitySystem {
 		} else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 			dx = 1;
 		}
-		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			dy = -1;
+		if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+
+			plc.mashing = true;
+			plc.flying = false;
+			plc.jumping = false;
 		} else if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
 			dy = 1;
 		}
@@ -61,13 +82,27 @@ public class HumanControllerSystem extends EntitySystem {
 		if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 			if( phc.grounded ) {
 				plc.jumping = true;
+				plc.flying = false;
+				plc.mashing = false;
+
 				lvc.doCap[1] = false;
 			} else {
 				plc.flying = true;
+				plc.jumping = false;
+				plc.mashing = false;
 				lvc.doCap[1] = true;
 			}
-			prevYlinear = 5;
+			prevYlinear = 6;
 			//phc.body.applyForce(new Vector2(0,50), new Vector2(0,0), true);
+		}
+		
+		if( plc.mashing ) {
+			prevYlinear = -15;
+			lvc.doCap[1] = true;
+			lvc.cap.y = 15;
+		} else if( plc.flying ) {
+			lvc.doCap[1] = true;
+			lvc.cap.y = 2;
 		}
 		lvc.linearVelocity.x = dx * 5 * lvc.speed.x;
 		lvc.linearVelocity.y = prevYlinear;

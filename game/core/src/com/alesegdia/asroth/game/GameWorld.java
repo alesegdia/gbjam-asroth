@@ -2,6 +2,7 @@ package com.alesegdia.asroth.game;
 
 import com.alesegdia.asroth.asset.Gfx;
 import com.alesegdia.asroth.components.AnimationComponent;
+import com.alesegdia.asroth.components.CountdownDestructionComponent;
 import com.alesegdia.asroth.components.GraphicsComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
@@ -11,18 +12,22 @@ import com.alesegdia.asroth.ecs.Engine;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.physics.Physics;
 import com.alesegdia.asroth.systems.AnimationSystem;
+import com.alesegdia.asroth.systems.CountdownDestructionSystem;
 import com.alesegdia.asroth.systems.DrawingSystem;
 import com.alesegdia.asroth.systems.FlipSystem;
 import com.alesegdia.asroth.systems.HumanControllerSystem;
 import com.alesegdia.asroth.systems.MovementSystem;
 import com.alesegdia.asroth.systems.UpdatePhysicsSystem;
-import com.alesegdia.platgen.tilemap.TileMap;
-import com.alesegdia.platgen.tilemap.TileType;
+import com.alesegdia.platgen.map.TileMap;
+import com.alesegdia.platgen.map.TileType;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 public class GameWorld {
+	
+	public static GameWorld instance;
 
 	Engine engine;
 	private Physics physics;
@@ -34,6 +39,7 @@ public class GameWorld {
 		engine = new Engine();
 		engine.addSystem(new AnimationSystem());
 		engine.addSystem(new UpdatePhysicsSystem());
+		engine.addSystem(new CountdownDestructionSystem());
 		engine.addSystem(new HumanControllerSystem());
 		engine.addSystem(new MovementSystem());
 		engine.addSystem(new FlipSystem());
@@ -65,7 +71,7 @@ public class GameWorld {
 		pc.body = physics.createPlayerBody(x, y);
 		pc.body.setUserData(player);
 		GraphicsComponent gc = (GraphicsComponent) player.addComponent(new GraphicsComponent());
-		gc.drawElement = Gfx.playerTiles.get(0);
+		gc.drawElement = Gfx.playerSheet.get(0);
 		gc.sprite = new Sprite(gc.drawElement);
 		playerPositionComponent = (PositionComponent) player.addComponent(new PositionComponent());
 		playerPositionComponent.position = pc.body.getPosition();
@@ -80,6 +86,28 @@ public class GameWorld {
 		lvc.cap.y = 2;
 		lvc.doCap[1] = true;
 		engine.addEntity(player);
+		//engine.addEntity(makeGroundExplosion(x,y));
+	}
+	
+	public Entity makeGroundExplosion(float x, float y) {
+		Entity e = new Entity();
+
+		GraphicsComponent gc = (GraphicsComponent) e.addComponent(new GraphicsComponent());
+		gc.drawElement = Gfx.groundExplosionSpritesheet.get(0);
+		gc.sprite = new Sprite(gc.drawElement);
+		
+		PositionComponent posc = (PositionComponent) e.addComponent(new PositionComponent());
+		posc.position = new Vector2(x-5,y-5);
+		posc.offset.x = 0;
+		posc.offset.y = 0;
+		
+		AnimationComponent ac = (AnimationComponent) e.addComponent(new AnimationComponent());
+		ac.currentAnim = Gfx.groundExplosion;
+		
+		CountdownDestructionComponent cdc = (CountdownDestructionComponent) e.addComponent(new CountdownDestructionComponent());
+		cdc.timeToLive = 0.7f;
+		engine.addEntity(e);
+		return e;
 	}
 	
 	public void setCam() {

@@ -6,6 +6,7 @@ import java.util.List;
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.ecs.Entity;
+import com.alesegdia.asroth.game.GameWorld;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -38,9 +39,15 @@ public class GameContactListener implements ContactListener {
 					Entity e = (Entity) player.getUserData();
 					PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
 					PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
+					
+					if( plc.mashing ) {
+						plc.justLandedMashing = true;
+					}
+					
 					plc.flying = false;
 					plc.jumping = false;
 					pc.grounded = true;
+					plc.mashing = false;
 				}
 			}
 

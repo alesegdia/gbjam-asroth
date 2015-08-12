@@ -6,6 +6,8 @@ public class PlayerComponent extends Component{
 
 	public boolean jumping;
 	public boolean flying;
+	public boolean mashing;
+	public boolean justLandedMashing;
 	
 
 }
