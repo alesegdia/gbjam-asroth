@@ -20,5 +20,11 @@ public class CountdownDestructionSystem extends EntitySystem {
 			cdc.timeToLive -= Gdx.graphics.getDeltaTime();
 		}
 	}
+
+	@Override
+	public void notifyEntityRemoved(Entity e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

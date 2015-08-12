@@ -115,5 +115,11 @@ public class HumanControllerSystem extends EntitySystem {
 		lvc.linearVelocity.y = prevYlinear;
 		
 	}
+
+	@Override
+	public void notifyEntityRemoved(Entity e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

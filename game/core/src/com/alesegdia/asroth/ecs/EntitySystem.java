@@ -40,8 +40,11 @@ public abstract class EntitySystem implements IEntityListener {
 		if( checkEntityBits(e) ) {
 			//System.out.println("removing entity " + e + " from " + this);
 			entities.remove(e);
+			notifyEntityRemoved(e);
 		}
 	}
+	
+	public abstract void notifyEntityRemoved(Entity e);
 	
 	public void process() {
 		for( Entity e : entities ) {

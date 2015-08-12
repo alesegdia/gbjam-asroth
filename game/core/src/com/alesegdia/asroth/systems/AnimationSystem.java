@@ -21,5 +21,11 @@ public class AnimationSystem extends EntitySystem {
 		gc.drawElement = ac.currentAnim.getKeyFrame(ac.currentTime, true);
 		gc.sprite.setRegion(gc.drawElement);
 	}
+
+	@Override
+	public void notifyEntityRemoved(Entity e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

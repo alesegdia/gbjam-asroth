@@ -21,5 +21,11 @@ public class FlipSystem extends EntitySystem {
 			gc.flipX = true;
 		}
 	}
+
+	@Override
+	public void notifyEntityRemoved(Entity e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

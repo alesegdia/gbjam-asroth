@@ -20,5 +20,11 @@ public class UpdatePhysicsSystem extends EntitySystem {
 		posc.position.x = (Math.round(posc.position.x*GameConfig.METERS_TO_PIXELS)/GameConfig.METERS_TO_PIXELS + posc.offset.x);
 		posc.position.y = (Math.round(posc.position.y*GameConfig.METERS_TO_PIXELS)/GameConfig.METERS_TO_PIXELS + posc.offset.y);
 	}
+
+	@Override
+	public void notifyEntityRemoved(Entity e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

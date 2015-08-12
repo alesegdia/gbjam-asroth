@@ -41,5 +41,11 @@ public class MovementSystem extends EntitySystem {
 
 		pc.body.setLinearVelocity(lvc.linearVelocity.x, lvc.linearVelocity.y);
 	}
+
+	@Override
+	public void notifyEntityRemoved(Entity e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

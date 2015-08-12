@@ -38,5 +38,11 @@ public class DrawingSystem extends EntitySystem {
 				GameConfig.PIXELS_TO_METERS, GameConfig.PIXELS_TO_METERS, 0);
 		*/
 	}
+
+	@Override
+	public void notifyEntityRemoved(Entity e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
