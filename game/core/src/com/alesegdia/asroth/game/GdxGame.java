@@ -47,8 +47,10 @@ public class GdxGame extends ApplicationAdapter {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, GameConfig.VIEWPORT_WIDTH, GameConfig.VIEWPORT_HEIGHT);
 		camera.update();
-		camera.zoom = 1f;
+		camera.zoom = 1.f;
 
+		OrthographicCamera ocam = camera;
+		
 		font = new BitmapFont();
 		batch = new SpriteBatch();
 

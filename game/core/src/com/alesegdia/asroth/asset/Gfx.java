@@ -25,6 +25,8 @@ public class Gfx {
 	public static Spritesheet groundExplosionSpritesheet;
 	public static Animation groundExplosion;
 	
+	public static TextureRegion playerBulletTexture;
+	
 	public static void Initialize() {
 		mapTilesTexture = new Texture(Gdx.files.internal("flyinGB_tiles.png"));
 		Texture pt = new Texture(Gdx.files.internal("flyinGB.png"));
@@ -47,6 +49,9 @@ public class Gfx {
 		
 		groundExplosion = new Animation(0.1f, groundExplosionSpritesheet.getRange(0,7));
 		groundExplosion.setPlayMode(PlayMode.LOOP);
+		
+		playerBulletTexture = new TextureRegion();
+		playerBulletTexture.setRegion(new Texture(Gdx.files.internal("flyinGB_playerBullet.png")));
 	}
 	
 }

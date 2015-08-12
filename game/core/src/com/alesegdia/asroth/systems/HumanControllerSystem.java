@@ -29,11 +29,10 @@ public class HumanControllerSystem extends EntitySystem {
 		PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
 		
 		if( plc.justLandedMashing ) {
-			GameWorld.instance.makeGroundExplosion(1, 1);
 			PositionComponent posc = (PositionComponent) e.getComponent(PositionComponent.class);
 			float x, y;
-			x = posc.position.x + 11;
-			y = posc.position.y + 11 - 3 * GameConfig.PIXELS_TO_METERS;
+			x = posc.position.x;
+			y = posc.position.y;
 			GameWorld.instance.makeGroundExplosion(x-0.6f, y);
 			GameWorld.instance.makeGroundExplosion(x-1.1f, y);
 			GameWorld.instance.makeGroundExplosion(x-1.6f, y);
@@ -79,6 +78,14 @@ public class HumanControllerSystem extends EntitySystem {
 			dy = 1;
 		}
 
+		if( Gdx.input.isKeyJustPressed(Input.Keys.C) ) {
+			float x, y;
+			PositionComponent posc = (PositionComponent) e.getComponent(PositionComponent.class);
+			x = posc.position.x;
+			y = posc.position.y;
+			GameWorld.instance.makePlayerBullet(x, y);
+		}
+		
 		if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 			if( phc.grounded ) {
 				plc.jumping = true;

@@ -75,8 +75,10 @@ public class GameWorld {
 		gc.sprite = new Sprite(gc.drawElement);
 		playerPositionComponent = (PositionComponent) player.addComponent(new PositionComponent());
 		playerPositionComponent.position = pc.body.getPosition();
-		playerPositionComponent.offset.x = -11;
-		playerPositionComponent.offset.y = -11 + GameConfig.PIXELS_TO_METERS;
+		playerPositionComponent.offset.x = 0;
+		playerPositionComponent.offset.y = 0;
+		//playerPositionComponent.offset.x = -11;
+		//playerPositionComponent.offset.y = -11 + GameConfig.PIXELS_TO_METERS;
 		
 		AnimationComponent ac = (AnimationComponent) player.addComponent(new AnimationComponent());
 		ac.currentAnim = Gfx.playerWalk;
@@ -86,7 +88,26 @@ public class GameWorld {
 		lvc.cap.y = 2;
 		lvc.doCap[1] = true;
 		engine.addEntity(player);
-		//engine.addEntity(makeGroundExplosion(x,y));
+	}
+	
+	public Entity makePlayerBullet( float x, float y ) {
+		Entity e = new Entity();
+		
+		GraphicsComponent gc = (GraphicsComponent) e.addComponent(new GraphicsComponent());
+		gc.drawElement = Gfx.playerBulletTexture;
+		gc.sprite = new Sprite(gc.drawElement);
+		
+		PositionComponent posc = (PositionComponent) e.addComponent(new PositionComponent());
+		posc.position = new Vector2(x,y);
+		posc.offset.x = 0;
+		posc.offset.y = 0;
+
+		PhysicsComponent phc = (PhysicsComponent) e.addComponent(new PhysicsComponent());
+		phc.body = physics.createPlayerBulletBody(x, y);
+		phc.body.setUserData(e);
+		
+		engine.addEntity(e);
+		return e;
 	}
 	
 	public Entity makeGroundExplosion(float x, float y) {
@@ -97,9 +118,13 @@ public class GameWorld {
 		gc.sprite = new Sprite(gc.drawElement);
 		
 		PositionComponent posc = (PositionComponent) e.addComponent(new PositionComponent());
-		posc.position = new Vector2(x-5,y-5);
+		posc.position = new Vector2(x,y);
 		posc.offset.x = 0;
 		posc.offset.y = 0;
+		
+		PhysicsComponent phc = (PhysicsComponent) e.addComponent(new PhysicsComponent());
+		phc.body = physics.createGroundExplosionBody(x, y);
+		phc.body.setUserData(e);
 		
 		AnimationComponent ac = (AnimationComponent) e.addComponent(new AnimationComponent());
 		ac.currentAnim = Gfx.groundExplosion;
@@ -111,8 +136,8 @@ public class GameWorld {
 	}
 	
 	public void setCam() {
-		cam.position.x = playerPositionComponent.position.x - playerPositionComponent.offset.x;
-		cam.position.y = playerPositionComponent.position.y - playerPositionComponent.offset.y;
+		cam.position.x = playerPositionComponent.position.x;
+		cam.position.y = playerPositionComponent.position.y;
 	}
 	
 	public void step() {

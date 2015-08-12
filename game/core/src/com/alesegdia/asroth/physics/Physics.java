@@ -54,7 +54,12 @@ public class Physics {
 		return world.createBody(bodyDef);
 	}
 	
-	public Fixture createFixture(Body body, Shape shape, short catbits, short maskbits, float density, float friction, float restitution) {
+	public Fixture createFixture(Body body, Shape shape, short catbits, short maskbits, float density, float friction, float restitution ) {
+		return createFixture(body, shape, catbits, maskbits, density, friction, restitution, false);
+	}
+	
+	public Fixture createFixture(Body body, Shape shape, short catbits, short maskbits, float density, float friction,
+			float restitution, boolean isSensor ) {
 		FixtureDef fd = new FixtureDef();
 		fd.shape = shape;
 		fd.density = density;
@@ -62,6 +67,7 @@ public class Physics {
 		fd.restitution = restitution;
 		fd.filter.categoryBits = catbits;
 		fd.filter.maskBits = maskbits;
+		fd.isSensor = isSensor;
 		return body.createFixture(fd);
 	}
 	
@@ -83,7 +89,7 @@ public class Physics {
 		ps.dispose();
 		return b;
 	}
-
+	
 	public Body createEnemyBody(float x, float y) {
 		return createCircleBody(x, y, 10, CollisionLayers.CATEGORY_ENEMY, CollisionLayers.MASK_ENEMY, true);
 	}
@@ -91,5 +97,26 @@ public class Physics {
 	public Body createPlayerBody(float x, float y) {
 		return createCircleBody(x, y, 7, CollisionLayers.CATEGORY_PLAYER, CollisionLayers.MASK_PLAYER, true);
 	}
+	
+	public Body createPlayerBulletBody( float x, float y ) {
+		Body b = createBody(x, y, true);
+		PolygonShape ps = new PolygonShape();
+		ps.setAsBox(5 * GameConfig.PIXELS_TO_METERS, 5 * GameConfig.PIXELS_TO_METERS);
+		createFixture(b, ps, CollisionLayers.MASK_PLBULLETS, CollisionLayers.CATEGORY_PLBULLETS, 0, 0, 0, true);
+		b.setGravityScale(0);
+		ps.dispose();
+		return b;
+	}
 
+	public Body createGroundExplosionBody( float x, float y ) {
+		Body b = createBody(x, y, true);
+		PolygonShape ps = new PolygonShape();
+		ps.setAsBox(5 * GameConfig.PIXELS_TO_METERS, 5 * GameConfig.PIXELS_TO_METERS);
+		createFixture(b, ps, CollisionLayers.MASK_PLBULLETS, CollisionLayers.CATEGORY_PLBULLETS, 0, 0, 0, true);
+		b.setGravityScale(0);
+		ps.dispose();
+		return b;
+	}
+
+	
 }
