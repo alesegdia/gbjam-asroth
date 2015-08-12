@@ -47,7 +47,7 @@ public class GdxGame extends ApplicationAdapter {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, GameConfig.VIEWPORT_WIDTH, GameConfig.VIEWPORT_HEIGHT);
 		camera.update();
-		camera.zoom = 1.f;
+		camera.zoom = 1f;
 
 		OrthographicCamera ocam = camera;
 		
@@ -112,6 +112,6 @@ public class GdxGame extends ApplicationAdapter {
 		batch.begin();
 		font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
 		batch.end();
-		physics.render(camera);
+		//physics.render(camera);
 	}
 }

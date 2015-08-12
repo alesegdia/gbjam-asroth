@@ -8,6 +8,9 @@ public class PlayerComponent extends Component{
 	public boolean flying;
 	public boolean mashing;
 	public boolean justLandedMashing;
+	public boolean dashingWall;
+	public boolean releasingWall;
+	public float releaseWallVelocity;
 	
 
 }

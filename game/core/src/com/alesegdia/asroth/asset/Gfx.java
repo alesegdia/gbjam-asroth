@@ -26,21 +26,23 @@ public class Gfx {
 	public static Animation groundExplosion;
 	
 	public static TextureRegion playerBulletTexture;
+	public static Animation playerWall;
 	
 	public static void Initialize() {
 		mapTilesTexture = new Texture(Gdx.files.internal("flyinGB_tiles.png"));
 		Texture pt = new Texture(Gdx.files.internal("flyinGB.png"));
 		TextureRegion tr = new TextureRegion();
 		tr.setRegion(pt);
-		playerSheet = new Spritesheet(tr, 3, 4);
+		playerSheet = new Spritesheet(tr, 3, 5);
 		
 		playerStand = new Animation(0.2f, playerSheet.get(0));
+		playerWall = new Animation(0.2f, playerSheet.get(14));
 		playerWalk = new Animation(0.2f, playerSheet.getRange(1, 3));
 		playerWalk.setPlayMode(PlayMode.LOOP);
-		playerFly = new Animation(0.15f, playerSheet.getRange(7, 9));
+		playerFly = new Animation(0.15f, playerSheet.getRange(6, 8));
 		playerJumpUp = new Animation(0.2f, playerSheet.get(7));
 		playerJumpDown = new Animation(0.2f, playerSheet.get(8));
-		playerMashDown = new Animation(0.2f, playerSheet.get(10));
+		playerMashDown = new Animation(0.05f, playerSheet.getRange(10,13));
 		
 		Texture get = new Texture(Gdx.files.internal("flyinGB_groundExplosion.png"));
 		TextureRegion trget = new TextureRegion();

@@ -1,4 +1,4 @@
-package com.alesegdia.asroth.physics;
+package com.alesegdia.asroth.systems;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,9 @@ import java.util.List;
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.ecs.Entity;
+import com.alesegdia.asroth.ecs.EntitySystem;
 import com.alesegdia.asroth.game.GameWorld;
+import com.alesegdia.asroth.physics.CollisionLayers;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -14,7 +16,7 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
-public class GameContactListener implements ContactListener {
+public class PhysicsSystem extends EntitySystem implements ContactListener {
 
 	abstract class ICollisionCallback {
 		public abstract void startCollision(Body b1, Body b2, Vector2 normal);
@@ -28,17 +30,20 @@ public class GameContactListener implements ContactListener {
 
 	List<ICollisionCallback> callbacks = new ArrayList<ICollisionCallback>();
 	
-	public GameContactListener() {
+	public PhysicsSystem() {
+		super(PhysicsComponent.class);
+		
 		callbacks.add(new ICollisionCallback(){
 			{ setCategories( CollisionLayers.CATEGORY_PLAYER, CollisionLayers.CATEGORY_MAP ); }
 			
 			@Override
 			public void startCollision(Body player, Body map, Vector2 normal) {
 				System.out.println("START PLAYER MAP! normal: " + normal.y);
+				Entity e = (Entity) player.getUserData();
+				PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
+				plc.releaseWallVelocity = 0f;
 				if( normal.y == 1 ) {
-					Entity e = (Entity) player.getUserData();
 					PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
-					PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
 					
 					if( plc.mashing ) {
 						plc.justLandedMashing = true;
@@ -48,6 +53,9 @@ public class GameContactListener implements ContactListener {
 					plc.jumping = false;
 					pc.grounded = true;
 					plc.mashing = false;
+				} else if( Math.abs(normal.x) == 1 ) {
+					plc.dashingWall = true;
+					plc.releasingWall = true;
 				}
 			}
 
@@ -56,6 +64,12 @@ public class GameContactListener implements ContactListener {
 				Entity e = (Entity) player.getUserData();
 				PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
 				pc.grounded = false;
+				PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
+				plc.jumping = true;
+				if( plc.dashingWall ) {
+					plc.flying = false;
+				}
+				plc.dashingWall = false;
 			}
 		});
 	}
@@ -128,6 +142,12 @@ public class GameContactListener implements ContactListener {
 	public void postSolve(Contact contact, ContactImpulse impulse) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void notifyEntityRemoved(Entity e) {
+		PhysicsComponent phc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
+		phc.body.getWorld().destroyBody(phc.body);
 	}
 
 }

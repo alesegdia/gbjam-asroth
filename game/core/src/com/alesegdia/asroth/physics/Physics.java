@@ -1,6 +1,7 @@
 package com.alesegdia.asroth.physics;
 
 import com.alesegdia.asroth.game.GameConfig;
+import com.alesegdia.asroth.systems.PhysicsSystem;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -23,9 +24,12 @@ public class Physics {
 	private static final int VELOCITY_ITERATIONS = 6000;
 	private static final int POSITION_ITERATIONS = 2000;
 	
+	public PhysicsSystem physicsSystem;
+	
 	public Physics() {
 		world = new World(new Vector2(0, -10f), false);
-		world.setContactListener(new GameContactListener());
+		physicsSystem = new PhysicsSystem();
+		world.setContactListener(this.physicsSystem);
 		debugRenderer = new Box2DDebugRenderer();
 	}
 	
@@ -95,7 +99,7 @@ public class Physics {
 	}
 
 	public Body createPlayerBody(float x, float y) {
-		return createCircleBody(x, y, 7, CollisionLayers.CATEGORY_PLAYER, CollisionLayers.MASK_PLAYER, true);
+		return createCircleBody(x, y, 7.41f, CollisionLayers.CATEGORY_PLAYER, CollisionLayers.MASK_PLAYER, true);
 	}
 	
 	public Body createPlayerBulletBody( float x, float y ) {

@@ -37,13 +37,14 @@ public class GameWorld {
 		this.physics = physics;
 		this.cam = cam;
 		engine = new Engine();
+		engine.addSystem(new HumanControllerSystem());
 		engine.addSystem(new AnimationSystem());
 		engine.addSystem(new UpdatePhysicsSystem());
 		engine.addSystem(new CountdownDestructionSystem());
-		engine.addSystem(new HumanControllerSystem());
 		engine.addSystem(new MovementSystem());
 		engine.addSystem(new FlipSystem());
 		engine.addSystem(new DrawingSystem(batch), true);
+		engine.addSystem(physics.physicsSystem);
 		
 		int x = -1;
 		int y = -1;
@@ -90,7 +91,7 @@ public class GameWorld {
 		engine.addEntity(player);
 	}
 	
-	public Entity makePlayerBullet( float x, float y ) {
+	public Entity makePlayerBullet( float x, float y, boolean faceLeft ) {
 		Entity e = new Entity();
 		
 		GraphicsComponent gc = (GraphicsComponent) e.addComponent(new GraphicsComponent());
@@ -106,6 +107,11 @@ public class GameWorld {
 		phc.body = physics.createPlayerBulletBody(x, y);
 		phc.body.setUserData(e);
 		
+		LinearVelocityComponent lvc = (LinearVelocityComponent) e.addComponent(new LinearVelocityComponent());		
+		lvc.speed.set(0.5f,0);
+		lvc.linearVelocity.x = 10 * ((faceLeft) ? -1 : 1);
+		gc.flipX = faceLeft;
+
 		engine.addEntity(e);
 		return e;
 	}

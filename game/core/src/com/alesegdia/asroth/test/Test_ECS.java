@@ -14,14 +14,32 @@ public class Test_ECS {
 	
 	public static class ES1 extends EntitySystem {
 		public ES1() { super(C1.class, C2.class); }
+
+		@Override
+		public void notifyEntityRemoved(Entity e) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 	
 	public static class ES2 extends EntitySystem {
 		public ES2() { super(C2.class, C4.class); }
+
+		@Override
+		public void notifyEntityRemoved(Entity e) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 	
 	public static class ES3 extends EntitySystem {
 		public ES3() { super(C3.class, C1.class); }
+
+		@Override
+		public void notifyEntityRemoved(Entity e) {
+			// TODO Auto-generated method stub
+			
+		}
 	}	
 	
 	public static void main(String[] args) {
