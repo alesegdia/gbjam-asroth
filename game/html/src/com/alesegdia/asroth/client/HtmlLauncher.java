@@ -1,9 +1,9 @@
 package com.alesegdia.asroth.client;
 
+import com.alesegdia.asroth.game.GdxGame;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.alesegdia.asroth.GdxGame;
 
 public class HtmlLauncher extends GwtApplication {
 
