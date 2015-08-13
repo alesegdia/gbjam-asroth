@@ -63,5 +63,9 @@ public class Engine {
 		}
 		systems.add(es);
 	}
+
+	public int getNumEntities() {
+		return entities.size();
+	}
 	
 }

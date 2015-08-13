@@ -13,6 +13,7 @@ import com.alesegdia.platgen.map.PlatformGenerator;
 import com.alesegdia.platgen.map.TileMap;
 import com.alesegdia.platgen.map.TileType;
 import com.alesegdia.platgen.map.PlatformGenerator.Level;
+import com.alesegdia.platgen.util.RNG;
 import com.alesegdia.platgen.util.Vec2;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -38,11 +39,16 @@ public class GdxGame extends ApplicationAdapter {
 	
 	Physics physics;
 	GameWorld gameWorld;
+	
+	RNG rng;
 
 	@Override
 	public void create () {
 		
 		Gfx.Initialize();
+		
+		rng = new RNG();
+		RNG.rng = rng;
 		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, GameConfig.VIEWPORT_WIDTH, GameConfig.VIEWPORT_HEIGHT);
@@ -92,12 +98,13 @@ public class GdxGame extends ApplicationAdapter {
 		gameWorld = new GameWorld(physics, sprBatch, camera, tm);
 		GameWorld.instance = gameWorld;
 		
+		
 	}
 	
 	@Override
 	public void render () {
 		float dt = Gdx.graphics.getRawDeltaTime();
-
+		
 		gameWorld.step();
 		physics.step(dt);
 
@@ -115,6 +122,7 @@ public class GdxGame extends ApplicationAdapter {
 		
 		batch.begin();
 		font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
+		font.draw(batch, "entities: " + gameWorld.getNumEntities(), 80, 20);
 		batch.end();
 		//physics.render(camera);
 	}

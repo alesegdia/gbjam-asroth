@@ -20,6 +20,12 @@ public class Test_ECS {
 			// TODO Auto-generated method stub
 			
 		}
+
+		@Override
+		public void process(Entity e) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 	
 	public static class ES2 extends EntitySystem {
@@ -30,6 +36,12 @@ public class Test_ECS {
 			// TODO Auto-generated method stub
 			
 		}
+
+		@Override
+		public void process(Entity e) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 	
 	public static class ES3 extends EntitySystem {
@@ -37,6 +49,12 @@ public class Test_ECS {
 
 		@Override
 		public void notifyEntityRemoved(Entity e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void process(Entity e) {
 			// TODO Auto-generated method stub
 			
 		}

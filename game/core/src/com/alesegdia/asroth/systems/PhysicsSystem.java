@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
+import com.alesegdia.asroth.components.WalkingComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
 import com.alesegdia.asroth.game.GameWorld;
@@ -32,6 +33,26 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 	
 	public PhysicsSystem() {
 		super(PhysicsComponent.class);
+		
+		callbacks.add(new ICollisionCallback() {
+			{ setCategories( CollisionLayers.CATEGORY_ENEMYLOGIC, CollisionLayers.CATEGORY_ENEMYLIMIT ); }
+			
+			@Override
+			public void startCollision(Body b1, Body b2, Vector2 normal) {
+				Entity e = (Entity) b1.getUserData();
+				WalkingComponent wc = (WalkingComponent) e.getComponent(WalkingComponent.class);
+				if( wc != null ) {
+					wc.walkingLeft = !wc.walkingLeft;
+				}
+			}
+
+			@Override
+			public void endCollision(Body b1, Body b2) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		
 		callbacks.add(new ICollisionCallback(){
 			{ setCategories( CollisionLayers.CATEGORY_PLAYERPHYSIC, CollisionLayers.CATEGORY_MAP ); }
@@ -86,7 +107,6 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 		for( ICollisionCallback icb : callbacks ) {
 			
 			if( HandleStartCollision(cb1, cb2, b1, b2, icb, normal) ) {
-				System.out.println("IT!");
 				break;
 			}
 		}
@@ -148,6 +168,13 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 	public void notifyEntityRemoved(Entity e) {
 		PhysicsComponent phc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
 		phc.body.getWorld().destroyBody(phc.body);
+	}
+
+
+	@Override
+	public void process(Entity e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

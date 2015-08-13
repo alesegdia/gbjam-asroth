@@ -22,21 +22,32 @@ public class DrawingSystem extends EntitySystem {
 		PositionComponent pc = (PositionComponent) e.getComponent(PositionComponent.class);
 
 		//gc.sprite.setPosition(pc.position.x - 11, pc.position.y - 11 + GameConfig.PIXELS_TO_METERS);
+		/*
 		gc.sprite.setScale(GameConfig.PIXELS_TO_METERS);
+
+		gc.sprite.setOrigin(0, 0);
+		gc.sprite.flip(gc.flipX, false);
+
 		gc.sprite.setOrigin(-gc.sprite.getWidth()/2 * GameConfig.PIXELS_TO_METERS,
 				-gc.sprite.getHeight()/2 * GameConfig.PIXELS_TO_METERS);
 		gc.sprite.setPosition(pc.position.x, pc.position.y);
 
-		gc.sprite.flip(gc.flipX, false);
 		gc.sprite.draw(spriteBatch);
-		
-		/*
+		*/
+
+		float sX, cX;
+		if( gc.flipX && gc.allowFlip ) {
+			sX = -GameConfig.PIXELS_TO_METERS;
+			cX = gc.drawElement.getRegionWidth()/2f * GameConfig.PIXELS_TO_METERS;
+		} else {
+			sX = GameConfig.PIXELS_TO_METERS;
+			cX = -gc.drawElement.getRegionWidth()/2f * GameConfig.PIXELS_TO_METERS;
+		}
 		spriteBatch.draw(gc.drawElement, pc.position.x, pc.position.y,
-				-gc.drawElement.getRegionWidth()/2f * GameConfig.PIXELS_TO_METERS,
+				cX,
 				-gc.drawElement.getRegionHeight()/2f * GameConfig.PIXELS_TO_METERS,
 				gc.drawElement.getRegionWidth(), gc.drawElement.getRegionHeight(),
-				GameConfig.PIXELS_TO_METERS, GameConfig.PIXELS_TO_METERS, 0);
-		*/
+				sX, GameConfig.PIXELS_TO_METERS, 0);
 	}
 
 	@Override

@@ -37,6 +37,18 @@ public class Gfx {
 	public static Spritesheet zombieSheet;
 	public static Spritesheet demonSheet;
 	
+	public static Animation threeHeadStand;
+	public static Animation threeHeadWalk;
+	public static Animation threeHeadAttack;
+	
+	public static Animation zombieWalk;
+	public static Animation zombieStand;
+	public static Animation zombieAttack;
+	
+	public static Animation runnerWalk;
+	public static Animation runnerStand;
+	public static Animation runnerAttack;
+	
 	
 	public static void Initialize() {
 		mapTilesTexture = new Texture(Gdx.files.internal("flyinGB_tiles.png"));
@@ -68,12 +80,23 @@ public class Gfx {
 		cryingMaskSheet = new Spritesheet("cryingmask.png", 3, 2);
 		jumperSheet = new Spritesheet("jumpers.png", 1, 3);
 		threeHeadSheet = new Spritesheet("threeheaded.png", 1, 2);
-		runnerSheet = new Spritesheet("runner.png", 5, 4);
+		runnerSheet = new Spritesheet("runner.png", 4, 3);
 		summonerSheet = new Spritesheet("summoner.png", 1, 4);
 		evilCherubSheet = new Spritesheet("evilcherubs.png", 1, 3);
 		zombieSheet = new Spritesheet("zombie-sheet.png", 1, 2);
 		demonSheet = new Spritesheet("demon.png", 1, 3);
 
+		threeHeadStand = new Animation(0.1f, threeHeadSheet.get(1));
+		threeHeadWalk = new Animation(0.1f, threeHeadSheet.getRange(0, 1));
+		threeHeadAttack = new Animation(0.1f, threeHeadSheet.get(0));
+		
+		zombieStand = new Animation(0.1f, zombieSheet.get(1));
+		zombieWalk = new Animation(0.5f, zombieSheet.getRange(0, 1));
+		zombieAttack = new Animation(0.1f, zombieSheet.get(0));
+
+		runnerStand = new Animation(0.1f, runnerSheet.get(0));
+		runnerWalk = new Animation(0.1f, runnerSheet.getRange(0, 3));
+		runnerAttack = new Animation(0.1f, runnerSheet.get(10));
 		
 	}
 	

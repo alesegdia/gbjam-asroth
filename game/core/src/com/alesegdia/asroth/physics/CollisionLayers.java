@@ -34,7 +34,7 @@ public class CollisionLayers {
 			CATEGORY_PLAYERPHYSIC 	| CATEGORY_PLBULLETS 	|
 			CATEGORY_ENBULLETS 		| CATEGORY_ENEMYPHYSIC;
 	public static final short MASK_1WAYPLATS = CATEGORY_PLAYERPHYSIC;
-	public static final short MASK_ENEMYLIMIT = CATEGORY_ENEMYPHYSIC;
+	public static final short MASK_ENEMYLIMIT = CATEGORY_ENEMYPHYSIC | CATEGORY_ENEMYLOGIC;
 
 	/* PLAYER PHYSICS *************************************************************/
 	public static final short MASK_PLAYERPHYSIC = CATEGORY_ENBULLETS | CATEGORY_1WAYPLATS | CATEGORY_MAP;
@@ -43,7 +43,7 @@ public class CollisionLayers {
 
 	/* ENEMY PHYSICS *************************************************************/
 	public static final short MASK_ENEMYPHYSIC = CATEGORY_MAP;
-	public static final short MASK_ENEMYLOGIC = CATEGORY_PLAYERLOGIC | CATEGORY_PLBULLETS;
+	public static final short MASK_ENEMYLOGIC = CATEGORY_PLAYERLOGIC | CATEGORY_PLBULLETS | CATEGORY_ENEMYLIMIT;
 	public static final short MASK_ENBULLETS = CATEGORY_PLAYERLOGIC | CATEGORY_MAP;
 
 }

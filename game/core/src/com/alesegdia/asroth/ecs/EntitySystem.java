@@ -52,8 +52,5 @@ public abstract class EntitySystem implements IEntityListener {
 		}
 	}
 
-	public void process(Entity e) {
-		// TODO Auto-generated method stub	
-	}
-	
+	public abstract void process(Entity e);	
 }

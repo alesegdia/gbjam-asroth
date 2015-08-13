@@ -21,13 +21,13 @@ public class Physics {
 	Box2DDebugRenderer debugRenderer;
 	private float accumulator = 0;
 	private static final float TIME_STEP = 1/60.f;
-	private static final int VELOCITY_ITERATIONS = 6000;
-	private static final int POSITION_ITERATIONS = 2000;
+	private static final int VELOCITY_ITERATIONS = 6;
+	private static final int POSITION_ITERATIONS = 2;
 	
 	public PhysicsSystem physicsSystem;
 	
 	public Physics() {
-		world = new World(new Vector2(0, -10f), false);
+		world = new World(new Vector2(0, -10f), true);
 		physicsSystem = new PhysicsSystem();
 		world.setContactListener(this.physicsSystem);
 		debugRenderer = new Box2DDebugRenderer();
@@ -87,11 +87,15 @@ public class Physics {
 		return b;
 	}
 	
-	public Body createRectBody(float x, float y, float w, float h, short catbits, short maskbits, short group, boolean dynamic) {
+	public Body createRectBody(float x, float y, float w, float h, short cat, short mask, short group, boolean dyn) {
+		return createRectBody(x,y,w,h,cat,mask,group,dyn,false);		
+	}
+	
+	public Body createRectBody(float x, float y, float w, float h, short catbits, short maskbits, short group, boolean dynamic, boolean isSensor) {
 		Body b = createBody(x,y,dynamic);
 		PolygonShape ps = new PolygonShape();
 		ps.setAsBox(w, h);
-		createFixture(b, ps, catbits, maskbits, group, 0, 0, 0);
+		createFixture(b, ps, catbits, maskbits, group, 0, 0, 0, isSensor);
 		ps.dispose();
 		return b;
 	}
@@ -133,5 +137,6 @@ public class Physics {
 		ps.dispose();
 		return b;
 	}
+
 
 }

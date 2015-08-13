@@ -9,5 +9,6 @@ public class GraphicsComponent extends Component {
 	public TextureRegion drawElement;
 	public Sprite sprite = new Sprite();
 	public boolean flipX = false;
+	public boolean allowFlip = true;
 	
 }
