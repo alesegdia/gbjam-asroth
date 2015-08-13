@@ -55,12 +55,16 @@ public class GdxGame extends ApplicationAdapter {
 		batch = new SpriteBatch();
 
 		Config cfg = new Config();
-		cfg.mapSize = new Vec2(400,200);
+		//cfg.mapSize = new Vec2(400,200);
+		cfg.mapSize = new Vec2(400,400);
+		
 		cfg.regionGeneratorType = ERegionGenerator.BALANCED;
 		
 		cfg.minK = 0.25f;
 		cfg.maxK = 0.75f;
-		cfg.numRegions = 7;
+		//cfg.numRegions = 7;
+		cfg.numRegions = 20;
+		
 		cfg.rdfsType = ERDFSType.COMBINED;
 		
 		cfg.rasterRegionLimits = false;
@@ -97,7 +101,7 @@ public class GdxGame extends ApplicationAdapter {
 		gameWorld.step();
 		physics.step(dt);
 
-		Gdx.gl.glClearColor(100f / 255f, 100f / 255f, 250f / 255f, 1f);
+		Gdx.gl.glClearColor(155f / 255f, 188f / 255f, 15f / 255f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		gameWorld.setCam();
 		camera.update();

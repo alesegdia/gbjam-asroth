@@ -55,14 +55,15 @@ public class Physics {
 			bodyDef.type = BodyType.StaticBody;
 		}
 		bodyDef.position.set(x, y);
-		return world.createBody(bodyDef);
+		Body b = world.createBody(bodyDef);
+		return b;
 	}
 	
-	public Fixture createFixture(Body body, Shape shape, short catbits, short maskbits, float density, float friction, float restitution ) {
-		return createFixture(body, shape, catbits, maskbits, density, friction, restitution, false);
+	public Fixture createFixture(Body body, Shape shape, short catbits, short maskbits, short group, float density, float friction, float restitution ) {
+		return createFixture(body, shape, catbits, maskbits, group, density, friction, restitution, false);
 	}
 	
-	public Fixture createFixture(Body body, Shape shape, short catbits, short maskbits, float density, float friction,
+	public Fixture createFixture(Body body, Shape shape, short catbits, short maskbits, short group, float density, float friction,
 			float restitution, boolean isSensor ) {
 		FixtureDef fd = new FixtureDef();
 		fd.shape = shape;
@@ -71,42 +72,43 @@ public class Physics {
 		fd.restitution = restitution;
 		fd.filter.categoryBits = catbits;
 		fd.filter.maskBits = maskbits;
+		fd.filter.groupIndex = group;
 		fd.isSensor = isSensor;
 		return body.createFixture(fd);
 	}
 	
-	public Body createCircleBody(float x, float y, float radius, short catbits, short maskbits, boolean dynamic) {
+	public Body createCircleBody(float x, float y, float radius, short catbits, short maskbits, short group, boolean dynamic) {
 		Body b = createBody(x * GameConfig.PIXELS_TO_METERS, y* GameConfig.PIXELS_TO_METERS,dynamic);
 		CircleShape cs = new CircleShape();
 		cs.setRadius(radius * GameConfig.PIXELS_TO_METERS);
 		System.out.println("PLAYERBODY");
-		createFixture(b, cs, catbits, maskbits, 1f, 0f, 0f);
+		createFixture(b, cs, catbits, maskbits, group, 1f, 0f, 0f);
 		cs.dispose();
 		return b;
 	}
 	
-	public Body createRectBody(float x, float y, float w, float h, short catbits, short maskbits, boolean dynamic) {
+	public Body createRectBody(float x, float y, float w, float h, short catbits, short maskbits, short group, boolean dynamic) {
 		Body b = createBody(x,y,dynamic);
 		PolygonShape ps = new PolygonShape();
 		ps.setAsBox(w, h);
-		createFixture(b, ps, catbits, maskbits, 0, 0, 0);
+		createFixture(b, ps, catbits, maskbits, group, 0, 0, 0);
 		ps.dispose();
 		return b;
 	}
 	
 	public Body createEnemyBody(float x, float y) {
-		return createCircleBody(x, y, 10, CollisionLayers.CATEGORY_ENEMY, CollisionLayers.MASK_ENEMY, true);
+		return createCircleBody(x, y, 10, CollisionLayers.CATEGORY_ENEMYPHYSIC, CollisionLayers.MASK_ENEMYPHYSIC, CollisionLayers.GROUP_ENEMYPHYSIC, true);
 	}
 
 	public Body createPlayerBody(float x, float y) {
-		return createCircleBody(x, y, 7.41f, CollisionLayers.CATEGORY_PLAYER, CollisionLayers.MASK_PLAYER, true);
+		return createCircleBody(x, y, 7.41f, CollisionLayers.CATEGORY_PLAYERPHYSIC, CollisionLayers.MASK_PLAYERPHYSIC, CollisionLayers.GROUP_PLAYERPHYSIC, true);
 	}
 	
 	public Body createPlayerBulletBody( float x, float y ) {
 		Body b = createBody(x, y, true);
 		PolygonShape ps = new PolygonShape();
 		ps.setAsBox(5 * GameConfig.PIXELS_TO_METERS, 5 * GameConfig.PIXELS_TO_METERS);
-		createFixture(b, ps, CollisionLayers.MASK_PLBULLETS, CollisionLayers.CATEGORY_PLBULLETS, 0, 0, 0, true);
+		createFixture(b, ps, CollisionLayers.CATEGORY_PLBULLETS, CollisionLayers.MASK_PLBULLETS, CollisionLayers.GROUP_PLBULLETS, 0, 0, 0, true);
 		b.setGravityScale(0);
 		ps.dispose();
 		return b;
@@ -116,11 +118,20 @@ public class Physics {
 		Body b = createBody(x, y, true);
 		PolygonShape ps = new PolygonShape();
 		ps.setAsBox(5 * GameConfig.PIXELS_TO_METERS, 5 * GameConfig.PIXELS_TO_METERS);
-		createFixture(b, ps, CollisionLayers.MASK_PLBULLETS, CollisionLayers.CATEGORY_PLBULLETS, 0, 0, 0, true);
+		createFixture(b, ps, CollisionLayers.CATEGORY_PLBULLETS, CollisionLayers.MASK_PLBULLETS, CollisionLayers.MASK_PLBULLETS, 0, 0, 0, true);
 		b.setGravityScale(0);
 		ps.dispose();
 		return b;
 	}
-
 	
+	public Body createEnemyBody2( float x, float y, float w, float h ) {
+		Body b = createBody(x, y, true);
+		PolygonShape ps = new PolygonShape();
+		ps.setAsBox(w * GameConfig.PIXELS_TO_METERS, h * GameConfig.PIXELS_TO_METERS);
+		createFixture(b, ps, CollisionLayers.CATEGORY_ENEMYPHYSIC, CollisionLayers.MASK_ENEMYPHYSIC, CollisionLayers.GROUP_ENEMYPHYSIC, 1f, 0, 0, false);
+		createFixture(b, ps, CollisionLayers.CATEGORY_ENEMYLOGIC, CollisionLayers.MASK_ENEMYLOGIC, CollisionLayers.GROUP_ENEMYPHYSIC, 0.01f, 0, 0, true);
+		ps.dispose();
+		return b;
+	}
+
 }

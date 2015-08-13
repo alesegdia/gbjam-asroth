@@ -90,14 +90,23 @@ public class HumanControllerSystem extends EntitySystem {
 		} else if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
 			dy = 1;
 		}
-
+		
+		float x, y;
+		PositionComponent posc = (PositionComponent) e.getComponent(PositionComponent.class);
+		x = posc.position.x;
+		y = posc.position.y;
 		if( Gdx.input.isKeyJustPressed(Input.Keys.C) ) {
-			float x, y;
-			PositionComponent posc = (PositionComponent) e.getComponent(PositionComponent.class);
-			x = posc.position.x;
-			y = posc.position.y;
 			GameWorld.instance.makePlayerBullet(x, y, (plc.dashingWall? !gc.flipX : gc.flipX));
 		}
+		
+		if( Gdx.input.isKeyJustPressed(Input.Keys.Q) ) { GameWorld.instance.makeThreeHeaded(x, y); }
+		if( Gdx.input.isKeyJustPressed(Input.Keys.W) ) { GameWorld.instance.makeRunner(x, y); }
+		if( Gdx.input.isKeyJustPressed(Input.Keys.E) ) { GameWorld.instance.makeJumper(x, y); }
+		if( Gdx.input.isKeyJustPressed(Input.Keys.R) ) { GameWorld.instance.makeZombie(x, y); }
+		if( Gdx.input.isKeyJustPressed(Input.Keys.A) ) { GameWorld.instance.makeSummoner(x, y); }
+		if( Gdx.input.isKeyJustPressed(Input.Keys.S) ) { GameWorld.instance.makeDemon(x, y); }
+		if( Gdx.input.isKeyJustPressed(Input.Keys.D) ) { GameWorld.instance.makeEvilCherub(x, y); }
+		if( Gdx.input.isKeyJustPressed(Input.Keys.F) ) { GameWorld.instance.makeCryingMask(x, y); }		
 		
 		if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 			if( phc.grounded ) {

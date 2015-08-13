@@ -28,7 +28,7 @@ public class MapPhysicsBuilderVisitor implements IRegionTreeVisitor {
 						y * GameConfig.PIXELS_TO_METERS,
 						w * GameConfig.PIXELS_TO_METERS,
 						h * GameConfig.PIXELS_TO_METERS,
-						CollisionLayers.CATEGORY_MAP, CollisionLayers.MASK_MAP, false);
+						CollisionLayers.CATEGORY_MAP, CollisionLayers.MASK_MAP, CollisionLayers.GROUP_MAP, false);
 			}
 		}
 	}

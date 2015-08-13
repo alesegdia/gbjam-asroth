@@ -1,5 +1,7 @@
 package com.alesegdia.asroth.game;
 
+import java.util.List;
+
 import com.alesegdia.asroth.asset.Gfx;
 import com.alesegdia.asroth.components.AnimationComponent;
 import com.alesegdia.asroth.components.CountdownDestructionComponent;
@@ -10,6 +12,7 @@ import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.PositionComponent;
 import com.alesegdia.asroth.ecs.Engine;
 import com.alesegdia.asroth.ecs.Entity;
+import com.alesegdia.asroth.physics.CollisionLayers;
 import com.alesegdia.asroth.physics.Physics;
 import com.alesegdia.asroth.systems.AnimationSystem;
 import com.alesegdia.asroth.systems.CountdownDestructionSystem;
@@ -18,11 +21,14 @@ import com.alesegdia.asroth.systems.FlipSystem;
 import com.alesegdia.asroth.systems.HumanControllerSystem;
 import com.alesegdia.asroth.systems.MovementSystem;
 import com.alesegdia.asroth.systems.UpdatePhysicsSystem;
+import com.alesegdia.platgen.map.MobZoneExtractor;
+import com.alesegdia.platgen.map.MobZoneExtractor.MobZone;
 import com.alesegdia.platgen.map.TileMap;
 import com.alesegdia.platgen.map.TileType;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class GameWorld {
@@ -62,6 +68,46 @@ public class GameWorld {
 		System.out.println(x);
 		System.out.println(y);
 		makePlayer(x*10, y*10);
+
+		MobZoneExtractor mze = new MobZoneExtractor();
+		List<MobZone> mobZones = mze.computeMobZones(tm);
+		for( MobZone mz : mobZones ) {
+			float w, h;
+			w = 10; h = 10;
+			//x = s.position.x * 10 + w;
+			x = mz.xRange.x * 10;
+			//y = (s.position.y + s.height - s.region.position.y) * 10 + h;
+			y = (mz.height+1) * 10;
+			physics.createRectBody(
+					x * GameConfig.PIXELS_TO_METERS,
+					y * GameConfig.PIXELS_TO_METERS,
+					w * GameConfig.PIXELS_TO_METERS,
+					h * GameConfig.PIXELS_TO_METERS,
+					CollisionLayers.CATEGORY_ENEMYLIMIT,
+					CollisionLayers.MASK_ENEMYLIMIT,
+					CollisionLayers.GROUP_ENEMYLIMIT,
+					false);
+			x = mz.xRange.y * 10;
+			physics.createRectBody(
+					x * GameConfig.PIXELS_TO_METERS,
+					y * GameConfig.PIXELS_TO_METERS,
+					w * GameConfig.PIXELS_TO_METERS,
+					h * GameConfig.PIXELS_TO_METERS,
+					CollisionLayers.CATEGORY_ENEMYLIMIT,
+					CollisionLayers.MASK_ENEMYLIMIT,
+					CollisionLayers.GROUP_ENEMYLIMIT,
+					false);
+
+
+/*			physics.createRectBody(mz.xRange.x, mz.height,//tm.cols - (mz.xRange.x-1),y-1, // (mz.height-1),
+					10, 10,
+					//10 * GameConfig.PIXELS_TO_METERS, 10 * GameConfig.PIXELS_TO_METERS, 
+					CollisionLayers.CATEGORY_ENEMYLIMIT,
+					CollisionLayers.MASK_ENEMYLIMIT,
+					CollisionLayers.GROUP_ENEMYLIMIT,
+					false);
+*/
+		}
 	}
 	
 	PositionComponent playerPositionComponent;
@@ -140,6 +186,64 @@ public class GameWorld {
 		engine.addEntity(e);
 		return e;
 	}
+	
+	public Entity makeEnemy( float x, float y, TextureRegion tr, float offw, float offh, boolean flying ) {
+		Entity e = new Entity();
+		GraphicsComponent gc = (GraphicsComponent) e.addComponent(new GraphicsComponent());
+		gc.drawElement = tr;
+		gc.sprite = new Sprite(gc.drawElement);
+		
+		PositionComponent posc = (PositionComponent) e.addComponent(new PositionComponent());
+		posc.position = new Vector2(x,y);
+		posc.offset.x = 0;
+		posc.offset.y = 0;
+
+		PhysicsComponent phc = (PhysicsComponent) e.addComponent(new PhysicsComponent());
+		phc.body = physics.createEnemyBody2(x, y, gc.sprite.getWidth()/2 + offw, gc.sprite.getHeight()/2 + offh );
+		phc.body.setUserData(e);
+		
+		phc.body.setGravityScale(flying ? 0 : 1);
+		return e;
+	}
+	
+	public Entity makeEnemy( float x, float y, TextureRegion tr, float offw, float offh) {
+		return makeEnemy(x, y, tr, offw, offh, false);
+	}
+	
+	public void makeThreeHeaded( float x, float y ) {
+		engine.addEntity(makeEnemy(x,y,Gfx.threeHeadSheet.get(0), 0, -2));
+	}
+	
+	public void makeRunner(float x, float y) {
+		engine.addEntity(makeEnemy(x,y,Gfx.runnerSheet.get(0), 0, 0));
+	}
+	
+	public void makeJumper(float x, float y) {
+		engine.addEntity(makeEnemy(x,y,Gfx.jumperSheet.get(0), 0, -14));
+	}
+	
+	public void makeDemon(float x, float y) {
+		engine.addEntity(makeEnemy(x,y,Gfx.demonSheet.get(0), 0, 0, true));
+	}
+	
+	public void makeEvilCherub(float x, float y) {
+		engine.addEntity(makeEnemy(x,y,Gfx.evilCherubSheet.get(0), -10, 0, true));
+	}
+	
+	public void makeZombie(float x, float y) {
+		engine.addEntity(makeEnemy(x,y,Gfx.zombieSheet.get(0), 0, 0));
+	}
+	
+	public void makeSummoner(float x, float y) {
+		engine.addEntity(makeEnemy(x,y,Gfx.summonerSheet.get(0), -5, -1));
+	}
+	
+	public void makeCryingMask(float x, float y) {
+		engine.addEntity(makeEnemy(x,y,Gfx.cryingMaskSheet.get(0), 0, 0, true));
+	}
+	
+	
+	
 	
 	public void setCam() {
 		cam.position.x = playerPositionComponent.position.x;

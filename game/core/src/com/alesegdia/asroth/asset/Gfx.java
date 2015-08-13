@@ -28,6 +28,16 @@ public class Gfx {
 	public static TextureRegion playerBulletTexture;
 	public static Animation playerWall;
 	
+	public static Spritesheet cryingMaskSheet;
+	public static Spritesheet jumperSheet;
+	public static Spritesheet runnerSheet;
+	public static Spritesheet evilCherubSheet;
+	public static Spritesheet summonerSheet;
+	public static Spritesheet threeHeadSheet;
+	public static Spritesheet zombieSheet;
+	public static Spritesheet demonSheet;
+	
+	
 	public static void Initialize() {
 		mapTilesTexture = new Texture(Gdx.files.internal("flyinGB_tiles.png"));
 		Texture pt = new Texture(Gdx.files.internal("flyinGB.png"));
@@ -54,6 +64,17 @@ public class Gfx {
 		
 		playerBulletTexture = new TextureRegion();
 		playerBulletTexture.setRegion(new Texture(Gdx.files.internal("flyinGB_playerBullet.png")));
+
+		cryingMaskSheet = new Spritesheet("cryingmask.png", 3, 2);
+		jumperSheet = new Spritesheet("jumpers.png", 1, 3);
+		threeHeadSheet = new Spritesheet("threeheaded.png", 1, 2);
+		runnerSheet = new Spritesheet("runner.png", 5, 4);
+		summonerSheet = new Spritesheet("summoner.png", 1, 4);
+		evilCherubSheet = new Spritesheet("evilcherubs.png", 1, 3);
+		zombieSheet = new Spritesheet("zombie-sheet.png", 1, 2);
+		demonSheet = new Spritesheet("demon.png", 1, 3);
+
+		
 	}
 	
 }

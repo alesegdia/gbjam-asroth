@@ -1,5 +1,7 @@
 package com.alesegdia.asroth.asset;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -13,7 +15,10 @@ public class Spritesheet {
 	public Spritesheet( TextureRegion sheet, int xtiles, int ytiles )
 	{
 		this.sheet = sheet;
-
+		loadSheet(xtiles, ytiles);
+	}
+	
+	private void loadSheet(int xtiles, int ytiles) {
 		tiles = new TextureRegion[xtiles * ytiles];
 		
 		tileWidth = this.sheet.getRegionWidth() / xtiles;
@@ -30,9 +35,16 @@ public class Spritesheet {
 					tileWidth, tileHeight);
 			tiles[i] = reg;
 		}
-
 	}
-	
+
+	public Spritesheet(String path, int xtiles, int ytiles) {
+		Texture pt = new Texture(Gdx.files.internal(path));
+		TextureRegion tr = new TextureRegion();
+		tr.setRegion(pt);
+		this.sheet = tr;
+		loadSheet(ytiles, xtiles);
+	}
+
 	public Sprite createSprite() {
 		Sprite sprite = new Sprite( sheet.getTexture() );
 		sprite.setSize( tileWidth,  tileHeight );

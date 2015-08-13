@@ -34,7 +34,7 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 		super(PhysicsComponent.class);
 		
 		callbacks.add(new ICollisionCallback(){
-			{ setCategories( CollisionLayers.CATEGORY_PLAYER, CollisionLayers.CATEGORY_MAP ); }
+			{ setCategories( CollisionLayers.CATEGORY_PLAYERPHYSIC, CollisionLayers.CATEGORY_MAP ); }
 			
 			@Override
 			public void startCollision(Body player, Body map, Vector2 normal) {

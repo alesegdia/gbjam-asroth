@@ -16,9 +16,9 @@ public class FlipSystem extends EntitySystem {
 		PhysicsComponent phc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
 		GraphicsComponent gc = (GraphicsComponent) e.getComponent(GraphicsComponent.class);
 		
-		if( phc.body.getLinearVelocity().x > 0.01 ) {
+		if( phc.body.getLinearVelocity().x > 0.0001 ) {
 			gc.flipX = false;
-		} else if( phc.body.getLinearVelocity().x < -0.01 ) {
+		} else if( phc.body.getLinearVelocity().x < -0.0001 ) {
 			gc.flipX = true;
 		}
 	}
