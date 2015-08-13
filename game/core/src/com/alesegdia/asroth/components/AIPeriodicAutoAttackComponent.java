@@ -2,7 +2,7 @@ package com.alesegdia.asroth.components;
 
 import com.alesegdia.asroth.ecs.Component;
 
-public class PeriodicAutoAttackComponent extends Component {
+public class AIPeriodicAutoAttackComponent extends Component {
 
 	public float attackCooldown;	// interval between will of attack. Obviously if
 									// AttackComponent.attackCooldown > PeriodicAutoAttack.attackCooldown,

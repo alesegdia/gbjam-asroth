@@ -9,9 +9,9 @@ import com.alesegdia.asroth.ecs.EntitySystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
-public class WalkingSystem extends EntitySystem {
+public class AIWalkingSystem extends EntitySystem {
 
-	public WalkingSystem() {
+	public AIWalkingSystem() {
 		super(EnemyComponent.class, WalkingComponent.class,
 				LinearVelocityComponent.class, ActiveComponent.class);
 	}
