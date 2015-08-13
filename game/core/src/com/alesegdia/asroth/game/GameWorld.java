@@ -5,20 +5,24 @@ import java.util.List;
 import com.alesegdia.asroth.asset.Gfx;
 import com.alesegdia.asroth.components.ActiveComponent;
 import com.alesegdia.asroth.components.AnimationComponent;
+import com.alesegdia.asroth.components.AttackComponent;
 import com.alesegdia.asroth.components.CountdownDestructionComponent;
 import com.alesegdia.asroth.components.EnemyAnimatorComponent;
 import com.alesegdia.asroth.components.EnemyComponent;
 import com.alesegdia.asroth.components.GraphicsComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
+import com.alesegdia.asroth.components.PeriodicAutoAttackComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.PositionComponent;
+import com.alesegdia.asroth.components.SummonComponent;
 import com.alesegdia.asroth.components.WalkingComponent;
 import com.alesegdia.asroth.ecs.Engine;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.physics.CollisionLayers;
 import com.alesegdia.asroth.physics.Physics;
 import com.alesegdia.asroth.systems.AnimationSystem;
+import com.alesegdia.asroth.systems.AttackTriggeringSystem;
 import com.alesegdia.asroth.systems.CountdownDestructionSystem;
 import com.alesegdia.asroth.systems.DrawingSystem;
 import com.alesegdia.asroth.systems.EnemyAnimationSystem;
@@ -26,6 +30,8 @@ import com.alesegdia.asroth.systems.FarDeactivationSystem;
 import com.alesegdia.asroth.systems.FlipSystem;
 import com.alesegdia.asroth.systems.HumanControllerSystem;
 import com.alesegdia.asroth.systems.MovementSystem;
+import com.alesegdia.asroth.systems.PeriodicAttackSystem;
+import com.alesegdia.asroth.systems.SummoningSystem;
 import com.alesegdia.asroth.systems.UpdatePhysicsSystem;
 import com.alesegdia.asroth.systems.WalkingSystem;
 import com.alesegdia.platgen.map.MobZoneExtractor;
@@ -60,6 +66,11 @@ public class GameWorld {
 		engine.addSystem(new AnimationSystem());
 		//engine.addSystem(new FarDeactivationSystem());
 		engine.addSystem(new EnemyAnimationSystem());
+
+		engine.addSystem(new PeriodicAttackSystem());
+		engine.addSystem(new AttackTriggeringSystem());
+		engine.addSystem(new SummoningSystem());
+
 		engine.addSystem(new WalkingSystem());
 		engine.addSystem(new UpdatePhysicsSystem());
 		engine.addSystem(new CountdownDestructionSystem());
@@ -114,10 +125,9 @@ public class GameWorld {
 					CollisionLayers.GROUP_ENEMYLIMIT,
 					false);
 			
-			makeThreeHeaded(
-					(mz.xRange.x + 3) * 10f * GameConfig.PIXELS_TO_METERS,
-					(mz.height + 3) * 10f * GameConfig.PIXELS_TO_METERS
-				);
+			Entity e = makeSummoner(0,0,mz);
+			adjustToTile(e, mz.xRange.x + 3, mz.height + 1);
+					//,mz				);
 
 
 /*			physics.createRectBody(mz.xRange.x, mz.height,//tm.cols - (mz.xRange.x-1),y-1, // (mz.height-1),
@@ -131,30 +141,44 @@ public class GameWorld {
 		}
 	}
 	
+	public void adjustToTile( Entity e, int tx, int ty ) {
+		PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
+		GraphicsComponent gc = (GraphicsComponent) e.getComponent(GraphicsComponent.class);
+		float dc = pc.boxOffset.y * -1f;
+		TextureRegion tr = gc.drawElement;
+		float dy = tr.getRegionHeight()/2 - dc + 1f;
+		System.out.println(dc);
+		float fx = (tx) * 10f * GameConfig.PIXELS_TO_METERS;
+		float fy = (ty) * 10f * GameConfig.PIXELS_TO_METERS + dy * GameConfig.PIXELS_TO_METERS;
+		pc.body.setTransform(fx, fy, 0);
+	}
+	
 	public static PositionComponent playerPositionComponent;
 	
 	public void makePlayer(int x, int y) {
 		Entity player = new Entity();
+		
 		PhysicsComponent pc = (PhysicsComponent) player.addComponent(new PhysicsComponent());
 		pc.body = physics.createPlayerBody(x, y);
 		pc.body.setUserData(player);
+		
 		GraphicsComponent gc = (GraphicsComponent) player.addComponent(new GraphicsComponent());
 		gc.drawElement = Gfx.playerSheet.get(0);
 		gc.sprite = new Sprite(gc.drawElement);
+		
 		playerPositionComponent = (PositionComponent) player.addComponent(new PositionComponent());
 		playerPositionComponent.position = pc.body.getPosition();
-		playerPositionComponent.offset.x = 0;
-		playerPositionComponent.offset.y = 0;
-		//playerPositionComponent.offset.x = -11;
-		//playerPositionComponent.offset.y = -11 + GameConfig.PIXELS_TO_METERS;
 		
 		AnimationComponent ac = (AnimationComponent) player.addComponent(new AnimationComponent());
 		ac.currentAnim = Gfx.playerWalk;
-		player.addComponent(new PlayerComponent());
+
+		PlayerComponent plc = (PlayerComponent) player.addComponent(new PlayerComponent());
+
 		LinearVelocityComponent lvc = (LinearVelocityComponent) player.addComponent(new LinearVelocityComponent());		
 		lvc.speed.set(0.5f,0.25f);
 		lvc.cap.y = 2;
 		lvc.doCap[1] = true;
+		
 		engine.addEntity(player);
 	}
 	
@@ -204,11 +228,13 @@ public class GameWorld {
 		
 		CountdownDestructionComponent cdc = (CountdownDestructionComponent) e.addComponent(new CountdownDestructionComponent());
 		cdc.timeToLive = 0.7f;
+		
 		engine.addEntity(e);
 		return e;
 	}
 	
 	public Entity makeEnemy( float x, float y, TextureRegion tr, float offw, float offh, boolean flying ) {
+		
 		Entity e = new Entity();
 		GraphicsComponent gc = (GraphicsComponent) e.addComponent(new GraphicsComponent());
 		gc.drawElement = tr;
@@ -223,6 +249,7 @@ public class GameWorld {
 		phc.body = physics.createEnemyBody2(x, y, gc.sprite.getWidth()/2 + offw, gc.sprite.getHeight()/2 + offh );
 		phc.body.setUserData(e);
 		phc.body.setGravityScale(flying ? 0 : 1);
+		phc.boxOffset.set(offw, offh);
 		
 		ActiveComponent actc = (ActiveComponent) e.addComponent(new ActiveComponent());
 		
@@ -238,8 +265,10 @@ public class GameWorld {
 		wc.timeToRest = ttr;
 		wc.restingTimer = ttr;
 		wc.walkingLeft = true;
+		
 		LinearVelocityComponent lvc = (LinearVelocityComponent) e.addComponent(new LinearVelocityComponent());
 		lvc.speed.x = speed;
+		
 		return e;
 	}
 	
@@ -253,27 +282,31 @@ public class GameWorld {
 		eac.standAnim = standAnim;
 		eac.walkAnim = walkAnim;
 		eac.attackAnim = attackAnim;
+		
 		AnimationComponent ac = (AnimationComponent) e.addComponent(new AnimationComponent());
 		ac.currentAnim = standAnim;
+		
 		return e;
 	}
 	
-	public void makeThreeHeaded( float x, float y ) {
+	public Entity makeThreeHeaded( float x, float y ) {
 		Entity e = makeEnemy(x,y,Gfx.threeHeadSheet.get(0), 0, -2);
+		
 		letEnemyWalk( e, 6, 3, 4 );
 		addEnemyAnimator(e, Gfx.threeHeadWalk, Gfx.threeHeadStand, Gfx.threeHeadAttack);
-		engine.addEntity(e);
+		
+		return engine.addEntity(e);
 	}
 	
-	public void makeRunner(float x, float y) {
+	public Entity makeRunner(float x, float y) {
 		Entity e = makeEnemy(x,y,Gfx.runnerSheet.get(0), 0, 0);
 		letEnemyWalk( e, 10, 0, 6 + RNG.rng.nextFloat()*2 );
 		addEnemyAnimator(e, Gfx.runnerWalk, Gfx.runnerStand, Gfx.runnerAttack);
-		engine.addEntity(e);
+		return engine.addEntity(e);
 	}
 	
-	public void makeJumper(float x, float y) {
-		engine.addEntity(makeEnemy(x,y,Gfx.jumperSheet.get(0), 0, -14));
+	public Entity makeJumper(float x, float y) {
+		return engine.addEntity(makeEnemy(x,y,Gfx.jumperSheet.get(2), 0, -14));
 	}
 	
 	public void makeDemon(float x, float y) {
@@ -284,23 +317,40 @@ public class GameWorld {
 		engine.addEntity(makeEnemy(x,y,Gfx.evilCherubSheet.get(0), -10, 0, true));
 	}
 	
-	public void makeZombie(float x, float y) {
+	public Entity makeZombie(float x, float y) {
 		Entity e = makeEnemy(x,y,Gfx.zombieSheet.get(0), 0, 0);
 		letEnemyWalk( e, 6, 0, 1 );
 		addEnemyAnimator(e, Gfx.zombieWalk, Gfx.zombieStand, Gfx.zombieAttack);
-		engine.addEntity(e);
+		return engine.addEntity(e);
 	}
 	
-	public void makeSummoner(float x, float y) {
-		engine.addEntity(makeEnemy(x,y,Gfx.summonerSheet.get(0), -5, -1));
+	public Entity makeSummoner(float x, float y, MobZone mz) {
+		Entity e = makeEnemy(x,y,Gfx.summonerSheet.get(0), -5, -1);
+
+		SummonComponent sc = (SummonComponent) e.addComponent(new SummonComponent());
+		sc.summonProb[0] = 0.1f;
+		sc.summonProb[1] = 0.9f;
+		sc.summonProb[2] = 1.f;
+		sc.actingZone = mz;
+
+		AttackComponent ac = (AttackComponent) e.addComponent(new AttackComponent());
+		ac.nextAttackAvailable = 3f;
+		ac.canAttack = false;
+		ac.attackCooldown = 1f;
+		
+		PeriodicAutoAttackComponent pac = (PeriodicAutoAttackComponent) e.addComponent(new PeriodicAutoAttackComponent());
+		pac.attackCooldown = 5f;
+		pac.nextAttack = 1f;
+		
+		letEnemyWalk( e, 6, 0, 1 );
+		addEnemyAnimator(e, Gfx.summonerWalk, Gfx.summonerStand, Gfx.summonerAttack);
+
+		return engine.addEntity(e);
 	}
 	
 	public void makeCryingMask(float x, float y) {
 		engine.addEntity(makeEnemy(x,y,Gfx.cryingMaskSheet.get(0), 0, 0, true));
 	}
-	
-	
-	
 	
 	public void setCam() {
 		cam.position.x = playerPositionComponent.position.x;

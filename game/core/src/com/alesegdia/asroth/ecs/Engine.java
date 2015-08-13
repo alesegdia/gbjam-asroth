@@ -11,11 +11,12 @@ public class Engine {
 	private List<EntitySystem> renderingSystems = new ArrayList<EntitySystem>();
 	private List<EntitySystem> stepSystems = new ArrayList<EntitySystem>();
 	
-	public void addEntity(Entity e) {
+	public Entity addEntity(Entity e) {
 		entities.add(e);
 		for( EntitySystem es : systems ) {
 			es.entityAdded(e);
 		}
+		return e;
 	}
 	
 	public void step() {

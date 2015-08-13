@@ -103,7 +103,7 @@ public class HumanControllerSystem extends EntitySystem {
 		if( Gdx.input.isKeyJustPressed(Input.Keys.W) ) { GameWorld.instance.makeRunner(x, y); }
 		if( Gdx.input.isKeyJustPressed(Input.Keys.E) ) { GameWorld.instance.makeJumper(x, y); }
 		if( Gdx.input.isKeyJustPressed(Input.Keys.R) ) { GameWorld.instance.makeZombie(x, y); }
-		if( Gdx.input.isKeyJustPressed(Input.Keys.A) ) { GameWorld.instance.makeSummoner(x, y); }
+		//if( Gdx.input.isKeyJustPressed(Input.Keys.A) ) { GameWorld.instance.makeSummoner(x, y); }
 		if( Gdx.input.isKeyJustPressed(Input.Keys.S) ) { GameWorld.instance.makeDemon(x, y); }
 		if( Gdx.input.isKeyJustPressed(Input.Keys.D) ) { GameWorld.instance.makeEvilCherub(x, y); }
 		if( Gdx.input.isKeyJustPressed(Input.Keys.F) ) { GameWorld.instance.makeCryingMask(x, y); }		
