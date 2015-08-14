@@ -1,18 +1,18 @@
 package com.alesegdia.asroth.systems;
 
-import com.alesegdia.asroth.components.AIAttackPreparationComponent;
-import com.alesegdia.asroth.components.AIEnemyAnimatorComponent;
+import com.alesegdia.asroth.components.AIAgentAttackPreparationComponent;
+import com.alesegdia.asroth.components.AIAgentAnimatorComponent;
 import com.alesegdia.asroth.components.AttackComponent;
-import com.alesegdia.asroth.components.EnemyComponent;
+import com.alesegdia.asroth.components.AIAgentComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
 import com.badlogic.gdx.Gdx;
 
-public class AIPrepareAttackSystem extends EntitySystem {
+public class AIAgentPrepareAttackSystem extends EntitySystem {
 
-	public AIPrepareAttackSystem () {
-		super(AttackComponent.class, AIAttackPreparationComponent.class,
-				EnemyComponent.class, AIEnemyAnimatorComponent.class);
+	public AIAgentPrepareAttackSystem () {
+		super(AttackComponent.class, AIAgentAttackPreparationComponent.class,
+				AIAgentComponent.class, AIAgentAnimatorComponent.class);
 	}
 	
 	@Override
@@ -23,9 +23,9 @@ public class AIPrepareAttackSystem extends EntitySystem {
 	@Override
 	public void process(Entity e) {
 		AttackComponent ac = (AttackComponent) e.getComponent(AttackComponent.class);
-		AIAttackPreparationComponent pac = (AIAttackPreparationComponent) e.getComponent(AIAttackPreparationComponent.class);
-		EnemyComponent ec = (EnemyComponent) e.getComponent(EnemyComponent.class);
-		AIEnemyAnimatorComponent eac = (AIEnemyAnimatorComponent) e.getComponent(AIEnemyAnimatorComponent.class);
+		AIAgentAttackPreparationComponent pac = (AIAgentAttackPreparationComponent) e.getComponent(AIAgentAttackPreparationComponent.class);
+		AIAgentComponent ec = (AIAgentComponent) e.getComponent(AIAgentComponent.class);
+		AIAgentAnimatorComponent eac = (AIAgentAnimatorComponent) e.getComponent(AIAgentAnimatorComponent.class);
 		
 		if( !ec.isPreparingAttack ) {
 			pac.preparingTimer = pac.timeToPrepare;

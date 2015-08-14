@@ -1,6 +1,6 @@
 package com.alesegdia.asroth.systems;
 
-import com.alesegdia.asroth.components.EnemyComponent;
+import com.alesegdia.asroth.components.AIAgentComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
 import com.alesegdia.asroth.components.WalkingComponent;
 import com.alesegdia.asroth.components.ActiveComponent;
@@ -9,10 +9,10 @@ import com.alesegdia.asroth.ecs.EntitySystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
-public class AIWalkingSystem extends EntitySystem {
+public class AIAgentWalkingSystem extends EntitySystem {
 
-	public AIWalkingSystem() {
-		super(EnemyComponent.class, WalkingComponent.class,
+	public AIAgentWalkingSystem() {
+		super(AIAgentComponent.class, WalkingComponent.class,
 				LinearVelocityComponent.class, ActiveComponent.class);
 	}
 	

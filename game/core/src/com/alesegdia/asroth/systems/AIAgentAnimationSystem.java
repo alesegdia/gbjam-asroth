@@ -1,16 +1,16 @@
 package com.alesegdia.asroth.systems;
 
 import com.alesegdia.asroth.components.AnimationComponent;
-import com.alesegdia.asroth.components.AIEnemyAnimatorComponent;
-import com.alesegdia.asroth.components.EnemyComponent;
+import com.alesegdia.asroth.components.AIAgentAnimatorComponent;
+import com.alesegdia.asroth.components.AIAgentComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
 
-public class AIEnemyAnimationSystem extends EntitySystem {
+public class AIAgentAnimationSystem extends EntitySystem {
 	
-	public AIEnemyAnimationSystem() {
-		super(EnemyComponent.class, AIEnemyAnimatorComponent.class, AnimationComponent.class,
+	public AIAgentAnimationSystem() {
+		super(AIAgentComponent.class, AIAgentAnimatorComponent.class, AnimationComponent.class,
 				LinearVelocityComponent.class);
 	}
 
@@ -22,8 +22,8 @@ public class AIEnemyAnimationSystem extends EntitySystem {
 
 	@Override
 	public void process(Entity e) {
-		EnemyComponent ec = (EnemyComponent) e.getComponent(EnemyComponent.class);
-		AIEnemyAnimatorComponent eac = (AIEnemyAnimatorComponent) e.getComponent(AIEnemyAnimatorComponent.class);
+		AIAgentComponent ec = (AIAgentComponent) e.getComponent(AIAgentComponent.class);
+		AIAgentAnimatorComponent eac = (AIAgentAnimatorComponent) e.getComponent(AIAgentAnimatorComponent.class);
 		AnimationComponent ac = (AnimationComponent) e.getComponent(AnimationComponent.class);
 		LinearVelocityComponent lvc = (LinearVelocityComponent) e.getComponent(LinearVelocityComponent.class);
 		

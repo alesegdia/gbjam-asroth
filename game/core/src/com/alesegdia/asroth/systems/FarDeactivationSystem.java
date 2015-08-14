@@ -1,6 +1,6 @@
 package com.alesegdia.asroth.systems;
 
-import com.alesegdia.asroth.components.EnemyComponent;
+import com.alesegdia.asroth.components.AIAgentComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.PositionComponent;
@@ -12,7 +12,7 @@ import com.alesegdia.asroth.game.GameWorld;
 public class FarDeactivationSystem extends EntitySystem {
 
 	public FarDeactivationSystem () {
-		super(EnemyComponent.class, PhysicsComponent.class, PositionComponent.class,
+		super(AIAgentComponent.class, PhysicsComponent.class, PositionComponent.class,
 				ActiveComponent.class, LinearVelocityComponent.class);
 	}
 	

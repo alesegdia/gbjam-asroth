@@ -7,12 +7,12 @@ import com.alesegdia.asroth.components.ActiveComponent;
 import com.alesegdia.asroth.components.AnimationComponent;
 import com.alesegdia.asroth.components.AttackComponent;
 import com.alesegdia.asroth.components.CountdownDestructionComponent;
-import com.alesegdia.asroth.components.AIAttackPreparationComponent;
-import com.alesegdia.asroth.components.AIEnemyAnimatorComponent;
-import com.alesegdia.asroth.components.EnemyComponent;
+import com.alesegdia.asroth.components.AIAgentAttackPreparationComponent;
+import com.alesegdia.asroth.components.AIAgentAnimatorComponent;
+import com.alesegdia.asroth.components.AIAgentComponent;
 import com.alesegdia.asroth.components.GraphicsComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
-import com.alesegdia.asroth.components.AIPeriodicAutoAttackComponent;
+import com.alesegdia.asroth.components.AIAgentPeriodicAutoAttackComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.PositionComponent;
@@ -26,16 +26,16 @@ import com.alesegdia.asroth.systems.AnimationSystem;
 import com.alesegdia.asroth.systems.AttackTriggeringSystem;
 import com.alesegdia.asroth.systems.CountdownDestructionSystem;
 import com.alesegdia.asroth.systems.DrawingSystem;
-import com.alesegdia.asroth.systems.AIEnemyAnimationSystem;
+import com.alesegdia.asroth.systems.AIAgentAnimationSystem;
 import com.alesegdia.asroth.systems.FarDeactivationSystem;
 import com.alesegdia.asroth.systems.FlipSystem;
 import com.alesegdia.asroth.systems.HumanControllerSystem;
 import com.alesegdia.asroth.systems.MovementSystem;
-import com.alesegdia.asroth.systems.AIPeriodicAttackSystem;
-import com.alesegdia.asroth.systems.AIPrepareAttackSystem;
+import com.alesegdia.asroth.systems.AIAgentPeriodicAttackSystem;
+import com.alesegdia.asroth.systems.AIAgentPrepareAttackSystem;
 import com.alesegdia.asroth.systems.SummoningSystem;
 import com.alesegdia.asroth.systems.UpdatePhysicsSystem;
-import com.alesegdia.asroth.systems.AIWalkingSystem;
+import com.alesegdia.asroth.systems.AIAgentWalkingSystem;
 import com.alesegdia.platgen.map.MobZoneExtractor;
 import com.alesegdia.platgen.map.MobZoneExtractor.MobZone;
 import com.alesegdia.platgen.map.TileMap;
@@ -68,12 +68,12 @@ public class GameWorld {
 		engine.addSystem(new AnimationSystem());
 		//engine.addSystem(new FarDeactivationSystem());
 		
-		engine.addSystem(new AIWalkingSystem());
+		engine.addSystem(new AIAgentWalkingSystem());
 
-		engine.addSystem(new AIEnemyAnimationSystem());
+		engine.addSystem(new AIAgentAnimationSystem());
 
-		engine.addSystem(new AIPeriodicAttackSystem());
-		engine.addSystem(new AIPrepareAttackSystem());
+		engine.addSystem(new AIAgentPeriodicAttackSystem());
+		engine.addSystem(new AIAgentPrepareAttackSystem());
 		engine.addSystem(new AttackTriggeringSystem());
 
 		engine.addSystem(new SummoningSystem());
@@ -251,7 +251,7 @@ public class GameWorld {
 		
 		ActiveComponent actc = (ActiveComponent) e.addComponent(new ActiveComponent());
 		
-		EnemyComponent enc = (EnemyComponent) e.addComponent(new EnemyComponent());
+		AIAgentComponent enc = (AIAgentComponent) e.addComponent(new AIAgentComponent());
 		
 		return e;
 	}
@@ -276,7 +276,7 @@ public class GameWorld {
 	}
 	
 	public Entity addEnemyAnimator( Entity e, Animation walkAnim, Animation standAnim, Animation attackAnim ) {
-		AIEnemyAnimatorComponent eac = (AIEnemyAnimatorComponent) e.addComponent(new AIEnemyAnimatorComponent());
+		AIAgentAnimatorComponent eac = (AIAgentAnimatorComponent) e.addComponent(new AIAgentAnimatorComponent());
 		eac.standAnim = standAnim;
 		eac.walkAnim = walkAnim;
 		eac.attackAnim = attackAnim;
@@ -336,14 +336,14 @@ public class GameWorld {
 		ac.canAttack = false;
 		ac.attackCooldown = 1f;
 		
-		AIPeriodicAutoAttackComponent pac = (AIPeriodicAutoAttackComponent) e.addComponent(new AIPeriodicAutoAttackComponent());
+		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
 		pac.attackCooldown = 5f;
 		pac.nextAttack = 1f;
 		
 		letEnemyWalk( e, 6, 0, 1 );
 		addEnemyAnimator(e, Gfx.summonerWalk, Gfx.summonerStand, Gfx.summonerAttack);
 		
-		AIAttackPreparationComponent aipac = (AIAttackPreparationComponent) e.addComponent(new AIAttackPreparationComponent());
+		AIAgentAttackPreparationComponent aipac = (AIAgentAttackPreparationComponent) e.addComponent(new AIAgentAttackPreparationComponent());
 		aipac.timeToPrepare = 3;
 		aipac.preparingTimer = 3;
 		return engine.addEntity(e);
