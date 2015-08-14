@@ -1,5 +1,6 @@
 package com.alesegdia.asroth.game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.alesegdia.asroth.asset.Gfx;
@@ -16,6 +17,7 @@ import com.alesegdia.asroth.components.AIAgentPeriodicAutoAttackComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.PositionComponent;
+import com.alesegdia.asroth.components.ShootComponent;
 import com.alesegdia.asroth.components.SummonComponent;
 import com.alesegdia.asroth.components.WalkingComponent;
 import com.alesegdia.asroth.ecs.Engine;
@@ -31,6 +33,7 @@ import com.alesegdia.asroth.systems.FarDeactivationSystem;
 import com.alesegdia.asroth.systems.FlipSystem;
 import com.alesegdia.asroth.systems.HumanControllerSystem;
 import com.alesegdia.asroth.systems.MovementSystem;
+import com.alesegdia.asroth.systems.HorizontalShootingSystem;
 import com.alesegdia.asroth.systems.AIAgentPeriodicAttackSystem;
 import com.alesegdia.asroth.systems.AIAgentPrepareAttackSystem;
 import com.alesegdia.asroth.systems.SummoningSystem;
@@ -56,6 +59,8 @@ public class GameWorld {
 	private Physics physics;
 	private Camera cam;
 	
+	private List<Vector2> threeHeadedOrigins = new ArrayList<Vector2>();
+	
 	public int getNumEntities() {
 		return engine.getNumEntities();
 	}
@@ -77,6 +82,7 @@ public class GameWorld {
 		engine.addSystem(new AttackTriggeringSystem());
 
 		engine.addSystem(new SummoningSystem());
+		engine.addSystem(new HorizontalShootingSystem());
 
 		engine.addSystem(new UpdatePhysicsSystem());
 		engine.addSystem(new CountdownDestructionSystem());
@@ -132,11 +138,14 @@ public class GameWorld {
 					CollisionLayers.GROUP_ENEMYLIMIT,
 					false);
 			
-			Entity e = makeSummoner(0,0,mz);
-			adjustToTile(e, mz.xRange.x + 3, mz.height + 1);
+			//Entity e = makeSummoner(0,0,mz);
+			//adjustToTile(e, mz.xRange.x + 3, mz.height + 1);
 
 			i++;
 		}
+		this.threeHeadedOrigins.add(new Vector2(0.5f,-0.35f));
+		this.threeHeadedOrigins.add(new Vector2(0.5f,0.3f));
+		this.threeHeadedOrigins.add(new Vector2(0.5f,0.75f));
 	}
 	
 	public void adjustToTile( Entity e, int tx, int ty ) {
@@ -293,6 +302,15 @@ public class GameWorld {
 		letEnemyWalk( e, 6, 3, 4 );
 		addEnemyAnimator(e, Gfx.threeHeadWalk, Gfx.threeHeadStand, Gfx.threeHeadAttack);
 		
+		AttackComponent ac = (AttackComponent) e.addComponent(new AttackComponent());
+		ac.attackCooldown = 1f;
+
+		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
+		sc.bulletOrigins = this.threeHeadedOrigins;
+
+		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
+		pac.attackCooldown = 3f;
+		
 		return engine.addEntity(e);
 	}
 	
@@ -326,8 +344,8 @@ public class GameWorld {
 		Entity e = makeEnemy(x,y,Gfx.summonerSheet.get(0), -5, -1);
 
 		SummonComponent sc = (SummonComponent) e.addComponent(new SummonComponent());
-		sc.summonProb[0] = 0.5f;
-		sc.summonProb[1] = 0.9f;
+		sc.summonProb[0] = 0.1f;
+		sc.summonProb[1] = 0.2f;
 		sc.summonProb[2] = 1.f;
 		sc.actingZone = mz;
 

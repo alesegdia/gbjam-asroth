@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -123,6 +124,13 @@ public class GdxGame extends ApplicationAdapter {
 		batch.begin();
 		font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
 		font.draw(batch, "entities: " + gameWorld.getNumEntities(), 80, 20);
+		TextureRegion t = Gfx.hpTexture;
+		float trw = t.getRegionWidth();
+		float trh = t.getRegionHeight();
+		float s = 3;
+		for( int i = 0; i < 10; i++ ) {
+			batch.draw(Gfx.hpTexture, 10 + i * trw * s, 295, trw*s, trh*s);	
+		}
 		batch.end();
 		//physics.render(camera);
 	}

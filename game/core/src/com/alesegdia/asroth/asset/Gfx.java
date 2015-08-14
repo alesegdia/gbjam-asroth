@@ -26,6 +26,8 @@ public class Gfx {
 	public static Animation groundExplosion;
 	
 	public static TextureRegion playerBulletTexture;
+	public static TextureRegion hpTexture;
+	
 	public static Animation playerWall;
 	
 	public static Spritesheet cryingMaskSheet;
@@ -59,6 +61,10 @@ public class Gfx {
 		Texture pt = new Texture(Gdx.files.internal("flyinGB.png"));
 		TextureRegion tr = new TextureRegion();
 		tr.setRegion(pt);
+		
+		hpTexture = new TextureRegion();
+		hpTexture.setRegion(new Texture(Gdx.files.internal("hpGB.png")));
+		
 		playerSheet = new Spritesheet(tr, 3, 5);
 		
 		playerStand = new Animation(0.2f, playerSheet.get(0));

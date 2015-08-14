@@ -35,10 +35,8 @@ public class AIAgentPrepareAttackSystem extends EntitySystem {
 			if( ac.wantToAttack ) {
 				// are we prepared yet?
 				if( pac.preparingTimer < 0 ) {
-					System.out.println("<" + Gdx.graphics.getFrameId() + " - " + pac.preparingTimer + " - PREPARED>");
 					ac.wantToAttack = true;
 				} else {
-					System.out.println("<" + Gdx.graphics.getFrameId() + " - " + pac.preparingTimer + " - preparing...>");
 					// wait for it until I'm prepared
 					ac.wantToAttack = false;
 					ec.isPreparingAttack = true;
@@ -46,7 +44,6 @@ public class AIAgentPrepareAttackSystem extends EntitySystem {
 			} else {
 				ec.isPreparingAttack = false;
 				pac.preparingTimer = pac.timeToPrepare;
-				System.out.println("<" + Gdx.graphics.getFrameId() + " - " + pac.preparingTimer + " - DONT WANT>");
 			}
 	}
 
