@@ -1,6 +1,7 @@
 package com.alesegdia.asroth.systems;
 
 import com.alesegdia.asroth.components.AnimationComponent;
+import com.alesegdia.asroth.components.AttackComponent;
 import com.alesegdia.asroth.components.AIAgentAnimatorComponent;
 import com.alesegdia.asroth.components.AIAgentComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
@@ -26,16 +27,22 @@ public class AIAgentAnimationSystem extends EntitySystem {
 		AIAgentAnimatorComponent eac = (AIAgentAnimatorComponent) e.getComponent(AIAgentAnimatorComponent.class);
 		AnimationComponent ac = (AnimationComponent) e.getComponent(AnimationComponent.class);
 		LinearVelocityComponent lvc = (LinearVelocityComponent) e.getComponent(LinearVelocityComponent.class);
+		AttackComponent atc = (AttackComponent) e.getComponent(AttackComponent.class);
 		
 		if( ec.isAttacking ) {
 			ac.currentAnim = eac.attackAnim;
-		} else if( ec.isPreparingAttack ) {
+			lvc.linearVelocity.x = 0;
+			System.out.println("ISATTACKING");
+		} else if( ec.isPreparingAttack || atc.isAttacking ) {
 			ac.currentAnim = eac.prepareAnim;
 			lvc.linearVelocity.x = 0;
+			System.out.println("PREPARING OR ATCATTACK");
 		} else if( Math.abs(lvc.linearVelocity.x) > 0.01 ) {
 			ac.currentAnim = eac.walkAnim;
+			System.out.println("DELAO2");
 		} else {
 			ac.currentAnim = eac.standAnim;
+			System.out.println("DELAO1");
 		}
 	}
 

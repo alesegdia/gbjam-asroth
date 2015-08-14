@@ -11,4 +11,8 @@ public class AttackComponent extends Component {
 	public boolean wantToAttack = false;	// will to attack
 	public boolean doAttack; 				// actually can perform an attack
 
+	public boolean isAttacking = false;
+	public float attackDuration;
+	public float attackTimer;
+	public boolean cooldownOverriden;
 }

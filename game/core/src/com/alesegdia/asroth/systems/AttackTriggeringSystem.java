@@ -25,10 +25,20 @@ public class AttackTriggeringSystem extends EntitySystem {
 
 		if( ac.attackedLastFrame ) {
 			// reset attack
+			ac.isAttacking = true;
 			ac.nextAttackAvailable = ac.attackCooldown;
 			ac.attackedLastFrame = false;
+			if( !ac.cooldownOverriden ) {
+				ac.attackTimer = ac.attackDuration;
+			}
 		}
 		
+		if( ac.isAttacking ) {
+			ac.attackTimer -= Gdx.graphics.getDeltaTime();
+		}
+
+		ac.isAttacking = ac.attackTimer >= 0;
+
 		ac.canAttack = ac.nextAttackAvailable <= 0;
 		
 		

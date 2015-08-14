@@ -11,6 +11,7 @@ import com.alesegdia.asroth.components.CountdownDestructionComponent;
 import com.alesegdia.asroth.components.AIAgentAttackPreparationComponent;
 import com.alesegdia.asroth.components.AIAgentAnimatorComponent;
 import com.alesegdia.asroth.components.AIAgentComponent;
+import com.alesegdia.asroth.components.AIAgentFlyingComponent;
 import com.alesegdia.asroth.components.GraphicsComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
 import com.alesegdia.asroth.components.AIAgentPeriodicAutoAttackComponent;
@@ -18,6 +19,7 @@ import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.PositionComponent;
 import com.alesegdia.asroth.components.ShootComponent;
+import com.alesegdia.asroth.components.StrikeAttackComponent;
 import com.alesegdia.asroth.components.SummonComponent;
 import com.alesegdia.asroth.components.WalkingComponent;
 import com.alesegdia.asroth.ecs.Engine;
@@ -29,13 +31,16 @@ import com.alesegdia.asroth.systems.AttackTriggeringSystem;
 import com.alesegdia.asroth.systems.CountdownDestructionSystem;
 import com.alesegdia.asroth.systems.DrawingSystem;
 import com.alesegdia.asroth.systems.AIAgentAnimationSystem;
+import com.alesegdia.asroth.systems.AIAgentFlyingSystem;
 import com.alesegdia.asroth.systems.FarDeactivationSystem;
 import com.alesegdia.asroth.systems.FlipSystem;
 import com.alesegdia.asroth.systems.HumanControllerSystem;
 import com.alesegdia.asroth.systems.MovementSystem;
+import com.alesegdia.asroth.systems.StrikeAttackSystem;
 import com.alesegdia.asroth.systems.HorizontalShootingSystem;
 import com.alesegdia.asroth.systems.AIAgentPeriodicAttackSystem;
 import com.alesegdia.asroth.systems.AIAgentPrepareAttackSystem;
+import com.alesegdia.asroth.systems.AIAgentSystem;
 import com.alesegdia.asroth.systems.SummoningSystem;
 import com.alesegdia.asroth.systems.UpdatePhysicsSystem;
 import com.alesegdia.asroth.systems.AIAgentWalkingSystem;
@@ -73,12 +78,15 @@ public class GameWorld {
 		engine.addSystem(new AnimationSystem());
 		//engine.addSystem(new FarDeactivationSystem());
 		
+		engine.addSystem(new AIAgentSystem());
 		engine.addSystem(new AIAgentWalkingSystem());
+		engine.addSystem(new AIAgentFlyingSystem());
 
 		engine.addSystem(new AIAgentAnimationSystem());
 
 		engine.addSystem(new AIAgentPeriodicAttackSystem());
 		engine.addSystem(new AIAgentPrepareAttackSystem());
+		engine.addSystem(new StrikeAttackSystem());
 		engine.addSystem(new AttackTriggeringSystem());
 
 		engine.addSystem(new SummoningSystem());
@@ -284,12 +292,16 @@ public class GameWorld {
 		return e;
 	}
 	
-	public Entity addEnemyAnimator( Entity e, Animation walkAnim, Animation standAnim, Animation attackAnim ) {
+	private Entity addEnemyAnimator(Entity e, Animation w, Animation s, Animation a) {
+		return addEnemyAnimator(e, w, s, a, null);
+	}
+	
+	public Entity addEnemyAnimator( Entity e, Animation walkAnim, Animation standAnim, Animation attackAnim, Animation prepareAnim ) {
 		AIAgentAnimatorComponent eac = (AIAgentAnimatorComponent) e.addComponent(new AIAgentAnimatorComponent());
 		eac.standAnim = standAnim;
 		eac.walkAnim = walkAnim;
 		eac.attackAnim = attackAnim;
-		eac.prepareAnim = Gfx.summonerPrepare;
+		eac.prepareAnim = prepareAnim;
 		AnimationComponent ac = (AnimationComponent) e.addComponent(new AnimationComponent());
 		ac.currentAnim = standAnim;
 		
@@ -299,17 +311,27 @@ public class GameWorld {
 	public Entity makeThreeHeaded( float x, float y ) {
 		Entity e = makeEnemy(x,y,Gfx.threeHeadSheet.get(0), 0, -2);
 		
-		letEnemyWalk( e, 6, 3, 4 );
-		addEnemyAnimator(e, Gfx.threeHeadWalk, Gfx.threeHeadStand, Gfx.threeHeadAttack);
+		letEnemyWalk( e, 6, 0, 4 );
+		addEnemyAnimator(e, Gfx.threeHeadWalk, Gfx.threeHeadStand, Gfx.threeHeadAttack, Gfx.threeHeadPrepare);
 		
 		AttackComponent ac = (AttackComponent) e.addComponent(new AttackComponent());
-		ac.attackCooldown = 1f;
+		ac.attackCooldown = 0f;
+		ac.attackTimer = 0.2f;
+		ac.attackDuration = 0.3f;
 
 		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
 		sc.bulletOrigins = this.threeHeadedOrigins;
 
 		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
 		pac.attackCooldown = 3f;
+
+		AIAgentAttackPreparationComponent aipac = (AIAgentAttackPreparationComponent) e.addComponent(new AIAgentAttackPreparationComponent());
+		aipac.timeToPrepare = 0.5f;
+		aipac.preparingTimer = 0.5f;
+
+		StrikeAttackComponent sac = (StrikeAttackComponent) e.addComponent(new StrikeAttackComponent());
+		sac.strikeNum = 3;
+		sac.strikeCooldown = 0.8f;
 		
 		return engine.addEntity(e);
 	}
@@ -330,7 +352,11 @@ public class GameWorld {
 	}
 	
 	public void makeEvilCherub(float x, float y) {
-		engine.addEntity(makeEnemy(x,y,Gfx.evilCherubSheet.get(0), -10, 0, true));
+		Entity e = makeEnemy(x,y,Gfx.evilCherubSheet.get(0), -10, 0, true);
+		AIAgentFlyingComponent aifc= (AIAgentFlyingComponent) e.addComponent(new AIAgentFlyingComponent());
+		LinearVelocityComponent lvc = (LinearVelocityComponent) e.addComponent(new LinearVelocityComponent());
+
+		engine.addEntity(e);
 	}
 	
 	public Entity makeZombie(float x, float y) {
@@ -359,7 +385,7 @@ public class GameWorld {
 		pac.nextAttack = 1f;
 		
 		letEnemyWalk( e, 6, 0, 1 );
-		addEnemyAnimator(e, Gfx.summonerWalk, Gfx.summonerStand, Gfx.summonerAttack);
+		addEnemyAnimator(e, Gfx.summonerWalk, Gfx.summonerStand, Gfx.summonerAttack, Gfx.summonerPrepare);
 		
 		AIAgentAttackPreparationComponent aipac = (AIAgentAttackPreparationComponent) e.addComponent(new AIAgentAttackPreparationComponent());
 		aipac.timeToPrepare = 3;
@@ -368,7 +394,31 @@ public class GameWorld {
 	}
 	
 	public void makeCryingMask(float x, float y) {
-		engine.addEntity(makeEnemy(x,y,Gfx.cryingMaskSheet.get(0), 0, 0, true));
+		Entity e = makeEnemy(x,y,Gfx.cryingMaskSheet.get(0), 0, 0, true);
+		AIAgentFlyingComponent aifc= (AIAgentFlyingComponent) e.addComponent(new AIAgentFlyingComponent());
+		LinearVelocityComponent lvc = (LinearVelocityComponent) e.addComponent(new LinearVelocityComponent());
+		
+		AttackComponent ac = (AttackComponent) e.addComponent(new AttackComponent());
+		ac.attackCooldown = 0f;
+		ac.attackTimer = 0.2f;
+		ac.attackDuration = 0.3f;
+
+		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
+		sc.bulletOrigins = this.threeHeadedOrigins;
+
+		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
+		pac.attackCooldown = 3f;
+
+		AIAgentAttackPreparationComponent aipac = (AIAgentAttackPreparationComponent) e.addComponent(new AIAgentAttackPreparationComponent());
+		aipac.timeToPrepare = 0.5f;
+		aipac.preparingTimer = 0.5f;
+
+		StrikeAttackComponent sac = (StrikeAttackComponent) e.addComponent(new StrikeAttackComponent());
+		sac.strikeNum = 3;
+		sac.strikeCooldown = 0.8f;
+
+		
+		engine.addEntity(e);
 	}
 	
 	public void setCam() {

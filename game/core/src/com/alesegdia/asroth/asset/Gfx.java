@@ -44,7 +44,8 @@ public class Gfx {
 	public static Animation threeHeadStand;
 	public static Animation threeHeadWalk;
 	public static Animation threeHeadAttack;
-	
+	public static Animation threeHeadPrepare;
+
 	public static Animation zombieWalk;
 	public static Animation zombieStand;
 	public static Animation zombieAttack;
@@ -105,6 +106,7 @@ public class Gfx {
 		threeHeadStand = new Animation(0.1f, threeHeadSheet.get(1));
 		threeHeadWalk = new Animation(0.1f, threeHeadSheet.getRange(0, 1));
 		threeHeadAttack = new Animation(0.1f, threeHeadSheet.get(0));
+		threeHeadPrepare = new Animation(0.1f, threeHeadSheet.get(0));
 		
 		zombieStand = new Animation(0.1f, zombieSheet.get(1));
 		zombieWalk = new Animation(0.5f, zombieSheet.getRange(0, 1));
