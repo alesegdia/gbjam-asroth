@@ -27,6 +27,8 @@ public class Gfx {
 	
 	public static TextureRegion playerBulletTexture;
 	public static TextureRegion hpTexture;
+	public static TextureRegion hpHud;
+	public static TextureRegion wingsHud;
 	
 	public static Animation playerWall;
 	
@@ -63,7 +65,11 @@ public class Gfx {
 		tr.setRegion(pt);
 		
 		hpTexture = new TextureRegion();
-		hpTexture.setRegion(new Texture(Gdx.files.internal("hpGB.png")));
+		hpTexture.setRegion(new Texture(Gdx.files.internal("hpSlot.png")));
+		hpHud = new TextureRegion();
+		hpHud.setRegion(new Texture(Gdx.files.internal("hpHud.png")));
+		wingsHud = new TextureRegion();
+		wingsHud.setRegion(new Texture(Gdx.files.internal("wingsBar.png")));
 		
 		playerSheet = new Spritesheet(tr, 3, 5);
 		

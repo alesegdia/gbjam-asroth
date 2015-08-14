@@ -125,13 +125,25 @@ public class GdxGame extends ApplicationAdapter {
 		font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
 		font.draw(batch, "entities: " + gameWorld.getNumEntities(), 80, 20);
 		TextureRegion t = Gfx.hpTexture;
+
+		batch.draw(Gfx.hpHud, 0, 0, 0, 0,
+				Gfx.hpHud.getRegionWidth(), Gfx.hpHud.getRegionHeight(),
+				3,3, 0);
+		batch.draw(Gfx.wingsHud, 118*3, 0, 0, 0,
+				Gfx.wingsHud.getRegionWidth(), Gfx.wingsHud.getRegionHeight(),
+				3,3, 0);
 		float trw = t.getRegionWidth();
 		float trh = t.getRegionHeight();
 		float s = 3;
-		for( int i = 0; i < 10; i++ ) {
-			batch.draw(Gfx.hpTexture, 10 + i * trw * s, 295, trw*s, trh*s);	
+		for( int i = 0; i < 3; i++ ) {
+			batch.draw(Gfx.hpTexture, 14*3 + i * trw * s, 2*3, trw*s, trh*s);	
+		}
+		
+		for( int i = 0; i < 6; i++ ) {
+			batch.draw(Gfx.hpTexture, 146*3 - i * trw * s, 2*3, -trw*s, trh*s);	
 		}
 		batch.end();
+
 		//physics.render(camera);
 	}
 }
