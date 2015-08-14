@@ -57,7 +57,6 @@ public class Engine {
 			es.entityAdded(e);
 		}
 		if( rendering ) {
-			System.out.println("adding to rendersys");
 			renderingSystems.add(es);
 		} else {
 			stepSystems.add(es);

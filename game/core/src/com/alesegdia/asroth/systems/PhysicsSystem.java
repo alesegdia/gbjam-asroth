@@ -59,7 +59,6 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			
 			@Override
 			public void startCollision(Body player, Body map, Vector2 normal) {
-				System.out.println("START PLAYER MAP! normal: " + normal.y);
 				Entity e = (Entity) player.getUserData();
 				PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
 				plc.releaseWallVelocity = 0f;

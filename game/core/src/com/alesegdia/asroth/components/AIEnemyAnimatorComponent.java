@@ -8,5 +8,6 @@ public class AIEnemyAnimatorComponent extends Component {
 	public Animation walkAnim;
 	public Animation standAnim;
 	public Animation attackAnim;
+	public Animation prepareAnim;
 	
 }

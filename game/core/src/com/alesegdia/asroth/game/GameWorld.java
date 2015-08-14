@@ -7,11 +7,12 @@ import com.alesegdia.asroth.components.ActiveComponent;
 import com.alesegdia.asroth.components.AnimationComponent;
 import com.alesegdia.asroth.components.AttackComponent;
 import com.alesegdia.asroth.components.CountdownDestructionComponent;
-import com.alesegdia.asroth.components.EnemyAnimatorComponent;
+import com.alesegdia.asroth.components.AIAttackPreparationComponent;
+import com.alesegdia.asroth.components.AIEnemyAnimatorComponent;
 import com.alesegdia.asroth.components.EnemyComponent;
 import com.alesegdia.asroth.components.GraphicsComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
-import com.alesegdia.asroth.components.PeriodicAutoAttackComponent;
+import com.alesegdia.asroth.components.AIPeriodicAutoAttackComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.PositionComponent;
@@ -25,15 +26,16 @@ import com.alesegdia.asroth.systems.AnimationSystem;
 import com.alesegdia.asroth.systems.AttackTriggeringSystem;
 import com.alesegdia.asroth.systems.CountdownDestructionSystem;
 import com.alesegdia.asroth.systems.DrawingSystem;
-import com.alesegdia.asroth.systems.EnemyAnimationSystem;
+import com.alesegdia.asroth.systems.AIEnemyAnimationSystem;
 import com.alesegdia.asroth.systems.FarDeactivationSystem;
 import com.alesegdia.asroth.systems.FlipSystem;
 import com.alesegdia.asroth.systems.HumanControllerSystem;
 import com.alesegdia.asroth.systems.MovementSystem;
-import com.alesegdia.asroth.systems.PeriodicAttackSystem;
+import com.alesegdia.asroth.systems.AIPeriodicAttackSystem;
+import com.alesegdia.asroth.systems.AIPrepareAttackSystem;
 import com.alesegdia.asroth.systems.SummoningSystem;
 import com.alesegdia.asroth.systems.UpdatePhysicsSystem;
-import com.alesegdia.asroth.systems.WalkingSystem;
+import com.alesegdia.asroth.systems.AIWalkingSystem;
 import com.alesegdia.platgen.map.MobZoneExtractor;
 import com.alesegdia.platgen.map.MobZoneExtractor.MobZone;
 import com.alesegdia.platgen.map.TileMap;
@@ -65,13 +67,17 @@ public class GameWorld {
 		engine.addSystem(new HumanControllerSystem());
 		engine.addSystem(new AnimationSystem());
 		//engine.addSystem(new FarDeactivationSystem());
-		engine.addSystem(new EnemyAnimationSystem());
+		
+		engine.addSystem(new AIWalkingSystem());
 
-		engine.addSystem(new PeriodicAttackSystem());
+		engine.addSystem(new AIEnemyAnimationSystem());
+
+		engine.addSystem(new AIPeriodicAttackSystem());
+		engine.addSystem(new AIPrepareAttackSystem());
 		engine.addSystem(new AttackTriggeringSystem());
+
 		engine.addSystem(new SummoningSystem());
 
-		engine.addSystem(new WalkingSystem());
 		engine.addSystem(new UpdatePhysicsSystem());
 		engine.addSystem(new CountdownDestructionSystem());
 		engine.addSystem(new MovementSystem());
@@ -98,6 +104,7 @@ public class GameWorld {
 
 		MobZoneExtractor mze = new MobZoneExtractor();
 		List<MobZone> mobZones = mze.computeMobZones(tm);
+		int i = 0;
 		for( MobZone mz : mobZones ) {
 			float w, h;
 			w = 10; h = 10;
@@ -127,17 +134,8 @@ public class GameWorld {
 			
 			Entity e = makeSummoner(0,0,mz);
 			adjustToTile(e, mz.xRange.x + 3, mz.height + 1);
-					//,mz				);
 
-
-/*			physics.createRectBody(mz.xRange.x, mz.height,//tm.cols - (mz.xRange.x-1),y-1, // (mz.height-1),
-					10, 10,
-					//10 * GameConfig.PIXELS_TO_METERS, 10 * GameConfig.PIXELS_TO_METERS, 
-					CollisionLayers.CATEGORY_ENEMYLIMIT,
-					CollisionLayers.MASK_ENEMYLIMIT,
-					CollisionLayers.GROUP_ENEMYLIMIT,
-					false);
-*/
+			i++;
 		}
 	}
 	
@@ -278,11 +276,11 @@ public class GameWorld {
 	}
 	
 	public Entity addEnemyAnimator( Entity e, Animation walkAnim, Animation standAnim, Animation attackAnim ) {
-		EnemyAnimatorComponent eac = (EnemyAnimatorComponent) e.addComponent(new EnemyAnimatorComponent());
+		AIEnemyAnimatorComponent eac = (AIEnemyAnimatorComponent) e.addComponent(new AIEnemyAnimatorComponent());
 		eac.standAnim = standAnim;
 		eac.walkAnim = walkAnim;
 		eac.attackAnim = attackAnim;
-		
+		eac.prepareAnim = Gfx.summonerPrepare;
 		AnimationComponent ac = (AnimationComponent) e.addComponent(new AnimationComponent());
 		ac.currentAnim = standAnim;
 		
@@ -328,7 +326,7 @@ public class GameWorld {
 		Entity e = makeEnemy(x,y,Gfx.summonerSheet.get(0), -5, -1);
 
 		SummonComponent sc = (SummonComponent) e.addComponent(new SummonComponent());
-		sc.summonProb[0] = 0.1f;
+		sc.summonProb[0] = 0.5f;
 		sc.summonProb[1] = 0.9f;
 		sc.summonProb[2] = 1.f;
 		sc.actingZone = mz;
@@ -338,13 +336,16 @@ public class GameWorld {
 		ac.canAttack = false;
 		ac.attackCooldown = 1f;
 		
-		PeriodicAutoAttackComponent pac = (PeriodicAutoAttackComponent) e.addComponent(new PeriodicAutoAttackComponent());
+		AIPeriodicAutoAttackComponent pac = (AIPeriodicAutoAttackComponent) e.addComponent(new AIPeriodicAutoAttackComponent());
 		pac.attackCooldown = 5f;
 		pac.nextAttack = 1f;
 		
 		letEnemyWalk( e, 6, 0, 1 );
 		addEnemyAnimator(e, Gfx.summonerWalk, Gfx.summonerStand, Gfx.summonerAttack);
-
+		
+		AIAttackPreparationComponent aipac = (AIAttackPreparationComponent) e.addComponent(new AIAttackPreparationComponent());
+		aipac.timeToPrepare = 3;
+		aipac.preparingTimer = 3;
 		return engine.addEntity(e);
 	}
 	

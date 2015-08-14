@@ -17,7 +17,6 @@ public class ComponentType {
 	public ComponentType () {
 		this.index = lastIndex;
 		lastIndex++;
-		System.out.println("Creating comptype: " + index);
 	}
 
 	public static ComponentType RegisterComponentType(Class<? extends Component> c1) {

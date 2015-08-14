@@ -81,7 +81,6 @@ public class Physics {
 		Body b = createBody(x * GameConfig.PIXELS_TO_METERS, y* GameConfig.PIXELS_TO_METERS,dynamic);
 		CircleShape cs = new CircleShape();
 		cs.setRadius(radius * GameConfig.PIXELS_TO_METERS);
-		System.out.println("PLAYERBODY");
 		createFixture(b, cs, catbits, maskbits, group, 1f, 0f, 0f);
 		cs.dispose();
 		return b;

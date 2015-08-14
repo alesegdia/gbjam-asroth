@@ -29,6 +29,9 @@ public class AIEnemyAnimationSystem extends EntitySystem {
 		
 		if( ec.isAttacking ) {
 			ac.currentAnim = eac.attackAnim;
+		} else if( ec.isPreparingAttack ) {
+			ac.currentAnim = eac.prepareAnim;
+			lvc.linearVelocity.x = 0;
 		} else if( Math.abs(lvc.linearVelocity.x) > 0.01 ) {
 			ac.currentAnim = eac.walkAnim;
 		} else {
