@@ -59,6 +59,10 @@ public class Gfx {
 	public static Animation summonerAttack;
 	public static Animation summonerPrepare;
 	
+	public static Animation demonWalk;
+	public static Animation demonStand;
+	public static Animation demonAttack;
+	
 	public static void Initialize() {
 		mapTilesTexture = new Texture(Gdx.files.internal("flyinGB_tiles.png"));
 		Texture pt = new Texture(Gdx.files.internal("flyinGB.png"));
@@ -120,6 +124,16 @@ public class Gfx {
 		summonerWalk = new Animation(0.4f, summonerSheet.getRange(2, 3));
 		summonerAttack = new Animation(0.1f, summonerSheet.get(1));
 		summonerPrepare = new Animation(0.1f, summonerSheet.getRange(0,1));
+		
+		demonWalk = new Animation(0.2f, demonSheet.getRange(0,2));
+		demonWalk.setPlayMode(PlayMode.LOOP_PINGPONG);
+
+		demonStand = new Animation(0.2f, demonSheet.getRange(0,2));
+		demonStand.setPlayMode(PlayMode.LOOP_PINGPONG);
+
+		demonAttack = new Animation(0.2f, demonSheet.getRange(0,2));
+		demonAttack.setPlayMode(PlayMode.LOOP_PINGPONG);
+
 		
 	}
 	

@@ -107,14 +107,23 @@ public class Physics {
 		return createCircleBody(x, y, 7.41f, CollisionLayers.CATEGORY_PLAYERPHYSIC, CollisionLayers.MASK_PLAYERPHYSIC, CollisionLayers.GROUP_PLAYERPHYSIC, true);
 	}
 	
-	public Body createPlayerBulletBody( float x, float y ) {
+	public Body createBulletBody( float x, float y, float w, float h, short cat, short mask, short group ) {
+		return createDirectionalBullet(x,y,w,h,0,cat,mask,group);
+	}
+	
+	public Body createDirectionalBullet( float x, float y, float w, float h, float angle, short cat, short mask, short group ) {
 		Body b = createBody(x, y, true);
+		b.setBullet(true);
 		PolygonShape ps = new PolygonShape();
-		ps.setAsBox(5 * GameConfig.PIXELS_TO_METERS, 5 * GameConfig.PIXELS_TO_METERS);
-		createFixture(b, ps, CollisionLayers.CATEGORY_PLBULLETS, CollisionLayers.MASK_PLBULLETS, CollisionLayers.GROUP_PLBULLETS, 0, 0, 0, true);
+		ps.setAsBox(w * GameConfig.PIXELS_TO_METERS, h * GameConfig.PIXELS_TO_METERS);
+		createFixture(b, ps, cat, mask, group, 0, 0, 0, true);
 		b.setGravityScale(0);
 		ps.dispose();
 		return b;
+	}
+	
+	public Body createPlayerBulletBody( float x, float y ) {
+		return createBulletBody(x, y, 5, 5, CollisionLayers.CATEGORY_PLBULLETS, CollisionLayers.MASK_PLBULLETS, CollisionLayers.GROUP_PLBULLETS);
 	}
 
 	public Body createGroundExplosionBody( float x, float y ) {

@@ -10,5 +10,6 @@ public class GraphicsComponent extends Component {
 	public Sprite sprite = new Sprite();
 	public boolean flipX = false;
 	public boolean allowFlip = true;
+	public float alpha = 1;
 	
 }

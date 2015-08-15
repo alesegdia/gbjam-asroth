@@ -43,6 +43,8 @@ public class DrawingSystem extends EntitySystem {
 			sX = GameConfig.PIXELS_TO_METERS;
 			cX = -gc.drawElement.getRegionWidth()/2f * GameConfig.PIXELS_TO_METERS;
 		}
+		
+		spriteBatch.setColor(1,1,1,gc.alpha);
 		spriteBatch.draw(gc.drawElement, pc.position.x, pc.position.y,
 				cX,
 				-gc.drawElement.getRegionHeight()/2f * GameConfig.PIXELS_TO_METERS,

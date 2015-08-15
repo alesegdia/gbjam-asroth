@@ -13,8 +13,10 @@ import com.alesegdia.asroth.components.AIAgentAnimatorComponent;
 import com.alesegdia.asroth.components.AIAgentComponent;
 import com.alesegdia.asroth.components.AIAgentFlyingComponent;
 import com.alesegdia.asroth.components.GraphicsComponent;
+import com.alesegdia.asroth.components.HideComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
 import com.alesegdia.asroth.components.AIAgentPeriodicAutoAttackComponent;
+import com.alesegdia.asroth.components.AIWarpComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.PositionComponent;
@@ -34,6 +36,7 @@ import com.alesegdia.asroth.systems.AIAgentAnimationSystem;
 import com.alesegdia.asroth.systems.AIAgentFlyingSystem;
 import com.alesegdia.asroth.systems.FarDeactivationSystem;
 import com.alesegdia.asroth.systems.FlipSystem;
+import com.alesegdia.asroth.systems.HideSystem;
 import com.alesegdia.asroth.systems.HumanControllerSystem;
 import com.alesegdia.asroth.systems.MovementSystem;
 import com.alesegdia.asroth.systems.StrikeAttackSystem;
@@ -44,6 +47,7 @@ import com.alesegdia.asroth.systems.AIAgentSystem;
 import com.alesegdia.asroth.systems.SummoningSystem;
 import com.alesegdia.asroth.systems.UpdatePhysicsSystem;
 import com.alesegdia.asroth.systems.AIAgentWalkingSystem;
+import com.alesegdia.asroth.systems.AIAgentWarpingSystem;
 import com.alesegdia.platgen.map.MobZoneExtractor;
 import com.alesegdia.platgen.map.MobZoneExtractor.MobZone;
 import com.alesegdia.platgen.map.TileMap;
@@ -89,6 +93,8 @@ public class GameWorld {
 		engine.addSystem(new StrikeAttackSystem());
 		engine.addSystem(new AttackTriggeringSystem());
 
+		engine.addSystem(new HideSystem());
+		engine.addSystem(new AIAgentWarpingSystem());
 		engine.addSystem(new SummoningSystem());
 		engine.addSystem(new HorizontalShootingSystem());
 
@@ -348,7 +354,15 @@ public class GameWorld {
 	}
 	
 	public void makeDemon(float x, float y) {
-		engine.addEntity(makeEnemy(x,y,Gfx.demonSheet.get(0), 0, 0, true));
+		Entity e = makeEnemy(x,y,Gfx.demonSheet.get(0), 0, 0, true);
+		AIWarpComponent aiwc = (AIWarpComponent) e.addComponent(new AIWarpComponent());
+		HideComponent hc = (HideComponent) e.addComponent(new HideComponent());
+		aiwc.hiddenTime = 1f;
+		aiwc.unhiddenTime = 4f;
+		aiwc.maxWarpDistance = 2f;
+		aiwc.minKeepDistance = 3f;
+		addEnemyAnimator(e, Gfx.demonWalk, Gfx.demonStand, Gfx.demonAttack);
+		engine.addEntity(e);
 	}
 	
 	public void makeEvilCherub(float x, float y) {
