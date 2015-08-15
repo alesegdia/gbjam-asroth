@@ -8,6 +8,7 @@ import com.alesegdia.asroth.components.WingsComponent;
 import com.alesegdia.asroth.components.GraphicsComponent;
 import com.alesegdia.asroth.asset.Gfx;
 import com.alesegdia.asroth.components.AnimationComponent;
+import com.alesegdia.asroth.components.AttackComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
 import com.alesegdia.asroth.game.GameConfig;
@@ -96,9 +97,11 @@ public class HumanControllerSystem extends EntitySystem {
 		TransformComponent posc = (TransformComponent) e.getComponent(TransformComponent.class);
 		x = posc.position.x;
 		y = posc.position.y;
-		if( Gdx.input.isKeyJustPressed(Input.Keys.C) ) {
-			GameWorld.instance.makePlayerBullet(x, y, (plc.dashingWall? gc.flipX : !gc.flipX));
-		}
+		
+		AttackComponent atc = (AttackComponent) e.getComponent(AttackComponent.class);
+		atc.wantToAttack = Gdx.input.isKeyJustPressed(Input.Keys.C);
+		atc.forceFace = (plc.dashingWall? (gc.flipX ? 1 : -1) : 0);
+		//GameWorld.instance.makePlayerBullet(x, y, (plc.dashingWall? gc.flipX : !gc.flipX));
 		
 		WingsComponent wc = (WingsComponent) e.getComponent(WingsComponent.class);
 		wc.isRecovering = phc.grounded;
@@ -123,7 +126,6 @@ public class HumanControllerSystem extends EntitySystem {
 
 			} else if( wc.currentBoost > 0 ) {
 				wc.currentBoost--;
-				System.out.println(wc.currentBoost);
 				plc.flying = true;
 				plc.jumping = false;
 				plc.mashing = false;

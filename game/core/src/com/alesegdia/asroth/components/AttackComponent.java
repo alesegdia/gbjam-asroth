@@ -15,4 +15,5 @@ public class AttackComponent extends Component {
 	public float attackDuration;
 	public float attackTimer;
 	public boolean cooldownOverriden;
+	public int forceFace;
 }

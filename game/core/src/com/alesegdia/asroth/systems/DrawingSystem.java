@@ -37,7 +37,6 @@ public class DrawingSystem extends EntitySystem {
 		gc.sprite.setScale(GameConfig.PIXELS_TO_METERS);
 		gc.sprite.setRotation(pc.angle);
 		gc.sprite.setOriginCenter();
-		System.out.println(gc.alpha);
 		gc.sprite.setAlpha(gc.alpha);
 		gc.sprite.setPosition(pc.position.x - gc.sprite.getOriginX(), pc.position.y - gc.sprite.getOriginY());
 		gc.sprite.draw(spriteBatch);

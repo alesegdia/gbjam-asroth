@@ -38,19 +38,33 @@ public class ShootingSystem extends EntitySystem {
 				// 	( float x, float y, float w, float h, float speed, boolean player, TextureRegion tr, boolean flipX ) {
 				BulletModel bm = sc.bulletModel;
 				if( sc.horizontal ) {
+					boolean flip = false;
+					if( ac.forceFace != 0 ) {
+						System.out.println("FORCING!");
+						flip = (ac.forceFace == 1 ? true : false);
+					} else {
+						flip = !gc.flipX;
+					}
 					GameWorld.instance.addToEngine(GameWorld.instance.makeHorizontalBullet(
-								pc.position.x + origin.x * (gc.flipX?1:-1),
+								pc.position.x + origin.x * (flip?1:-1),
 								pc.position.y + origin.y,
-								bm.w, bm.h, 10, false, bm.tr, !gc.flipX, bm.destructionTime));
+								bm.w, bm.h, 10, bm.isPlayer, bm.tr, flip, bm.destructionTime));
 				} else {
 					TransformComponent plpc = GameWorld.playerPositionComponent;
 					System.out.println(gc.flipX);
 					System.out.println(gc.isFlipped);
-					Vector2 dir = new Vector2(plpc.position).sub(pc.position).nor().scl(bm.speed);					
+					Vector2 dir = new Vector2(plpc.position).sub(pc.position).nor().scl(bm.speed);
+					boolean flip = false;
+					if( ac.forceFace != 0 ) {
+						System.out.println("FORCING!");
+						flip = (ac.forceFace == 1 ? true : false);
+					} else {
+						flip = gc.flipX;
+					}
 					GameWorld.instance.addToEngine(GameWorld.instance.makeBullet(
-							pc.position.x + origin.x * (gc.flipX?1:-1),
+							pc.position.x + origin.x * (flip?1:-1),
 							pc.position.y + origin.y,
-							bm.w, bm.h, dir, false, bm.tr, bm.destructionTime));
+							bm.w, bm.h, dir, bm.isPlayer, bm.tr, bm.destructionTime));
 				}
 			}
 		}

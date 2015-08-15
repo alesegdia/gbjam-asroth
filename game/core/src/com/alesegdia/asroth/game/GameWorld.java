@@ -248,9 +248,26 @@ public class GameWorld {
 		lvc.cap.y = 2;
 		lvc.doCap[1] = true;
 		
+		ShootComponent sc = (ShootComponent) player.addComponent(new ShootComponent());
+		sc.bulletOrigins = new ArrayList<Vector2>();
+		sc.bulletOrigins.add(new Vector2(0,0));
+		sc.bulletModel = new BulletModel();
+		sc.bulletModel.h = 5;
+		sc.bulletModel.w = 5;
+		sc.bulletModel.speed = 1;
+		sc.bulletModel.destructionTime = 1f;
+		sc.bulletModel.tr = Gfx.playerBulletTexture;
+		sc.bulletModel.isPlayer = true;
+		
+		AttackComponent atc = (AttackComponent) player.addComponent(new AttackComponent());
+		atc.attackCooldown = 2f;
+		
 		addHealthDamage(player, 10f, 1f);
 		
 		WingsComponent wc = (WingsComponent) player.addComponent(new WingsComponent());
+		
+		ActiveComponent actc = (ActiveComponent) player.addComponent(new ActiveComponent());
+		actc.isActive = true;
 		
 		engine.addEntity(player);
 	}

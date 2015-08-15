@@ -13,6 +13,7 @@ public class ShootComponent extends Component {
 		public int w, h;
 		public float destructionTime = 0.5f;
 		public float speed = 10f;
+		public boolean isPlayer = false;
 	}
 	
 	public BulletModel bulletModel;
