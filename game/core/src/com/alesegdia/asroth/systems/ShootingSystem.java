@@ -37,7 +37,7 @@ public class ShootingSystem extends EntitySystem {
 				BulletModel bm = sc.bulletModel;
 				if( sc.horizontal ) {
 					GameWorld.instance.addToEngine(GameWorld.instance.makeHorizontalBullet(
-								pc.position.x + origin.x * (gc.flipX?-1:1),
+								pc.position.x + origin.x * (gc.flipX?1:-1),
 								pc.position.y + origin.y,
 								bm.w, bm.h, 10, false, bm.tr, gc.flipX, bm.destructionTime));
 				} else {
