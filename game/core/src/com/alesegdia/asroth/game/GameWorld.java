@@ -82,12 +82,14 @@ public class GameWorld {
 	private List<Vector2> threeHeadedOrigins = new ArrayList<Vector2>();
 	private List<Vector2> runnerOrigins = new ArrayList<Vector2>();
 	private List<Vector2> jumperOrigins = new ArrayList<Vector2>();
+	private List<Vector2> demonOrigins = new ArrayList<Vector2>();
 	
 	public int getNumEntities() {
 		return engine.getNumEntities();
 	}
 	
 	BulletModel bm1;
+	BulletModel demonBulletModel;
 
 	public GameWorld( Physics physics, SpriteBatch batch, Camera cam, TileMap tm ) {
 		this.physics = physics;
@@ -184,12 +186,19 @@ public class GameWorld {
 		this.runnerOrigins.add(new Vector2(0,0.3f));
 
 		this.jumperOrigins.add(new Vector2(0,0.5f));
+		
+		this.demonOrigins.add(new Vector2(0,0));
 
 		bm1 = new BulletModel();
 		bm1.h = 5;
 		bm1.w = 5;
 		bm1.tr = Gfx.playerBulletTexture;
 		bm1.speed = 10;
+		
+		demonBulletModel = new BulletModel();
+		demonBulletModel.w = 5;
+		demonBulletModel.tr = Gfx.playerBulletTexture;
+		demonBulletModel.speed = 5;
 
 	}
 	
