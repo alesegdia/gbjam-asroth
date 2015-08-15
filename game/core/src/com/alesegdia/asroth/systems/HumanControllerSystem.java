@@ -96,7 +96,7 @@ public class HumanControllerSystem extends EntitySystem {
 		x = posc.position.x;
 		y = posc.position.y;
 		if( Gdx.input.isKeyJustPressed(Input.Keys.C) ) {
-			GameWorld.instance.makePlayerBullet(x, y, (plc.dashingWall? !gc.flipX : gc.flipX));
+			GameWorld.instance.makePlayerBullet(x, y, (plc.dashingWall? gc.flipX : !gc.flipX));
 		}
 		
 		if( Gdx.input.isKeyJustPressed(Input.Keys.Q) ) { GameWorld.instance.makeThreeHeaded(x, y); }
