@@ -484,7 +484,7 @@ public class GameWorld {
 		aiwc.maxWarpDistance = 2f;
 		aiwc.minKeepDistance = 3f;
 		addEnemyAnimator(e, Gfx.demonWalk, Gfx.demonStand, Gfx.demonAttack, Gfx.demonAttack);
-/*
+
 		AttackComponent ac = (AttackComponent) e.addComponent(new AttackComponent());
 		ac.attackCooldown = 0f;
 		ac.attackTimer = 0.2f;
@@ -505,7 +505,6 @@ public class GameWorld {
 		StrikeAttackComponent sac = (StrikeAttackComponent) e.addComponent(new StrikeAttackComponent());
 		sac.strikeNum = 6;
 		sac.strikeCooldown = 0.1f;
-*/
 		
 		engine.addEntity(e);
 	}
