@@ -34,17 +34,17 @@ public class ShootingSystem extends EntitySystem {
 		
 		if( ac.doAttack && actc.isActive ) {
 			ac.attackedLastFrame = true;
+			boolean flip = false;
+			if( ac.forceFace != 0 ) {
+				System.out.println("FORCING!");
+				flip = (ac.forceFace == 1 ? true : false);
+			} else {
+				flip = !gc.flipX;
+			}
 			for( Vector2 origin : sc.bulletOrigins ) {
 				// 	( float x, float y, float w, float h, float speed, boolean player, TextureRegion tr, boolean flipX ) {
 				BulletModel bm = sc.bulletModel;
 				if( sc.horizontal ) {
-					boolean flip = false;
-					if( ac.forceFace != 0 ) {
-						System.out.println("FORCING!");
-						flip = (ac.forceFace == 1 ? true : false);
-					} else {
-						flip = !gc.flipX;
-					}
 					GameWorld.instance.addToEngine(GameWorld.instance.makeHorizontalBullet(
 								pc.position.x + origin.x * (flip?1:-1),
 								pc.position.y + origin.y,
@@ -54,13 +54,6 @@ public class ShootingSystem extends EntitySystem {
 					System.out.println(gc.flipX);
 					System.out.println(gc.isFlipped);
 					Vector2 dir = new Vector2(plpc.position).sub(pc.position).nor().scl(bm.speed);
-					boolean flip = false;
-					if( ac.forceFace != 0 ) {
-						System.out.println("FORCING!");
-						flip = (ac.forceFace == 1 ? true : false);
-					} else {
-						flip = gc.flipX;
-					}
 					GameWorld.instance.addToEngine(GameWorld.instance.makeBullet(
 							pc.position.x + origin.x * (flip?1:-1),
 							pc.position.y + origin.y,
