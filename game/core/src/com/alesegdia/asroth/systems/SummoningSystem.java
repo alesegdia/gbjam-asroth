@@ -43,11 +43,14 @@ public class SummoningSystem extends EntitySystem {
 			sc.summonedCreatures.remove(s);
 		}
 		
-		if( ac.doAttack && sc.summonedCreatures.size() < 4 ) {
+		if( ac.doAttack ) {
 			ac.attackedLastFrame = true;
+		}
+		
+		if( ac.doAttack && sc.summonedCreatures.size() < 4 ) {
 			float prob = RNG.rng.nextFloat();
 			int i = 0;
-			while( i < 3 ) {
+			while( i < 4 ) {
 				if( prob < sc.summonProb[i] ) {
 					break;
 				}
@@ -73,8 +76,11 @@ public class SummoningSystem extends EntitySystem {
 			} else if( i == 1 ) {
 				c = GameWorld.instance.makeRunner(sx, sy + 25 * GameConfig.PIXELS_TO_METERS);
 				GameWorld.instance.adjustToTile(c, ((int)sx), ((int)sy));
-			} else {
+			} else if( i == 2 ) {
 				c = GameWorld.instance.makeThreeHeaded(sx, sy + 25 * GameConfig.PIXELS_TO_METERS);
+				GameWorld.instance.adjustToTile(c, ((int)sx), ((int)sy));
+			} else  {
+				c = GameWorld.instance.makeJumper(0, 0);
 				GameWorld.instance.adjustToTile(c, ((int)sx), ((int)sy));
 			}
 			sc.summonedCreatures.add(c);

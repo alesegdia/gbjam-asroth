@@ -32,19 +32,19 @@ public class AIAgentPrepareAttackSystem extends EntitySystem {
 		}
 		pac.preparingTimer -= Gdx.graphics.getDeltaTime();
 
-			if( ac.wantToAttack ) {
-				// are we prepared yet?
-				if( pac.preparingTimer < 0 ) {
-					ac.wantToAttack = true;
-				} else {
-					// wait for it until I'm prepared
-					ac.wantToAttack = false;
-					ec.isPreparingAttack = true;
-				}
+		if( ac.wantToAttack ) {
+			// are we prepared yet?
+			if( pac.preparingTimer < 0 ) {
+				ac.wantToAttack = true;
 			} else {
-				ec.isPreparingAttack = false;
-				pac.preparingTimer = pac.timeToPrepare;
+				// wait for it until I'm prepared
+				ac.wantToAttack = false;
+				ec.isPreparingAttack = true;
 			}
+		} else {
+			ec.isPreparingAttack = false;
+			pac.preparingTimer = pac.timeToPrepare;
+		}
 	}
 
 }

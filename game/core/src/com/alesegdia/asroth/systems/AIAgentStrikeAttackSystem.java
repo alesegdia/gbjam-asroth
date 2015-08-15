@@ -6,9 +6,9 @@ import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
 import com.badlogic.gdx.Gdx;
 
-public class StrikeAttackSystem extends EntitySystem {
+public class AIAgentStrikeAttackSystem extends EntitySystem {
 
-	public StrikeAttackSystem() {
+	public AIAgentStrikeAttackSystem() {
 		super(StrikeAttackComponent.class, AttackComponent.class);
 	}
 	

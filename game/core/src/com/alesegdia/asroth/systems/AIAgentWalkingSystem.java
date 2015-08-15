@@ -3,6 +3,7 @@ package com.alesegdia.asroth.systems;
 import com.alesegdia.asroth.components.AIAgentComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
 import com.alesegdia.asroth.components.WalkingComponent;
+import com.alesegdia.asroth.components.AIAgentInhibitWalkComponent;
 import com.alesegdia.asroth.components.ActiveComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
@@ -13,7 +14,8 @@ public class AIAgentWalkingSystem extends EntitySystem {
 
 	public AIAgentWalkingSystem() {
 		super(AIAgentComponent.class, WalkingComponent.class,
-				LinearVelocityComponent.class, ActiveComponent.class);
+				LinearVelocityComponent.class, ActiveComponent.class,
+				AIAgentInhibitWalkComponent.class);
 	}
 	
 	@Override
@@ -25,9 +27,11 @@ public class AIAgentWalkingSystem extends EntitySystem {
 	@Override
 	public void process(Entity e) {
 		ActiveComponent actc = (ActiveComponent) e.getComponent(ActiveComponent.class);
-		if( actc.isActive ) {
+		AIAgentInhibitWalkComponent inhibit = (AIAgentInhibitWalkComponent) e.getComponent(AIAgentInhibitWalkComponent.class);
+		LinearVelocityComponent lvc = (LinearVelocityComponent) e.getComponent(LinearVelocityComponent.class);
+		if( inhibit.canWalk && actc.isActive ) {
+			System.out.println("WALKING");
 			WalkingComponent wc = (WalkingComponent) e.getComponent(WalkingComponent.class);
-			LinearVelocityComponent lvc = (LinearVelocityComponent) e.getComponent(LinearVelocityComponent.class);
 			if( wc.isWalking ) {
 				// update walking timer
 				wc.walkingTimer -= Gdx.graphics.getDeltaTime();
@@ -51,6 +55,8 @@ public class AIAgentWalkingSystem extends EntitySystem {
 					lvc.linearVelocity.x = 0;
 				}
 			}
+		} else {
+			lvc.linearVelocity.x = 0;
 		}
 	}
 

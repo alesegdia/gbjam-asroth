@@ -38,12 +38,8 @@ public class AttackTriggeringSystem extends EntitySystem {
 		}
 
 		ac.isAttacking = ac.attackTimer >= 0;
-
 		ac.canAttack = ac.nextAttackAvailable <= 0;
-		
-		
 		ac.doAttack = ac.canAttack && ac.wantToAttack;
-		//ac.wantToAttack = false;
 
 	}
 

@@ -63,6 +63,11 @@ public class Gfx {
 	public static Animation demonStand;
 	public static Animation demonAttack;
 	public static Animation runnerPrepare;
+
+	public static Animation jumperWalk;
+	public static Animation jumperAttack;
+	public static Animation jumperStand;
+	public static Animation jumperPrepare;
 	
 	public static void Initialize() {
 		mapTilesTexture = new Texture(Gdx.files.internal("flyinGB_tiles.png"));
@@ -120,7 +125,7 @@ public class Gfx {
 		runnerStand = new Animation(0.1f, runnerSheet.get(0));
 		runnerWalk = new Animation(0.1f, runnerSheet.getRange(0, 3));
 		runnerAttack = new Animation(0.1f, runnerSheet.get(10));
-		runnerPrepare = new Animation(0.1f, runnerSheet.getRange(4,9));
+		runnerPrepare = new Animation(0.1f, runnerSheet.getRange(8,9));
 		
 		summonerStand = new Animation(0.1f, summonerSheet.get(3));
 		summonerWalk = new Animation(0.4f, summonerSheet.getRange(2, 3));
@@ -135,6 +140,12 @@ public class Gfx {
 
 		demonAttack = new Animation(0.2f, demonSheet.getRange(0,2));
 		demonAttack.setPlayMode(PlayMode.LOOP_PINGPONG);
+
+		jumperWalk = new Animation(0.2f, jumperSheet.get(0));
+		jumperStand = new Animation(0.2f, jumperSheet.get(2));
+		jumperAttack = new Animation(0.2f, jumperSheet.get(0));
+		jumperPrepare = new Animation(0.2f, jumperSheet.get(0));
+		
 
 		
 	}

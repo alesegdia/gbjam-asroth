@@ -56,6 +56,25 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 		});
 		
 		callbacks.add(new ICollisionCallback() {
+			{ setCategories( CollisionLayers.CATEGORY_ENEMYPHYSIC, CollisionLayers.CATEGORY_MAP ); }
+			
+			@Override
+			public void startCollision(Body b1, Body b2, Vector2 normal) {
+				Entity e = (Entity) b1.getUserData();
+				PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
+				pc.grounded = true;
+			}
+
+			@Override
+			public void endCollision(Body b1, Body b2) {
+				Entity e = (Entity) b1.getUserData();
+				PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
+				pc.grounded = false;
+			}
+			
+		});
+		
+		callbacks.add(new ICollisionCallback() {
 			{ setCategories( CollisionLayers.CATEGORY_PLBULLETS, CollisionLayers.CATEGORY_ENEMYLOGIC ); }
 
 			@Override
