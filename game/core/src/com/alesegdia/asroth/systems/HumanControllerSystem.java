@@ -4,6 +4,7 @@ import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.TransformComponent;
+import com.alesegdia.asroth.components.WingsComponent;
 import com.alesegdia.asroth.components.GraphicsComponent;
 import com.alesegdia.asroth.asset.Gfx;
 import com.alesegdia.asroth.components.AnimationComponent;
@@ -99,6 +100,9 @@ public class HumanControllerSystem extends EntitySystem {
 			GameWorld.instance.makePlayerBullet(x, y, (plc.dashingWall? gc.flipX : !gc.flipX));
 		}
 		
+		WingsComponent wc = (WingsComponent) e.getComponent(WingsComponent.class);
+		wc.isRecovering = phc.grounded;
+		
 		if( Gdx.input.isKeyJustPressed(Input.Keys.Q) ) { GameWorld.instance.makeThreeHeaded(x, y); }
 		if( Gdx.input.isKeyJustPressed(Input.Keys.W) ) { GameWorld.instance.makeRunner(x, y); }
 		if( Gdx.input.isKeyJustPressed(Input.Keys.E) ) { GameWorld.instance.makeJumper(x, y); }
@@ -115,17 +119,22 @@ public class HumanControllerSystem extends EntitySystem {
 				plc.mashing = false;
 
 				lvc.doCap[1] = false;
-			} else {
+				prevYlinear = 6;
+
+			} else if( wc.currentBoost > 0 ) {
+				wc.currentBoost--;
+				System.out.println(wc.currentBoost);
 				plc.flying = true;
 				plc.jumping = false;
 				plc.mashing = false;
 				lvc.doCap[1] = true;
+				prevYlinear = 6;
 			}
 			if( plc.dashingWall ) {
 				plc.dashingWall = false;
 				plc.releaseWallVelocity = -10 * (gc.flipX ? -1 : 1);
+				prevYlinear = 6;
 			}
-			prevYlinear = 6;
 			//phc.body.applyForce(new Vector2(0,50), new Vector2(0,0), true);
 		}
 		

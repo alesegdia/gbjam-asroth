@@ -29,6 +29,7 @@ import com.alesegdia.asroth.components.ShootComponent.BulletModel;
 import com.alesegdia.asroth.components.StrikeAttackComponent;
 import com.alesegdia.asroth.components.SummonComponent;
 import com.alesegdia.asroth.components.WalkingComponent;
+import com.alesegdia.asroth.components.WingsComponent;
 import com.alesegdia.asroth.ecs.Engine;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.physics.CollisionLayers;
@@ -57,6 +58,7 @@ import com.alesegdia.asroth.systems.AIAgentSystem;
 import com.alesegdia.asroth.systems.SummoningSystem;
 import com.alesegdia.asroth.systems.TakingDamageSystem;
 import com.alesegdia.asroth.systems.UpdatePhysicsSystem;
+import com.alesegdia.asroth.systems.WingsRecoverySystem;
 import com.alesegdia.asroth.systems.AIAgentWalkingSystem;
 import com.alesegdia.asroth.systems.AIAgentWarpingSystem;
 import com.alesegdia.platgen.map.MobZoneExtractor;
@@ -112,6 +114,7 @@ public class GameWorld {
 		engine.addSystem(new AIAgentAnimationSystem());
 		engine.addSystem(new AIAgentIhibitWalkWhenAttackingSystem());
 
+		engine.addSystem(new WingsRecoverySystem());
 		engine.addSystem(new PainSystem());
 		engine.addSystem(new AIAgentWarpingSystem());
 		engine.addSystem(new SummoningSystem());
@@ -246,6 +249,8 @@ public class GameWorld {
 		lvc.doCap[1] = true;
 		
 		addHealthDamage(player, 10f, 1f);
+		
+		WingsComponent wc = (WingsComponent) player.addComponent(new WingsComponent());
 		
 		engine.addEntity(player);
 	}
