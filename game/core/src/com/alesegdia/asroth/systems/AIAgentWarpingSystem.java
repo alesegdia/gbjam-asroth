@@ -51,7 +51,7 @@ public class AIAgentWarpingSystem extends EntitySystem {
 				displacement.scl(-(1f - portion));
 				displacement.rotate(angle);
 				displacement.add(pposc.position);
-				phc.body.setTransform(displacement, angle);
+				phc.body.setTransform(displacement, 0);
 
 			}
 		} else {
