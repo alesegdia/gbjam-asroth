@@ -226,7 +226,7 @@ public class GameWorld {
 		atc.attackCooldown = 2f;
 		
 		ShootComponent sc = (ShootComponent) player.addComponent(new ShootComponent());
-		sc.bulletOrigins = bulletCfgs.playerOrigins;
+		sc.bulletConfigs = bulletCfgs.playerBulletConfigs;
 		
 		addHealthDamage(player, 10f, 1f);
 		
@@ -393,7 +393,7 @@ public class GameWorld {
 		ac.attackDuration = 0.3f;
 
 		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
-		sc.bulletOrigins = bulletCfgs.threeHeadedOrigins;
+		sc.bulletConfigs = bulletCfgs.threeHeadedBulletConfigs;
 		sc.horizontal = true;
 		
 		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
@@ -421,7 +421,7 @@ public class GameWorld {
 		ac.attackDuration = 0.3f;
 
 		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
-		sc.bulletOrigins = bulletCfgs.runnerOrigins;
+		sc.bulletConfigs = bulletCfgs.runnerBulletConfigs;
 		
 		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
 		pac.attackCooldown = 3f;
@@ -453,7 +453,7 @@ public class GameWorld {
 		pac.attackCooldown = 5.2f;
 		
 		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
-		sc.bulletOrigins = bulletCfgs.jumperOrigins;
+		sc.bulletConfigs = bulletCfgs.jumperBulletConfigs;
 		
 		StrikeAttackComponent sac = (StrikeAttackComponent) e.addComponent(new StrikeAttackComponent());
 		sac.strikeNum = 10;
@@ -478,7 +478,7 @@ public class GameWorld {
 		ac.attackDuration = 0.3f;
 
 		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
-		sc.bulletOrigins = bulletCfgs.demonOrigins;
+		sc.bulletConfigs = bulletCfgs.demonBulletConfigs;
 		sc.horizontal = false;
 		
 		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
@@ -548,7 +548,7 @@ public class GameWorld {
 		ac.attackDuration = 0.3f;
 
 		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
-		sc.bulletOrigins = bulletCfgs.threeHeadedOrigins;
+		sc.bulletConfigs = bulletCfgs.threeHeadedBulletConfigs;
 		
 		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
 		pac.attackCooldown = 3f;

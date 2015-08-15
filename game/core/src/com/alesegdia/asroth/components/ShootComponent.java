@@ -25,6 +25,6 @@ public class ShootComponent extends Component {
 	
 	public boolean horizontal = true;
 	
-	public List<BulletEntry> bulletOrigins;
+	public List<BulletEntry> bulletConfigs;
 	
 }

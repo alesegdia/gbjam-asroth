@@ -42,7 +42,7 @@ public class ShootingSystem extends EntitySystem {
 			} else {
 				flip = !gc.flipX;
 			}
-			for( BulletEntry be : sc.bulletOrigins ) {
+			for( BulletEntry be : sc.bulletConfigs ) {
 				// 	( float x, float y, float w, float h, float speed, boolean player, TextureRegion tr, boolean flipX ) {
 				BulletModel bm = be.bm;//sc.bulletModel;
 				if( sc.horizontal ) {

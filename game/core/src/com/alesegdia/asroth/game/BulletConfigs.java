@@ -10,11 +10,11 @@ import com.badlogic.gdx.math.Vector2;
 
 public class BulletConfigs {
 
-	public List<BulletEntry> threeHeadedOrigins = new ArrayList<BulletEntry>();
-	public List<BulletEntry> runnerOrigins = new ArrayList<BulletEntry>();
-	public List<BulletEntry> jumperOrigins = new ArrayList<BulletEntry>();
-	public List<BulletEntry> demonOrigins = new ArrayList<BulletEntry>();
-	public List<BulletEntry> playerOrigins = new ArrayList<BulletEntry>();
+	public List<BulletEntry> threeHeadedBulletConfigs = new ArrayList<BulletEntry>();
+	public List<BulletEntry> runnerBulletConfigs = new ArrayList<BulletEntry>();
+	public List<BulletEntry> jumperBulletConfigs = new ArrayList<BulletEntry>();
+	public List<BulletEntry> demonBulletConfigs = new ArrayList<BulletEntry>();
+	public List<BulletEntry> playerBulletConfigs = new ArrayList<BulletEntry>();
 	
 	public BulletConfigs() {
 
@@ -29,43 +29,43 @@ public class BulletConfigs {
 		be = new BulletEntry();
 		be.origin = new Vector2(-0.5f,-0.35f);
 		be.bm = threeHeadedBulletModel;
-		this.threeHeadedOrigins.add(be);
+		this.threeHeadedBulletConfigs.add(be);
 		be = new BulletEntry();
 		be.origin = new Vector2(-0.5f,0.3f);
 		be.bm = threeHeadedBulletModel;
-		this.threeHeadedOrigins.add(be);
+		this.threeHeadedBulletConfigs.add(be);
 		be = new BulletEntry();
 		be.origin = new Vector2(-0.5f,0.75f);
 		be.bm = threeHeadedBulletModel;
-		this.threeHeadedOrigins.add(be);
+		this.threeHeadedBulletConfigs.add(be);
 		
 		/* RUNNER SHOOT CONFIG */
 		be = new BulletEntry();
 		be.origin = new Vector2(0,0.3f);
 		be.bm = threeHeadedBulletModel;
-		this.runnerOrigins.add(be);
+		this.runnerBulletConfigs.add(be);
 		
 		/* JUMPER SHOOT CONFIG */
 		be = new BulletEntry();
 		be.origin = new Vector2(0, 0.5f);
 		be.bm = threeHeadedBulletModel;
-		this.jumperOrigins.add(be);
+		this.jumperBulletConfigs.add(be);
 		
 		/* DEMON SHOOT CONFIG */
 		be = new BulletEntry();
 		be.origin = new Vector2(-0.3f, 0);
 		be.bm = threeHeadedBulletModel;
-		this.demonOrigins.add(be);
+		this.demonBulletConfigs.add(be);
 		be = new BulletEntry();
 		be.bm = threeHeadedBulletModel;
 		be.origin = new Vector2(0.3f, 0);
-		this.demonOrigins.add(be);
+		this.demonBulletConfigs.add(be);
 		
 		/* PLAYER SHOOT CONFIG */
 		be = new BulletEntry();
 		be.origin = new Vector2(0,0);
 		be.bm = threeHeadedBulletModel;
-		this.playerOrigins.add(be);
+		this.playerBulletConfigs.add(be);
 	}
 	
 }
