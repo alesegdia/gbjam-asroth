@@ -16,10 +16,15 @@ public class ShootComponent extends Component {
 		public boolean isPlayer = false;
 	}
 	
-	public BulletModel bulletModel;
+	public static class BulletEntry {
+		public BulletModel bm;
+		public Vector2 origin;
+	}
+	
+	//public BulletModel bulletModel;
 	
 	public boolean horizontal = true;
 	
-	public List<Vector2> bulletOrigins;
+	public List<BulletEntry> bulletOrigins;
 	
 }

@@ -25,6 +25,7 @@ import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.TransformComponent;
 import com.alesegdia.asroth.components.ShootComponent;
+import com.alesegdia.asroth.components.ShootComponent.BulletEntry;
 import com.alesegdia.asroth.components.ShootComponent.BulletModel;
 import com.alesegdia.asroth.components.StrikeAttackComponent;
 import com.alesegdia.asroth.components.SummonComponent;
@@ -80,18 +81,11 @@ public class GameWorld {
 	Engine engine;
 	private Physics physics;
 	private Camera cam;
-	
-	private List<Vector2> threeHeadedOrigins = new ArrayList<Vector2>();
-	private List<Vector2> runnerOrigins = new ArrayList<Vector2>();
-	private List<Vector2> jumperOrigins = new ArrayList<Vector2>();
-	private List<Vector2> demonOrigins = new ArrayList<Vector2>();
+	BulletConfigs bulletCfgs;
 	
 	public int getNumEntities() {
 		return engine.getNumEntities();
 	}
-	
-	BulletModel bm1;
-	BulletModel demonBulletModel;
 	
 	Entity player;
 
@@ -132,6 +126,8 @@ public class GameWorld {
 
 		engine.addSystem(new DrawingSystem(batch), true);
 		engine.addSystem(physics.physicsSystem);
+		
+		bulletCfgs = new BulletConfigs();
 		
 		int x = -1;
 		int y = -1;
@@ -185,29 +181,7 @@ public class GameWorld {
 
 			i++;
 		}
-		this.threeHeadedOrigins.add(new Vector2(0.5f,-0.35f));
-		this.threeHeadedOrigins.add(new Vector2(0.5f,0.3f));
-		this.threeHeadedOrigins.add(new Vector2(0.5f,0.75f));
 		
-		this.runnerOrigins.add(new Vector2(0,0.3f));
-
-		this.jumperOrigins.add(new Vector2(0,0.5f));
-		
-		this.demonOrigins.add(new Vector2(-0.3f,0));
-		this.demonOrigins.add(new Vector2(0.3f,0));
-
-		bm1 = new BulletModel();
-		bm1.h = 5;
-		bm1.w = 5;
-		bm1.tr = Gfx.playerBulletTexture;
-		bm1.speed = 10;
-		
-		demonBulletModel = new BulletModel();
-		demonBulletModel.w = 5;
-		demonBulletModel.tr = Gfx.playerBulletTexture;
-		demonBulletModel.destructionTime = 5f;
-		demonBulletModel.speed = 10;
-
 	}
 	
 	public void adjustToTile( Entity e, int tx, int ty ) {
@@ -248,19 +222,11 @@ public class GameWorld {
 		lvc.cap.y = 2;
 		lvc.doCap[1] = true;
 		
-		ShootComponent sc = (ShootComponent) player.addComponent(new ShootComponent());
-		sc.bulletOrigins = new ArrayList<Vector2>();
-		sc.bulletOrigins.add(new Vector2(0,0));
-		sc.bulletModel = new BulletModel();
-		sc.bulletModel.h = 5;
-		sc.bulletModel.w = 5;
-		sc.bulletModel.speed = 1;
-		sc.bulletModel.destructionTime = 1f;
-		sc.bulletModel.tr = Gfx.playerBulletTexture;
-		sc.bulletModel.isPlayer = true;
-		
 		AttackComponent atc = (AttackComponent) player.addComponent(new AttackComponent());
 		atc.attackCooldown = 2f;
+		
+		ShootComponent sc = (ShootComponent) player.addComponent(new ShootComponent());
+		sc.bulletOrigins = bulletCfgs.playerOrigins;
 		
 		addHealthDamage(player, 10f, 1f);
 		
@@ -427,9 +393,8 @@ public class GameWorld {
 		ac.attackDuration = 0.3f;
 
 		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
-		sc.bulletOrigins = this.threeHeadedOrigins;
-		sc.bulletModel = bm1;
-		sc.horizontal = false;
+		sc.bulletOrigins = bulletCfgs.threeHeadedOrigins;
+		sc.horizontal = true;
 		
 		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
 		pac.attackCooldown = 3f;
@@ -456,8 +421,7 @@ public class GameWorld {
 		ac.attackDuration = 0.3f;
 
 		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
-		sc.bulletOrigins = runnerOrigins;
-		sc.bulletModel = bm1;
+		sc.bulletOrigins = bulletCfgs.runnerOrigins;
 		
 		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
 		pac.attackCooldown = 3f;
@@ -489,9 +453,8 @@ public class GameWorld {
 		pac.attackCooldown = 5.2f;
 		
 		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
-		sc.bulletOrigins = this.jumperOrigins;
-		sc.bulletModel = bm1;
-
+		sc.bulletOrigins = bulletCfgs.jumperOrigins;
+		
 		StrikeAttackComponent sac = (StrikeAttackComponent) e.addComponent(new StrikeAttackComponent());
 		sac.strikeNum = 10;
 		sac.strikeCooldown = 0.07f;
@@ -515,8 +478,7 @@ public class GameWorld {
 		ac.attackDuration = 0.3f;
 
 		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
-		sc.bulletOrigins = this.demonOrigins;
-		sc.bulletModel = demonBulletModel;
+		sc.bulletOrigins = bulletCfgs.demonOrigins;
 		sc.horizontal = false;
 		
 		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
@@ -586,9 +548,8 @@ public class GameWorld {
 		ac.attackDuration = 0.3f;
 
 		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
-		sc.bulletOrigins = this.threeHeadedOrigins;
-		sc.bulletModel = bm1;
-
+		sc.bulletOrigins = bulletCfgs.threeHeadedOrigins;
+		
 		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
 		pac.attackCooldown = 3f;
 
