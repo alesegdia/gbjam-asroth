@@ -41,7 +41,7 @@ public class ShootingSystem extends EntitySystem {
 					GameWorld.instance.addToEngine(GameWorld.instance.makeHorizontalBullet(
 								pc.position.x + origin.x * (gc.flipX?1:-1),
 								pc.position.y + origin.y,
-								bm.w, bm.h, 10, false, bm.tr, gc.flipX, bm.destructionTime));
+								bm.w, bm.h, 10, false, bm.tr, !gc.flipX, bm.destructionTime));
 				} else {
 					TransformComponent plpc = GameWorld.playerPositionComponent;
 					System.out.println(gc.flipX);
