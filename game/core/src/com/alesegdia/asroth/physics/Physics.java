@@ -56,6 +56,7 @@ public class Physics {
 		}
 		bodyDef.position.set(x, y);
 		Body b = world.createBody(bodyDef);
+		b.setFixedRotation(true);
 		return b;
 	}
 	
