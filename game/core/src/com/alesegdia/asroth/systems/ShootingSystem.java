@@ -3,6 +3,7 @@ package com.alesegdia.asroth.systems;
 import com.alesegdia.asroth.components.AttackComponent;
 import com.alesegdia.asroth.components.TransformComponent;
 import com.alesegdia.asroth.components.ShootComponent;
+import com.alesegdia.asroth.components.ActiveComponent;
 import com.alesegdia.asroth.components.ShootComponent.BulletModel;
 import com.alesegdia.asroth.components.GraphicsComponent;
 import com.alesegdia.asroth.ecs.Entity;
@@ -15,7 +16,7 @@ public class ShootingSystem extends EntitySystem {
 
 	public ShootingSystem() {
 		super(ShootComponent.class, TransformComponent.class, GraphicsComponent.class,
-				AttackComponent.class);
+				AttackComponent.class, ActiveComponent.class);
 	}
 	
 	@Override
@@ -29,8 +30,9 @@ public class ShootingSystem extends EntitySystem {
 		TransformComponent pc = (TransformComponent) e.getComponent(TransformComponent.class);
 		AttackComponent ac = (AttackComponent) e.getComponent(AttackComponent.class);
 		GraphicsComponent gc = (GraphicsComponent) e.getComponent(GraphicsComponent.class);
+		ActiveComponent actc = (ActiveComponent) e.getComponent(ActiveComponent.class);
 		
-		if( ac.doAttack ) {
+		if( ac.doAttack && actc.isActive ) {
 			ac.attackedLastFrame = true;
 			for( Vector2 origin : sc.bulletOrigins ) {
 				// 	( float x, float y, float w, float h, float speed, boolean player, TextureRegion tr, boolean flipX ) {

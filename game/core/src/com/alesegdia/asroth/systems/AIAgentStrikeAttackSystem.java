@@ -1,5 +1,6 @@
 package com.alesegdia.asroth.systems;
 
+import com.alesegdia.asroth.components.ActiveComponent;
 import com.alesegdia.asroth.components.AttackComponent;
 import com.alesegdia.asroth.components.StrikeAttackComponent;
 import com.alesegdia.asroth.ecs.Entity;
@@ -22,29 +23,32 @@ public class AIAgentStrikeAttackSystem extends EntitySystem {
 	public void process(Entity e) {
 		AttackComponent ac = (AttackComponent) e.getComponent(AttackComponent.class);
 		StrikeAttackComponent sac = (StrikeAttackComponent) e.getComponent(StrikeAttackComponent.class);
-
-		if( sac.strikeRunning ) {
-			ac.wantToAttack = false;
-			// did we finish the whole strike attack?
-			if( sac.currentStrike >= sac.strikeNum ) {
-				ac.isAttacking = true;
-				ac.attackTimer = ac.attackDuration;
-				sac.currentStrike = 0;
-				sac.strikeRunning = false;
-			} else {
-				// still attacks to deploy!
-				if( ac.attackTimer <= 0 ) {
-					// ATTACK!
-					sac.currentStrike++;
-					ac.wantToAttack = true;
-					ac.cooldownOverriden = true;
-					ac.attackTimer = sac.strikeCooldown;
+		ActiveComponent actc = (ActiveComponent) e.getComponent(ActiveComponent.class);
+		
+		if( actc.isActive ) {
+			if( sac.strikeRunning ) {
+				ac.wantToAttack = false;
+				// did we finish the whole strike attack?
+				if( sac.currentStrike >= sac.strikeNum ) {
+					ac.isAttacking = true;
+					ac.attackTimer = ac.attackDuration;
+					sac.currentStrike = 0;
+					sac.strikeRunning = false;
+				} else {
+					// still attacks to deploy!
+					if( ac.attackTimer <= 0 ) {
+						// ATTACK!
+						sac.currentStrike++;
+						ac.wantToAttack = true;
+						ac.cooldownOverriden = true;
+						ac.attackTimer = sac.strikeCooldown;
+					}
 				}
+			} else if( ac.wantToAttack ) {
+				// we can try to start a strike
+				sac.strikeRunning = true;
+				ac.wantToAttack = false;
 			}
-		} else if( ac.wantToAttack ) {
-			// we can try to start a strike
-			sac.strikeRunning = true;
-			ac.wantToAttack = false;
 		}
 	}
 
