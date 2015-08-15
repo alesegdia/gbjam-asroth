@@ -102,7 +102,7 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 				Entity b = (Entity) plbullet.getUserData();
 				Entity p = (Entity) enemy.getUserData();
 				DamageComponent dc = (DamageComponent) p.getComponent(DamageComponent.class);
-				//dc.damageDealtLastFrame = 1;
+				dc.damageDealtLastFrame = 1;
 				b.isDead = dc.painTimer <= 0;
 			}
 
