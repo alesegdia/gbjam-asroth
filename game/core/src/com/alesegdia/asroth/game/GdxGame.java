@@ -1,7 +1,9 @@
 package com.alesegdia.asroth.game;
 
 import com.alesegdia.asroth.asset.Gfx;
+import com.alesegdia.asroth.components.HealthComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
+import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.map.MapPhysicsBuilderVisitor;
 import com.alesegdia.asroth.map.TiledTileMapConverter;
 import com.alesegdia.asroth.physics.Physics;
@@ -135,7 +137,10 @@ public class GdxGame extends ApplicationAdapter {
 		float trw = t.getRegionWidth();
 		float trh = t.getRegionHeight();
 		float s = 3;
-		for( int i = 0; i < 3; i++ ) {
+		Entity pl = gameWorld.getPlayer();
+		HealthComponent hc = (HealthComponent) pl.getComponent(HealthComponent.class);
+		int numBars = (int) Math.floor(hc.currentHP * 8 / hc.maxHP);
+		for( int i = 0; i < numBars; i++ ) {
 			batch.draw(Gfx.hpTexture, 14*3 + i * trw * s, 2*3, trw*s, trh*s);	
 		}
 		

@@ -90,6 +90,8 @@ public class GameWorld {
 	
 	BulletModel bm1;
 	BulletModel demonBulletModel;
+	
+	Entity player;
 
 	public GameWorld( Physics physics, SpriteBatch batch, Camera cam, TileMap tm ) {
 		this.physics = physics;
@@ -220,7 +222,7 @@ public class GameWorld {
 	public static TransformComponent playerPositionComponent;
 	
 	public void makePlayer(int x, int y) {
-		Entity player = new Entity();
+		player = new Entity();
 		
 		PhysicsComponent pc = (PhysicsComponent) player.addComponent(new PhysicsComponent());
 		pc.body = physics.createPlayerBody(x, y);
@@ -595,6 +597,10 @@ public class GameWorld {
 
 	public void addToEngine(Entity e) {
 		engine.addEntity(e);
+	}
+
+	public Entity getPlayer() {
+		return player;
 	}
 	
 }
