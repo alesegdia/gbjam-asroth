@@ -187,7 +187,8 @@ public class GameWorld {
 
 		this.jumperOrigins.add(new Vector2(0,0.5f));
 		
-		this.demonOrigins.add(new Vector2(0,0));
+		this.demonOrigins.add(new Vector2(-0.3f,0));
+		this.demonOrigins.add(new Vector2(0.3f,0));
 
 		bm1 = new BulletModel();
 		bm1.h = 5;
@@ -198,7 +199,8 @@ public class GameWorld {
 		demonBulletModel = new BulletModel();
 		demonBulletModel.w = 5;
 		demonBulletModel.tr = Gfx.playerBulletTexture;
-		demonBulletModel.speed = 5;
+		demonBulletModel.destructionTime = 5f;
+		demonBulletModel.speed = 10;
 
 	}
 	
@@ -480,7 +482,30 @@ public class GameWorld {
 		aiwc.unhiddenTime = 4f;
 		aiwc.maxWarpDistance = 2f;
 		aiwc.minKeepDistance = 3f;
-		addEnemyAnimator(e, Gfx.demonWalk, Gfx.demonStand, Gfx.demonAttack);
+		addEnemyAnimator(e, Gfx.demonWalk, Gfx.demonStand, Gfx.demonAttack, Gfx.demonAttack);
+
+		AttackComponent ac = (AttackComponent) e.addComponent(new AttackComponent());
+		ac.attackCooldown = 0f;
+		ac.attackTimer = 0.2f;
+		ac.attackDuration = 0.3f;
+
+		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
+		sc.bulletOrigins = this.demonOrigins;
+		sc.bulletModel = demonBulletModel;
+		sc.horizontal = false;
+		
+		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
+		pac.attackCooldown = 3f;
+
+		AIAgentAttackPreparationComponent aipac = (AIAgentAttackPreparationComponent) e.addComponent(new AIAgentAttackPreparationComponent());
+		aipac.timeToPrepare = 0.5f;
+		aipac.preparingTimer = 0.5f;
+
+		StrikeAttackComponent sac = (StrikeAttackComponent) e.addComponent(new StrikeAttackComponent());
+		sac.strikeNum = 6;
+		sac.strikeCooldown = 0.1f;
+
+		
 		engine.addEntity(e);
 	}
 	
