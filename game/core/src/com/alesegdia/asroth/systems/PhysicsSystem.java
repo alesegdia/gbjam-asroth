@@ -3,6 +3,7 @@ package com.alesegdia.asroth.systems;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alesegdia.asroth.components.DamageComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.WalkingComponent;
@@ -53,6 +54,47 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			}
 			
 		});
+		
+		callbacks.add(new ICollisionCallback() {
+			{ setCategories( CollisionLayers.CATEGORY_PLBULLETS, CollisionLayers.CATEGORY_ENEMYLOGIC ); }
+
+			@Override
+			public void startCollision(Body plbullet, Body enemy, Vector2 normal) {
+				Entity b = (Entity) plbullet.getUserData();
+				Entity e = (Entity) enemy.getUserData();
+				DamageComponent dc = (DamageComponent) e.getComponent(DamageComponent.class);
+				dc.damageDealtLastFrame = 1;
+				b.isDead = dc.painTimer <= 0;
+			}
+
+			@Override
+			public void endCollision(Body b1, Body b2) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+		callbacks.add(new ICollisionCallback() {
+			{ setCategories( CollisionLayers.CATEGORY_ENBULLETS, CollisionLayers.CATEGORY_PLAYERLOGIC ); }
+
+			@Override
+			public void startCollision(Body plbullet, Body enemy, Vector2 normal) {
+				Entity b = (Entity) plbullet.getUserData();
+				Entity p = (Entity) enemy.getUserData();
+				DamageComponent dc = (DamageComponent) p.getComponent(DamageComponent.class);
+				//dc.damageDealtLastFrame = 1;
+				b.isDead = dc.painTimer <= 0;
+			}
+
+			@Override
+			public void endCollision(Body b1, Body b2) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+
 		
 		callbacks.add(new ICollisionCallback(){
 			{ setCategories( CollisionLayers.CATEGORY_PLAYERPHYSIC, CollisionLayers.CATEGORY_MAP ); }

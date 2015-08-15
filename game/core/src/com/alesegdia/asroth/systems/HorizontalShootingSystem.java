@@ -3,10 +3,12 @@ package com.alesegdia.asroth.systems;
 import com.alesegdia.asroth.components.AttackComponent;
 import com.alesegdia.asroth.components.PositionComponent;
 import com.alesegdia.asroth.components.ShootComponent;
+import com.alesegdia.asroth.components.ShootComponent.BulletModel;
 import com.alesegdia.asroth.components.GraphicsComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
 import com.alesegdia.asroth.game.GameWorld;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class HorizontalShootingSystem extends EntitySystem {
@@ -32,9 +34,13 @@ public class HorizontalShootingSystem extends EntitySystem {
 		if( ac.doAttack ) {
 			ac.attackedLastFrame = true;
 			for( Vector2 origin : sc.bulletOrigins ) {
-				GameWorld.instance.makePlayerBullet(
-						pc.position.x + origin.x * (gc.flipX?-1:1),
-						pc.position.y + origin.y, gc.flipX);
+				// 	( float x, float y, float w, float h, float speed, boolean player, TextureRegion tr, boolean flipX ) {
+				System.out.println("CHUT!");
+				BulletModel bm = sc.bulletModel;
+				GameWorld.instance.addToEngine(GameWorld.instance.makeHorizontalBullet(
+							pc.position.x + origin.x * (gc.flipX?-1:1),
+							pc.position.y + origin.y,
+							bm.w, bm.h, 10, false, bm.tr, gc.flipX, bm.destructionTime));
 			}
 		}
 	}

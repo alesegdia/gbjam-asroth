@@ -62,6 +62,7 @@ public class Gfx {
 	public static Animation demonWalk;
 	public static Animation demonStand;
 	public static Animation demonAttack;
+	public static Animation runnerPrepare;
 	
 	public static void Initialize() {
 		mapTilesTexture = new Texture(Gdx.files.internal("flyinGB_tiles.png"));
@@ -119,6 +120,7 @@ public class Gfx {
 		runnerStand = new Animation(0.1f, runnerSheet.get(0));
 		runnerWalk = new Animation(0.1f, runnerSheet.getRange(0, 3));
 		runnerAttack = new Animation(0.1f, runnerSheet.get(10));
+		runnerPrepare = new Animation(0.1f, runnerSheet.getRange(4,9));
 		
 		summonerStand = new Animation(0.1f, summonerSheet.get(3));
 		summonerWalk = new Animation(0.4f, summonerSheet.getRange(2, 3));

@@ -39,7 +39,7 @@ public class CollisionLayers {
 	/* PLAYER PHYSICS *************************************************************/
 	public static final short MASK_PLAYERPHYSIC = CATEGORY_ENBULLETS | CATEGORY_1WAYPLATS | CATEGORY_MAP;
 	public static final short MASK_PLAYERLOGIC = CATEGORY_ENEMYLOGIC | CATEGORY_ENBULLETS;
-	public static final short MASK_PLBULLETS = CATEGORY_ENEMYPHYSIC | CATEGORY_MAP;
+	public static final short MASK_PLBULLETS = CATEGORY_ENEMYLOGIC | CATEGORY_MAP;
 
 	/* ENEMY PHYSICS *************************************************************/
 	public static final short MASK_ENEMYPHYSIC = CATEGORY_MAP;

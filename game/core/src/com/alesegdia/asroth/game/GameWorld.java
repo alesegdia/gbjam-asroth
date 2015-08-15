@@ -8,11 +8,13 @@ import com.alesegdia.asroth.components.ActiveComponent;
 import com.alesegdia.asroth.components.AnimationComponent;
 import com.alesegdia.asroth.components.AttackComponent;
 import com.alesegdia.asroth.components.CountdownDestructionComponent;
+import com.alesegdia.asroth.components.DamageComponent;
 import com.alesegdia.asroth.components.AIAgentAttackPreparationComponent;
 import com.alesegdia.asroth.components.AIAgentAnimatorComponent;
 import com.alesegdia.asroth.components.AIAgentComponent;
 import com.alesegdia.asroth.components.AIAgentFlyingComponent;
 import com.alesegdia.asroth.components.GraphicsComponent;
+import com.alesegdia.asroth.components.HealthComponent;
 import com.alesegdia.asroth.components.HideComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
 import com.alesegdia.asroth.components.AIAgentPeriodicAutoAttackComponent;
@@ -21,6 +23,7 @@ import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.PositionComponent;
 import com.alesegdia.asroth.components.ShootComponent;
+import com.alesegdia.asroth.components.ShootComponent.BulletModel;
 import com.alesegdia.asroth.components.StrikeAttackComponent;
 import com.alesegdia.asroth.components.SummonComponent;
 import com.alesegdia.asroth.components.WalkingComponent;
@@ -39,6 +42,7 @@ import com.alesegdia.asroth.systems.FlipSystem;
 import com.alesegdia.asroth.systems.HideSystem;
 import com.alesegdia.asroth.systems.HumanControllerSystem;
 import com.alesegdia.asroth.systems.MovementSystem;
+import com.alesegdia.asroth.systems.PainSystem;
 import com.alesegdia.asroth.systems.StrikeAttackSystem;
 import com.alesegdia.asroth.systems.HorizontalShootingSystem;
 import com.alesegdia.asroth.systems.AIAgentPeriodicAttackSystem;
@@ -69,11 +73,14 @@ public class GameWorld {
 	private Camera cam;
 	
 	private List<Vector2> threeHeadedOrigins = new ArrayList<Vector2>();
+	private List<Vector2> runnerOrigins = new ArrayList<Vector2>();
 	
 	public int getNumEntities() {
 		return engine.getNumEntities();
 	}
 	
+	BulletModel bm1;
+
 	public GameWorld( Physics physics, SpriteBatch batch, Camera cam, TileMap tm ) {
 		this.physics = physics;
 		this.cam = cam;
@@ -94,6 +101,7 @@ public class GameWorld {
 		engine.addSystem(new AttackTriggeringSystem());
 
 		engine.addSystem(new HideSystem());
+		engine.addSystem(new PainSystem());
 		engine.addSystem(new AIAgentWarpingSystem());
 		engine.addSystem(new SummoningSystem());
 		engine.addSystem(new HorizontalShootingSystem());
@@ -160,6 +168,13 @@ public class GameWorld {
 		this.threeHeadedOrigins.add(new Vector2(0.5f,-0.35f));
 		this.threeHeadedOrigins.add(new Vector2(0.5f,0.3f));
 		this.threeHeadedOrigins.add(new Vector2(0.5f,0.75f));
+		
+		this.runnerOrigins.add(new Vector2(0,0.3f));
+		
+		bm1 = new BulletModel();
+		bm1.h = 5;
+		bm1.w = 5;
+		bm1.tr = Gfx.playerBulletTexture;
 	}
 	
 	public void adjustToTile( Entity e, int tx, int ty ) {
@@ -200,32 +215,61 @@ public class GameWorld {
 		lvc.cap.y = 2;
 		lvc.doCap[1] = true;
 		
+		addHealthDamage(player, 10f, 1f);
+		
 		engine.addEntity(player);
 	}
 	
-	public Entity makePlayerBullet( float x, float y, boolean faceLeft ) {
+	private void addHealthDamage(Entity e, float maxHP, float cooldownPain) {
+		HealthComponent hc = (HealthComponent) e.addComponent(new HealthComponent());
+		DamageComponent dc = (DamageComponent) e.addComponent(new DamageComponent());
+		hc.currentHP = (int) maxHP;
+		hc.maxHP = (int) maxHP;
+		dc.painCooldown = cooldownPain;
+	}
+
+	public Entity makeBullet( float x, float y, float w, float h, float angle, Vector2 dir, boolean player, TextureRegion tr, float destructionTime ) {
 		Entity e = new Entity();
-		
+
 		GraphicsComponent gc = (GraphicsComponent) e.addComponent(new GraphicsComponent());
-		gc.drawElement = Gfx.playerBulletTexture;
+		gc.drawElement = tr;
 		gc.sprite = new Sprite(gc.drawElement);
 		
 		PositionComponent posc = (PositionComponent) e.addComponent(new PositionComponent());
 		posc.position = new Vector2(x,y);
 		posc.offset.x = 0;
 		posc.offset.y = 0;
-
 		PhysicsComponent phc = (PhysicsComponent) e.addComponent(new PhysicsComponent());
-		phc.body = physics.createPlayerBulletBody(x, y);
+		short cat, mask, group;
+		if( player ) {
+			cat = CollisionLayers.CATEGORY_PLBULLETS;
+			mask = CollisionLayers.MASK_PLBULLETS;
+			group = CollisionLayers.GROUP_PLBULLETS;
+		} else {
+			cat = CollisionLayers.CATEGORY_ENBULLETS;
+			mask = CollisionLayers.MASK_ENBULLETS;
+			group = CollisionLayers.GROUP_ENBULLETS;
+		}
+		phc.body = physics.createBulletBody(x, y, w, h, cat, mask, group);
 		phc.body.setUserData(e);
 		
 		LinearVelocityComponent lvc = (LinearVelocityComponent) e.addComponent(new LinearVelocityComponent());		
 		lvc.speed.set(0.5f,0);
-		lvc.linearVelocity.x = 10 * ((faceLeft) ? -1 : 1);
-		gc.flipX = faceLeft;
+		lvc.linearVelocity.set(dir);
 
-		engine.addEntity(e);
+		CountdownDestructionComponent cdc = (CountdownDestructionComponent) e.addComponent(new CountdownDestructionComponent());
+		cdc.timeToLive = destructionTime;
+
 		return e;
+	}
+	
+	public Entity makeHorizontalBullet( float x, float y, float w, float h, float speed, boolean player, TextureRegion tr, boolean flipX, float dt ) {
+		Entity e = makeBullet(x, y, w, h, 0, new Vector2(speed * (flipX ? -1 : 1), 0), player, tr, dt);
+		return e;
+	}
+	
+	public Entity makePlayerBullet( float x, float y, boolean faceLeft ) {
+		return engine.addEntity(makeHorizontalBullet( x, y, 5, 5, 10, true, Gfx.playerBulletTexture, faceLeft, 1f));
 	}
 	
 	public Entity makeGroundExplosion(float x, float y) {
@@ -275,6 +319,9 @@ public class GameWorld {
 		ActiveComponent actc = (ActiveComponent) e.addComponent(new ActiveComponent());
 		
 		AIAgentComponent enc = (AIAgentComponent) e.addComponent(new AIAgentComponent());
+		
+		addHealthDamage(e, 10, 1);
+		
 		
 		return e;
 	}
@@ -327,7 +374,8 @@ public class GameWorld {
 
 		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
 		sc.bulletOrigins = this.threeHeadedOrigins;
-
+		sc.bulletModel = bm1;
+		
 		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
 		pac.attackCooldown = 3f;
 
@@ -345,7 +393,29 @@ public class GameWorld {
 	public Entity makeRunner(float x, float y) {
 		Entity e = makeEnemy(x,y,Gfx.runnerSheet.get(0), 0, 0);
 		letEnemyWalk( e, 10, 0, 6 + RNG.rng.nextFloat()*2 );
-		addEnemyAnimator(e, Gfx.runnerWalk, Gfx.runnerStand, Gfx.runnerAttack);
+		addEnemyAnimator(e, Gfx.runnerWalk, Gfx.runnerStand, Gfx.runnerAttack, Gfx.runnerPrepare);
+		
+		AttackComponent ac = (AttackComponent) e.addComponent(new AttackComponent());
+		ac.attackCooldown = 0f;
+		ac.attackTimer = 0.2f;
+		ac.attackDuration = 0.3f;
+
+		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
+		sc.bulletOrigins = runnerOrigins;
+		sc.bulletModel = bm1;
+		
+		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
+		pac.attackCooldown = 3f;
+
+		AIAgentAttackPreparationComponent aipac = (AIAgentAttackPreparationComponent) e.addComponent(new AIAgentAttackPreparationComponent());
+		aipac.timeToPrepare = 0.5f;
+		aipac.preparingTimer = 0.5f;
+
+		StrikeAttackComponent sac = (StrikeAttackComponent) e.addComponent(new StrikeAttackComponent());
+		sac.strikeNum = 5;
+		sac.strikeCooldown = 0.1f;
+
+		
 		return engine.addEntity(e);
 	}
 	
@@ -369,7 +439,6 @@ public class GameWorld {
 		Entity e = makeEnemy(x,y,Gfx.evilCherubSheet.get(0), -10, 0, true);
 		AIAgentFlyingComponent aifc= (AIAgentFlyingComponent) e.addComponent(new AIAgentFlyingComponent());
 		LinearVelocityComponent lvc = (LinearVelocityComponent) e.addComponent(new LinearVelocityComponent());
-
 		engine.addEntity(e);
 	}
 	
@@ -419,6 +488,7 @@ public class GameWorld {
 
 		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
 		sc.bulletOrigins = this.threeHeadedOrigins;
+		sc.bulletModel = bm1;
 
 		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
 		pac.attackCooldown = 3f;
@@ -446,6 +516,10 @@ public class GameWorld {
 	
 	public void render() {
 		engine.render();
+	}
+
+	public void addToEngine(Entity e) {
+		engine.addEntity(e);
 	}
 	
 }

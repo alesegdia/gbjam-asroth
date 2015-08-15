@@ -32,17 +32,13 @@ public class AIAgentAnimationSystem extends EntitySystem {
 		if( ec.isAttacking ) {
 			ac.currentAnim = eac.attackAnim;
 			lvc.linearVelocity.x = 0;
-			System.out.println("ISATTACKING");
 		} else if( ec.isPreparingAttack || atc.isAttacking ) {
 			ac.currentAnim = eac.prepareAnim;
 			lvc.linearVelocity.x = 0;
-			System.out.println("PREPARING OR ATCATTACK");
 		} else if( Math.abs(lvc.linearVelocity.x) > 0.01 ) {
 			ac.currentAnim = eac.walkAnim;
-			System.out.println("DELAO2");
 		} else {
 			ac.currentAnim = eac.standAnim;
-			System.out.println("DELAO1");
 		}
 	}
 

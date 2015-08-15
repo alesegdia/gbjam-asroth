@@ -104,7 +104,14 @@ public class Physics {
 	}
 
 	public Body createPlayerBody(float x, float y) {
-		return createCircleBody(x, y, 7.41f, CollisionLayers.CATEGORY_PLAYERPHYSIC, CollisionLayers.MASK_PLAYERPHYSIC, CollisionLayers.GROUP_PLAYERPHYSIC, true);
+		Body b = createBody(x * GameConfig.PIXELS_TO_METERS, y* GameConfig.PIXELS_TO_METERS, true);
+		CircleShape cs = new CircleShape();
+		cs.setRadius(7.41f * GameConfig.PIXELS_TO_METERS);
+		createFixture(b, cs, CollisionLayers.CATEGORY_PLAYERPHYSIC, CollisionLayers.MASK_PLAYERPHYSIC, CollisionLayers.GROUP_PLAYERPHYSIC, 1f, 0f, 0f);
+		createFixture(b, cs, CollisionLayers.CATEGORY_PLAYERLOGIC, CollisionLayers.MASK_PLAYERLOGIC, CollisionLayers.GROUP_PLAYERPHYSIC, 1f, 0f, 0f);
+		cs.dispose();
+		return b;
+
 	}
 	
 	public Body createBulletBody( float x, float y, float w, float h, short cat, short mask, short group ) {
