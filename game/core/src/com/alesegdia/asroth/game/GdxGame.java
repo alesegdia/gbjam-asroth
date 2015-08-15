@@ -3,6 +3,7 @@ package com.alesegdia.asroth.game;
 import com.alesegdia.asroth.asset.Gfx;
 import com.alesegdia.asroth.components.HealthComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
+import com.alesegdia.asroth.components.WingsComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.map.MapPhysicsBuilderVisitor;
 import com.alesegdia.asroth.map.TiledTileMapConverter;
@@ -143,8 +144,9 @@ public class GdxGame extends ApplicationAdapter {
 		for( int i = 0; i < numBars; i++ ) {
 			batch.draw(Gfx.hpTexture, 14*3 + i * trw * s, 2*3, trw*s, trh*s);	
 		}
-		
-		for( int i = 0; i < 6; i++ ) {
+		WingsComponent wc = (WingsComponent) pl.getComponent(WingsComponent.class);
+		numBars = (int) Math.floor(wc.currentBoost * 8 / wc.maxCapacity);
+		for( int i = 0; i < numBars; i++ ) {
 			batch.draw(Gfx.hpTexture, 146*3 - i * trw * s, 2*3, -trw*s, trh*s);	
 		}
 		batch.end();
