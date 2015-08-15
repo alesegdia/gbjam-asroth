@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.alesegdia.asroth.components.AttackComponent;
 import com.alesegdia.asroth.components.SummonComponent;
-import com.alesegdia.asroth.components.PositionComponent;
+import com.alesegdia.asroth.components.TransformComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
 import com.alesegdia.asroth.game.GameConfig;
@@ -17,7 +17,7 @@ import com.badlogic.gdx.Gdx;
 public class SummoningSystem extends EntitySystem {
 
 	public SummoningSystem() {
-		super(SummonComponent.class, AttackComponent.class, PositionComponent.class);
+		super(SummonComponent.class, AttackComponent.class, TransformComponent.class);
 	}
 	
 	@Override
@@ -28,7 +28,7 @@ public class SummoningSystem extends EntitySystem {
 	@Override
 	public void process(Entity e) {
 		SummonComponent sc = (SummonComponent) e.getComponent(SummonComponent.class);
-		PositionComponent pc = (PositionComponent) e.getComponent(PositionComponent.class);
+		TransformComponent pc = (TransformComponent) e.getComponent(TransformComponent.class);
 		
 		AttackComponent ac = (AttackComponent) e.getComponent(AttackComponent.class);
 

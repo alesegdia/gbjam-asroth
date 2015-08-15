@@ -30,7 +30,6 @@ public class AIAgentWalkingSystem extends EntitySystem {
 		AIAgentInhibitWalkComponent inhibit = (AIAgentInhibitWalkComponent) e.getComponent(AIAgentInhibitWalkComponent.class);
 		LinearVelocityComponent lvc = (LinearVelocityComponent) e.getComponent(LinearVelocityComponent.class);
 		if( inhibit.canWalk && actc.isActive ) {
-			System.out.println("WALKING");
 			WalkingComponent wc = (WalkingComponent) e.getComponent(WalkingComponent.class);
 			if( wc.isWalking ) {
 				// update walking timer

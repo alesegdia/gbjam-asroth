@@ -121,11 +121,15 @@ public class Physics {
 	public Body createDirectionalBullet( float x, float y, float w, float h, float angle, short cat, short mask, short group ) {
 		Body b = createBody(x, y, true);
 		b.setBullet(true);
+		CircleShape cs = new CircleShape();
+		cs.setRadius(w * GameConfig.PIXELS_TO_METERS);
+		/*
 		PolygonShape ps = new PolygonShape();
 		ps.setAsBox(w * GameConfig.PIXELS_TO_METERS, h * GameConfig.PIXELS_TO_METERS);
-		createFixture(b, ps, cat, mask, group, 0, 0, 0, true);
+		*/
+		createFixture(b, cs, cat, mask, group, 0, 0, 0, true);
 		b.setGravityScale(0);
-		ps.dispose();
+		cs.dispose();
 		return b;
 	}
 	

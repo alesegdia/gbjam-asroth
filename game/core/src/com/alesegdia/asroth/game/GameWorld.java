@@ -23,7 +23,7 @@ import com.alesegdia.asroth.components.AIAgentPeriodicAutoAttackComponent;
 import com.alesegdia.asroth.components.AIWarpComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
-import com.alesegdia.asroth.components.PositionComponent;
+import com.alesegdia.asroth.components.TransformComponent;
 import com.alesegdia.asroth.components.ShootComponent;
 import com.alesegdia.asroth.components.ShootComponent.BulletModel;
 import com.alesegdia.asroth.components.StrikeAttackComponent;
@@ -50,7 +50,7 @@ import com.alesegdia.asroth.systems.JumperAttackSystem;
 import com.alesegdia.asroth.systems.MovementSystem;
 import com.alesegdia.asroth.systems.PainSystem;
 import com.alesegdia.asroth.systems.AIAgentStrikeAttackSystem;
-import com.alesegdia.asroth.systems.HorizontalShootingSystem;
+import com.alesegdia.asroth.systems.ShootingSystem;
 import com.alesegdia.asroth.systems.AIAgentPeriodicAttackSystem;
 import com.alesegdia.asroth.systems.AIAgentPrepareAttackSystem;
 import com.alesegdia.asroth.systems.AIAgentSystem;
@@ -113,7 +113,7 @@ public class GameWorld {
 		engine.addSystem(new AIAgentWarpingSystem());
 		engine.addSystem(new SummoningSystem());
 		engine.addSystem(new JumperAttackSystem());
-		engine.addSystem(new HorizontalShootingSystem());
+		engine.addSystem(new ShootingSystem());
 
 		engine.addSystem(new UpdatePhysicsSystem());
 		engine.addSystem(new CountdownDestructionSystem());
@@ -172,8 +172,8 @@ public class GameWorld {
 					CollisionLayers.GROUP_ENEMYLIMIT,
 					false);
 			
-			Entity e = makeSummoner(0,0,mz);
-			adjustToTile(e, mz.xRange.x + 3, mz.height + 1);
+			//Entity e = makeSummoner(0,0,mz);
+			//adjustToTile(e, mz.xRange.x + 3, mz.height + 1);
 
 			i++;
 		}
@@ -189,6 +189,8 @@ public class GameWorld {
 		bm1.h = 5;
 		bm1.w = 5;
 		bm1.tr = Gfx.playerBulletTexture;
+		bm1.speed = 10;
+
 	}
 	
 	public void adjustToTile( Entity e, int tx, int ty ) {
@@ -203,7 +205,7 @@ public class GameWorld {
 		pc.body.setTransform(fx, fy, 0);
 	}
 	
-	public static PositionComponent playerPositionComponent;
+	public static TransformComponent playerPositionComponent;
 	
 	public void makePlayer(int x, int y) {
 		Entity player = new Entity();
@@ -216,7 +218,7 @@ public class GameWorld {
 		gc.drawElement = Gfx.playerSheet.get(0);
 		gc.sprite = new Sprite(gc.drawElement);
 		
-		playerPositionComponent = (PositionComponent) player.addComponent(new PositionComponent());
+		playerPositionComponent = (TransformComponent) player.addComponent(new TransformComponent());
 		playerPositionComponent.position = pc.body.getPosition();
 		
 		AnimationComponent ac = (AnimationComponent) player.addComponent(new AnimationComponent());
@@ -242,14 +244,15 @@ public class GameWorld {
 		dc.painCooldown = cooldownPain;
 	}
 
-	public Entity makeBullet( float x, float y, float w, float h, float angle, Vector2 dir, boolean player, TextureRegion tr, float destructionTime ) {
+	public Entity makeBullet( float x, float y, float w, float h, Vector2 dir, boolean player, TextureRegion tr, float destructionTime ) {
 		Entity e = new Entity();
 
 		GraphicsComponent gc = (GraphicsComponent) e.addComponent(new GraphicsComponent());
 		gc.drawElement = tr;
 		gc.sprite = new Sprite(gc.drawElement);
+		gc.allowFlip = false;
 		
-		PositionComponent posc = (PositionComponent) e.addComponent(new PositionComponent());
+		TransformComponent posc = (TransformComponent) e.addComponent(new TransformComponent());
 		posc.position = new Vector2(x,y);
 		posc.offset.x = 0;
 		posc.offset.y = 0;
@@ -265,6 +268,7 @@ public class GameWorld {
 			group = CollisionLayers.GROUP_ENBULLETS;
 		}
 		phc.body = physics.createBulletBody(x, y, w, h, cat, mask, group);
+		phc.body.setTransform(x, y, (float) Math.toRadians(dir.angle()));
 		phc.body.setUserData(e);
 		
 		LinearVelocityComponent lvc = (LinearVelocityComponent) e.addComponent(new LinearVelocityComponent());		
@@ -278,7 +282,7 @@ public class GameWorld {
 	}
 	
 	public Entity makeHorizontalBullet( float x, float y, float w, float h, float speed, boolean player, TextureRegion tr, boolean flipX, float dt ) {
-		Entity e = makeBullet(x, y, w, h, 0, new Vector2(speed * (flipX ? -1 : 1), 0), player, tr, dt);
+		Entity e = makeBullet(x, y, w, h, new Vector2(speed * (flipX ? -1 : 1), 0), player, tr, dt);
 		return e;
 	}
 	
@@ -293,7 +297,7 @@ public class GameWorld {
 		gc.drawElement = Gfx.groundExplosionSpritesheet.get(0);
 		gc.sprite = new Sprite(gc.drawElement);
 		
-		PositionComponent posc = (PositionComponent) e.addComponent(new PositionComponent());
+		TransformComponent posc = (TransformComponent) e.addComponent(new TransformComponent());
 		posc.position = new Vector2(x,y);
 		posc.offset.x = 0;
 		posc.offset.y = 0;
@@ -319,7 +323,7 @@ public class GameWorld {
 		gc.drawElement = tr;
 		gc.sprite = new Sprite(gc.drawElement);
 		
-		PositionComponent posc = (PositionComponent) e.addComponent(new PositionComponent());
+		TransformComponent posc = (TransformComponent) e.addComponent(new TransformComponent());
 		posc.position = new Vector2(x,y);
 		posc.offset.x = 0;
 		posc.offset.y = 0;
@@ -331,12 +335,9 @@ public class GameWorld {
 		phc.boxOffset.set(offw, offh);
 		
 		ActiveComponent actc = (ActiveComponent) e.addComponent(new ActiveComponent());
-		
 		AIAgentComponent enc = (AIAgentComponent) e.addComponent(new AIAgentComponent());
-		
 		addHealthDamage(e, 10, 1);
-		
-		
+
 		return e;
 	}
 	
@@ -392,6 +393,7 @@ public class GameWorld {
 		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
 		sc.bulletOrigins = this.threeHeadedOrigins;
 		sc.bulletModel = bm1;
+		sc.horizontal = false;
 		
 		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
 		pac.attackCooldown = 3f;

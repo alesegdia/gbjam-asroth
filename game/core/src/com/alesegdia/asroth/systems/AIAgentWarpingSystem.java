@@ -3,7 +3,7 @@ package com.alesegdia.asroth.systems;
 import com.alesegdia.asroth.components.AIWarpComponent;
 import com.alesegdia.asroth.components.HideComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
-import com.alesegdia.asroth.components.PositionComponent;
+import com.alesegdia.asroth.components.TransformComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
 import com.alesegdia.asroth.game.GameWorld;
@@ -14,7 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 public class AIAgentWarpingSystem extends EntitySystem {
 
 	public AIAgentWarpingSystem() {
-		super(AIWarpComponent.class, HideComponent.class, PhysicsComponent.class, PositionComponent.class);
+		super(AIWarpComponent.class, HideComponent.class, PhysicsComponent.class, TransformComponent.class);
 	}
 	
 	@Override
@@ -28,8 +28,8 @@ public class AIAgentWarpingSystem extends EntitySystem {
 		AIWarpComponent wc = (AIWarpComponent) e.getComponent(AIWarpComponent.class);
 		HideComponent hc = (HideComponent) e.getComponent(HideComponent.class);
 		PhysicsComponent phc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
-		PositionComponent pposc = GameWorld.instance.playerPositionComponent;
-		PositionComponent posc = (PositionComponent) e.getComponent(PositionComponent.class);
+		TransformComponent pposc = GameWorld.instance.playerPositionComponent;
+		TransformComponent posc = (TransformComponent) e.getComponent(TransformComponent.class);
 
 		Vector2 ppos = new Vector2(pposc.position);
 		

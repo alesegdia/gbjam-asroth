@@ -144,6 +144,6 @@ public class GdxGame extends ApplicationAdapter {
 		}
 		batch.end();
 
-		//physics.render(camera);
+		physics.render(camera);
 	}
 }

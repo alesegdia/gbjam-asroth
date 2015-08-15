@@ -1,7 +1,7 @@
 package com.alesegdia.asroth.systems;
 
 import com.alesegdia.asroth.components.GraphicsComponent;
-import com.alesegdia.asroth.components.PositionComponent;
+import com.alesegdia.asroth.components.TransformComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
 import com.alesegdia.asroth.game.GameConfig;
@@ -12,44 +12,33 @@ public class DrawingSystem extends EntitySystem {
 	private SpriteBatch spriteBatch;
 
 	public DrawingSystem( SpriteBatch spriteBatch ) {
-		super(GraphicsComponent.class, PositionComponent.class);
+		super(GraphicsComponent.class, TransformComponent.class);
 		this.spriteBatch = spriteBatch;
 	}
 	
 	@Override
 	public void process(Entity e) {
 		GraphicsComponent gc = (GraphicsComponent) e.getComponent(GraphicsComponent.class);
-		PositionComponent pc = (PositionComponent) e.getComponent(PositionComponent.class);
+		TransformComponent pc = (TransformComponent) e.getComponent(TransformComponent.class);
 
-		//gc.sprite.setPosition(pc.position.x - 11, pc.position.y - 11 + GameConfig.PIXELS_TO_METERS);
-		/*
-		gc.sprite.setScale(GameConfig.PIXELS_TO_METERS);
 
-		gc.sprite.setOrigin(0, 0);
-		gc.sprite.flip(gc.flipX, false);
-
-		gc.sprite.setOrigin(-gc.sprite.getWidth()/2 * GameConfig.PIXELS_TO_METERS,
-				-gc.sprite.getHeight()/2 * GameConfig.PIXELS_TO_METERS);
-		gc.sprite.setPosition(pc.position.x, pc.position.y);
-
-		gc.sprite.draw(spriteBatch);
-		*/
-
-		float sX, cX;
-		if( gc.flipX && gc.allowFlip ) {
-			sX = -GameConfig.PIXELS_TO_METERS;
-			cX = gc.drawElement.getRegionWidth()/2f * GameConfig.PIXELS_TO_METERS;
-		} else {
-			sX = GameConfig.PIXELS_TO_METERS;
-			cX = -gc.drawElement.getRegionWidth()/2f * GameConfig.PIXELS_TO_METERS;
+		if( gc.allowFlip ) {
+			if( gc.isFlipped && gc.flipX ) {
+				gc.sprite.flip(true, false);
+				gc.isFlipped = true;
+			}
+			
+			if( !gc.isFlipped && !gc.flipX ) {
+				gc.sprite.flip(true, false);
+				gc.isFlipped = false;
+			}
 		}
 		
-		spriteBatch.setColor(1,1,1,gc.alpha);
-		spriteBatch.draw(gc.drawElement, pc.position.x, pc.position.y,
-				cX,
-				-gc.drawElement.getRegionHeight()/2f * GameConfig.PIXELS_TO_METERS,
-				gc.drawElement.getRegionWidth(), gc.drawElement.getRegionHeight(),
-				sX, GameConfig.PIXELS_TO_METERS, 0);
+		gc.sprite.setScale(GameConfig.PIXELS_TO_METERS);
+		gc.sprite.setRotation(pc.angle);
+		gc.sprite.setOriginCenter();
+		gc.sprite.setPosition(pc.position.x - gc.sprite.getOriginX(), pc.position.y - gc.sprite.getOriginY());
+		gc.sprite.draw(spriteBatch);
 	}
 
 	@Override

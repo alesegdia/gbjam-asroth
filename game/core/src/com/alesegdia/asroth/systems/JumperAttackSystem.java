@@ -3,7 +3,7 @@ package com.alesegdia.asroth.systems;
 import com.alesegdia.asroth.components.AttackComponent;
 import com.alesegdia.asroth.components.JumperAttackComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
-import com.alesegdia.asroth.components.PositionComponent;
+import com.alesegdia.asroth.components.TransformComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
 import com.alesegdia.asroth.game.GameWorld;
@@ -25,8 +25,8 @@ public class JumperAttackSystem extends EntitySystem {
 		AttackComponent ac = (AttackComponent) e.getComponent(AttackComponent.class);
 		JumperAttackComponent jac = (JumperAttackComponent) e.getComponent(JumperAttackComponent.class);
 		PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
-		PositionComponent posc = (PositionComponent) e.getComponent(PositionComponent.class);
-		PositionComponent pposc = GameWorld.instance.playerPositionComponent;
+		TransformComponent posc = (TransformComponent) e.getComponent(TransformComponent.class);
+		TransformComponent pposc = GameWorld.instance.playerPositionComponent;
 		
 		
 		//ac.isAttacking = Math.abs(pc.body.getLinearVelocity().len()) > 0.1f;

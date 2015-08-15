@@ -3,7 +3,7 @@ package com.alesegdia.asroth.systems;
 import com.alesegdia.asroth.components.AIAgentComponent;
 import com.alesegdia.asroth.components.AIAgentFlyingComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
-import com.alesegdia.asroth.components.PositionComponent;
+import com.alesegdia.asroth.components.TransformComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
 import com.alesegdia.asroth.game.GameWorld;
@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 public class AIAgentFlyingSystem extends EntitySystem {
 
 	public AIAgentFlyingSystem() {
-		super(AIAgentFlyingComponent.class, LinearVelocityComponent.class, PositionComponent.class);
+		super(AIAgentFlyingComponent.class, LinearVelocityComponent.class, TransformComponent.class);
 	}
 	
 	@Override
@@ -29,10 +29,10 @@ public class AIAgentFlyingSystem extends EntitySystem {
 
 	@Override
 	public void process(Entity e) {
-		PositionComponent plpc = GameWorld.playerPositionComponent;
+		TransformComponent plpc = GameWorld.playerPositionComponent;
 		LinearVelocityComponent lvc = (LinearVelocityComponent) e.getComponent(LinearVelocityComponent.class);
 		AIAgentFlyingComponent aifc = (AIAgentFlyingComponent) e.getComponent(AIAgentFlyingComponent.class);
-		PositionComponent pc = (PositionComponent) e.getComponent(PositionComponent.class);
+		TransformComponent pc = (TransformComponent) e.getComponent(TransformComponent.class);
 		AIAgentComponent aiac = (AIAgentComponent) e.getComponent(AIAgentComponent.class);
 		
 		if( !aiac.isAttacking ) {

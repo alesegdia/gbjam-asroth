@@ -12,9 +12,12 @@ public class ShootComponent extends Component {
 		public TextureRegion tr;
 		public int w, h;
 		public float destructionTime = 0.5f;
+		public float speed = 10f;
 	}
 	
 	public BulletModel bulletModel;
+	
+	public boolean horizontal = true;
 	
 	public List<Vector2> bulletOrigins;
 	

@@ -3,7 +3,7 @@ package com.alesegdia.asroth.systems;
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
-import com.alesegdia.asroth.components.PositionComponent;
+import com.alesegdia.asroth.components.TransformComponent;
 import com.alesegdia.asroth.components.GraphicsComponent;
 import com.alesegdia.asroth.asset.Gfx;
 import com.alesegdia.asroth.components.AnimationComponent;
@@ -32,7 +32,7 @@ public class HumanControllerSystem extends EntitySystem {
 		GraphicsComponent gc = (GraphicsComponent) e.getComponent(GraphicsComponent.class);
 		
 		if( plc.justLandedMashing ) {
-			PositionComponent posc = (PositionComponent) e.getComponent(PositionComponent.class);
+			TransformComponent posc = (TransformComponent) e.getComponent(TransformComponent.class);
 			float x, y;
 			x = posc.position.x;
 			y = posc.position.y;
@@ -92,7 +92,7 @@ public class HumanControllerSystem extends EntitySystem {
 		}
 		
 		float x, y;
-		PositionComponent posc = (PositionComponent) e.getComponent(PositionComponent.class);
+		TransformComponent posc = (TransformComponent) e.getComponent(TransformComponent.class);
 		x = posc.position.x;
 		y = posc.position.y;
 		if( Gdx.input.isKeyJustPressed(Input.Keys.C) ) {
