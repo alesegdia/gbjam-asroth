@@ -150,7 +150,7 @@ public class GdxGame extends ApplicationAdapter {
 		cfg.rasterRegionLimits = false;
 		*********************************************************/
 		
-		/* LEVEL 5 **********************************************
+		/* LEVEL 5 **********************************************/
 		Config cfg = new Config();
 		cfg.mapSize = new Vec2(400,400);
 		cfg.regionGeneratorType = ERegionGenerator.BALANCED;
@@ -159,7 +159,7 @@ public class GdxGame extends ApplicationAdapter {
 		cfg.numRegions = 30;
 		cfg.rdfsType = ERDFSType.COMBINED;
 		cfg.rasterRegionLimits = false;
-		*********************************************************/
+		/*********************************************************/
 		
 		
 
@@ -249,13 +249,13 @@ public class GdxGame extends ApplicationAdapter {
 		batch.end();
 
 		physics.render(camera);
-		
+		/*
+
 		srenderer.setColor(48f/255f, 98f/255f, 48f/255f, 1f);
 		srenderer.begin();
 		srenderer.set(ShapeType.Filled);
 		lm.regionTree.visit(minimapRenderer);
 
-		/*
 
 		srenderer.setColor(1f,0f,0f, 1f);
 		srenderer.rect(
