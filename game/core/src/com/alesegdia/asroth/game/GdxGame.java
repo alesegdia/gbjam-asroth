@@ -14,6 +14,7 @@ import com.alesegdia.platgen.config.Config;
 import com.alesegdia.platgen.config.ERDFSType;
 import com.alesegdia.platgen.config.ERegionGenerator;
 import com.alesegdia.platgen.generator.GeneratorPipeline;
+import com.alesegdia.platgen.map.LogicMap;
 import com.alesegdia.platgen.map.PlatformGenerator;
 import com.alesegdia.platgen.map.TileMap;
 import com.alesegdia.platgen.map.TileType;
@@ -28,6 +29,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -43,12 +46,18 @@ public class GdxGame extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private SpriteBatch sprBatch;
 	BitmapFont customFont;
+	SectorMinimapRendererVisitor minimapRenderer;
 	
 	Physics physics;
 	GameWorld gameWorld;
 	
+	ShapeRenderer srenderer;
+	
 	RNG rng;
-
+	
+	LogicMap lm;
+	TileMap tm;
+	
 	@Override
 	public void create () {
 		
@@ -69,24 +78,95 @@ public class GdxGame extends ApplicationAdapter {
 		font = new BitmapFont();
 		batch = new SpriteBatch();
 
+		srenderer = new ShapeRenderer();
+		srenderer.setAutoShapeType(true);
+
+		
+		/*
 		Config cfg = new Config();
-		//cfg.mapSize = new Vec2(400,200);
 		cfg.mapSize = new Vec2(400,400);
-		
 		cfg.regionGeneratorType = ERegionGenerator.BALANCED;
-		
 		cfg.minK = 0.25f;
 		cfg.maxK = 0.75f;
-		//cfg.numRegions = 7;
 		cfg.numRegions = 20;
-		
 		cfg.rdfsType = ERDFSType.COMBINED;
-		
 		cfg.rasterRegionLimits = false;
 
 		
 		GeneratorPipeline gp = new GeneratorPipeline();
 		TileMap tm = gp.generate(cfg);
+		
+		PlatformGenerator pg = new PlatformGenerator();
+		pg.addLevel(new Level(10, 20, 10, 10));
+		pg.addLevel(new Level(10, 20, 15, 15));
+		pg.addLevel(new Level(10, 20, 25, 25));
+		tm = pg.generate(tm);
+
+		*/
+
+		/* LEVEL 1 **********************************************
+		Config cfg = new Config();
+		cfg.mapSize = new Vec2(100,100);
+		cfg.regionGeneratorType = ERegionGenerator.BALANCED;
+		cfg.minK = 0.25f;
+		cfg.maxK = 0.75f;
+		cfg.numRegions = 2;
+		cfg.rdfsType = ERDFSType.COMBINED;
+		cfg.rasterRegionLimits = false;
+		*********************************************************/
+
+
+		/* LEVEL 2 **********************************************
+		Config cfg = new Config();
+		cfg.mapSize = new Vec2(150,150);
+		cfg.regionGeneratorType = ERegionGenerator.BALANCED;
+		cfg.minK = 0.25f;
+		cfg.maxK = 0.75f;
+		cfg.numRegions = 5;
+		cfg.rdfsType = ERDFSType.COMBINED;
+		cfg.rasterRegionLimits = false;
+		*********************************************************/
+
+		
+		/* LEVEL 3 **********************************************
+		Config cfg = new Config();
+		cfg.mapSize = new Vec2(200,200);
+		cfg.regionGeneratorType = ERegionGenerator.BALANCED;
+		cfg.minK = 0.25f;
+		cfg.maxK = 0.75f;
+		cfg.numRegions = 10;
+		cfg.rdfsType = ERDFSType.COMBINED;
+		cfg.rasterRegionLimits = false;
+		*********************************************************/
+
+		/* LEVEL 4 **********************************************
+		Config cfg = new Config();
+		cfg.mapSize = new Vec2(300,300);
+		cfg.regionGeneratorType = ERegionGenerator.BALANCED;
+		cfg.minK = 0.25f;
+		cfg.maxK = 0.75f;
+		cfg.numRegions = 15;
+		cfg.rdfsType = ERDFSType.COMBINED;
+		cfg.rasterRegionLimits = false;
+		*********************************************************/
+		
+		/* LEVEL 5 **********************************************
+		Config cfg = new Config();
+		cfg.mapSize = new Vec2(400,400);
+		cfg.regionGeneratorType = ERegionGenerator.BALANCED;
+		cfg.minK = 0.25f;
+		cfg.maxK = 0.75f;
+		cfg.numRegions = 30;
+		cfg.rdfsType = ERDFSType.COMBINED;
+		cfg.rasterRegionLimits = false;
+		*********************************************************/
+		
+		
+
+		GeneratorPipeline gp = new GeneratorPipeline();
+		tm = gp.generate(cfg);
+		
+		lm = gp.getLogicMap();
 		
 		PlatformGenerator pg = new PlatformGenerator();
 		pg.addLevel(new Level(10, 20, 10, 10));
@@ -107,7 +187,10 @@ public class GdxGame extends ApplicationAdapter {
 		gameWorld = new GameWorld(physics, sprBatch, camera, tm);
 		GameWorld.instance = gameWorld;
 		
-		
+		minimapRenderer = new SectorMinimapRendererVisitor(srenderer,
+				GameConfig.WINDOW_WIDTH/2 - tm.rows/2,
+				GameConfig.WINDOW_HEIGHT/2 - tm.cols/2);
+
 	}
 	
 	@Override
@@ -166,6 +249,22 @@ public class GdxGame extends ApplicationAdapter {
 		batch.end();
 
 		physics.render(camera);
+		
+		srenderer.setColor(48f/255f, 98f/255f, 48f/255f, 1f);
+		srenderer.begin();
+		srenderer.set(ShapeType.Filled);
+		lm.regionTree.visit(minimapRenderer);
+
+		/*
+
+		srenderer.setColor(1f,0f,0f, 1f);
+		srenderer.rect(
+				camera.position.x*1.5f, //+ GameConfig.WINDOW_WIDTH/2 - tm.rows*3/2+6,
+				camera.position.y *1.5f, //+ GameConfig.WINDOW_HEIGHT/2 - tm.cols*3/2+20,
+				2,2);
+						*/
+
+		srenderer.end();
 	}
 
 	private void renderWeaponSlot(SpriteBatch batch2, int i, int j) {
