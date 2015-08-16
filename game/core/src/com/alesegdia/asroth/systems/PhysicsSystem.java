@@ -3,6 +3,7 @@ package com.alesegdia.asroth.systems;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alesegdia.asroth.components.BulletComponent;
 import com.alesegdia.asroth.components.BuyerComponent;
 import com.alesegdia.asroth.components.DamageComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
@@ -128,8 +129,11 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 				Entity b = (Entity) plbullet.getUserData();
 				Entity e = (Entity) enemy.getUserData();
 				DamageComponent dc = (DamageComponent) e.getComponent(DamageComponent.class);
-				dc.damageDealtLastFrame = 1;
-				b.isDead = dc.painTimer <= 0;
+				BulletComponent bc = (BulletComponent) b.getComponent(BulletComponent.class);
+				dc.damageDealtLastFrame = bc.power;
+				if( !bc.trespassingEnabled ) {
+					b.isDead = dc.painTimer <= 0;
+				}
 			}
 
 			@Override
