@@ -28,6 +28,9 @@ public class CollisionLayers {
 	
 	public static final short CATEGORY_ENEMYLIMIT	= 0x0100;
 	public static final short GROUP_ENEMYLIMIT 		= -9;
+	
+	public static final short CATEGORY_PICKUP		= 0x0200;
+	public static final short GROUP_PICKUP 			= -10;
 
 	/* MAP PHYSICS *************************************************************/
 	public static final short MASK_MAP =
@@ -38,12 +41,16 @@ public class CollisionLayers {
 
 	/* PLAYER PHYSICS *************************************************************/
 	public static final short MASK_PLAYERPHYSIC = CATEGORY_ENBULLETS | CATEGORY_1WAYPLATS | CATEGORY_MAP;
-	public static final short MASK_PLAYERLOGIC = CATEGORY_ENEMYLOGIC | CATEGORY_ENBULLETS;
+	public static final short MASK_PLAYERLOGIC = CATEGORY_ENEMYLOGIC | CATEGORY_ENBULLETS | CATEGORY_PICKUP;
 	public static final short MASK_PLBULLETS = CATEGORY_ENEMYLOGIC | CATEGORY_MAP;
 
 	/* ENEMY PHYSICS *************************************************************/
 	public static final short MASK_ENEMYPHYSIC = CATEGORY_MAP;
 	public static final short MASK_ENEMYLOGIC = CATEGORY_PLAYERLOGIC | CATEGORY_PLBULLETS | CATEGORY_ENEMYLIMIT;
 	public static final short MASK_ENBULLETS = CATEGORY_PLAYERLOGIC | CATEGORY_MAP;
+	
+	/* PICKUPS *******************************************************************/
+	public static final short MASK_PICKUP = CATEGORY_PLAYERLOGIC;
+	
 
 }
