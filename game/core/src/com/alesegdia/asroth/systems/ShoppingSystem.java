@@ -33,8 +33,9 @@ public class ShoppingSystem extends EntitySystem {
 
 		if( bc.triedBuyLastFrame ) {
 			if( bc.standingShop != null ) {
+				MoneyComponent mc = (MoneyComponent) e.getComponent(MoneyComponent.class);
 				ShopComponent sc = (ShopComponent) bc.standingShop.getComponent(ShopComponent.class);
-				if( !sc.isSold ) {
+				if( !sc.isSold && mc.currency - ShopConfig.getPriceFor(sc.vendingProduct) >= 0 ) {
 					WeaponComponent wc = (WeaponComponent) e.getComponent(WeaponComponent.class);
 					switch( sc.vendingProduct ) {
 					case DEFAULTGUN:
@@ -59,7 +60,6 @@ public class ShoppingSystem extends EntitySystem {
 					}
 
 					sc.isSold = true;
-					MoneyComponent mc = (MoneyComponent) e.getComponent(MoneyComponent.class);
 					mc.currency -= ShopConfig.getPriceFor(sc.vendingProduct);
 					sc.refillingTimer = sc.refillingCooldown;
 					sc.vendingProduct = ShopConfig.chooseRandomProduct();
