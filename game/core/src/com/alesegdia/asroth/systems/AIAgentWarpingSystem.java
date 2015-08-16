@@ -43,16 +43,17 @@ public class AIAgentWarpingSystem extends EntitySystem {
 				ppos.sub(posc.position);
 				float distToPlayer = ppos.len();
 				
-				float warpingDistance = distToPlayer - wc.minKeepDistance;
-				float angle = RNG.rng.nextInt(0,360);
-				float portion = warpingDistance / distToPlayer;
-				Vector2 displacement = new Vector2(pposc.position);
-				displacement.sub(posc.position);
-				displacement.scl(-(1f - portion));
-				displacement.rotate(angle);
-				displacement.add(pposc.position);
-				phc.body.setTransform(displacement, 0);
-
+				if( distToPlayer < 10 ) {
+					float warpingDistance = distToPlayer - wc.minKeepDistance;
+					float angle = RNG.rng.nextInt(0,360);
+					float portion = warpingDistance / distToPlayer;
+					Vector2 displacement = new Vector2(pposc.position);
+					displacement.sub(posc.position);
+					displacement.scl(-(1f - portion));
+					displacement.rotate(angle);
+					displacement.add(pposc.position);
+					phc.body.setTransform(displacement, 0);
+				}
 			}
 		} else {
 			wc.unhiddenTimer -= Gdx.graphics.getDeltaTime();
