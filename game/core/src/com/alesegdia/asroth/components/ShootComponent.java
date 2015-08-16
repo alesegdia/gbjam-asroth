@@ -24,6 +24,7 @@ public class ShootComponent extends Component {
 		public Vector2 dir;
 		public boolean horizontal = true;
 		public boolean sinegun = false;
+		public boolean trespassingEnabled = false;
 	}
 	
 	public static class BulletEntry {
