@@ -18,6 +18,8 @@ public class BulletConfigs {
 	
 	
 	BulletModel standardEnemyBM = new BulletModel();
+	BulletModel standardEnemyDirectionalBM = new BulletModel();
+	
 	
 	public static List<BulletEntry> playerDefaultBEList = new ArrayList<BulletEntry>();
 	BulletModel playerDefaultBM = new BulletModel();
@@ -38,6 +40,7 @@ public class BulletConfigs {
 	
 	public static List<BulletEntry> playerTroquegunBEList = new ArrayList<BulletEntry>();
 	BulletModel playerTroquegunBM = new BulletModel();
+	public List<BulletEntry> maskBEList = new ArrayList<BulletEntry>();
 	
 	public static WeaponModel defaultGun = new WeaponModel();
 	public static WeaponModel fireball = new WeaponModel();
@@ -56,6 +59,17 @@ public class BulletConfigs {
 		standardEnemyBM.isPlayer = false;
 		standardEnemyBM.power = 1;
 		
+		standardEnemyDirectionalBM.h = 5;
+		standardEnemyDirectionalBM.w = 5;
+		standardEnemyDirectionalBM.tr = Gfx.playerBulletTexture;
+		standardEnemyDirectionalBM.speed = 10;
+		standardEnemyDirectionalBM.destructionTime = 1f;
+		standardEnemyDirectionalBM.isPlayer = false;
+		standardEnemyDirectionalBM.power = 1;
+		standardEnemyDirectionalBM.horizontal = false;
+		
+		createEntryInList(0,0, standardEnemyDirectionalBM, maskBEList);
+		
 		createEntryInList( -0.5f, -0.35f, standardEnemyBM, threeHeadedBEList );
 		createEntryInList( -0.5f, 0.3f, standardEnemyBM, threeHeadedBEList );
 		createEntryInList( -0.5f, 0.75f, standardEnemyBM, threeHeadedBEList );
@@ -67,8 +81,8 @@ public class BulletConfigs {
 		createEntryInList( 0, 0.5f, standardEnemyBM, jumperBEList );
 		
 		/* DEMON SHOOT CONFIG */
-		createEntryInList( -0.3f, 0f, standardEnemyBM, demonBEList );
-		createEntryInList( 0.3f, 0.3f, standardEnemyBM, demonBEList );
+		createEntryInList( -0.3f, 0f, standardEnemyDirectionalBM, demonBEList );
+		createEntryInList( 0.3f, 0.3f, standardEnemyDirectionalBM, demonBEList );
 		
 		/* PLAYER DEFAULT SHOOT CONFIG */
 		playerDefaultBM.h = 5;
@@ -100,6 +114,7 @@ public class BulletConfigs {
 		playerSacredpunchBM.power = 5;
 		playerSacredpunchBM.speed = 15;
 		playerSacredpunchBM.destructionTime = 0.2f;
+		playerSacredpunchBM.trespassingEnabled = true;
 		playerSacredpunchBM.tr = Gfx.playerSacredpunchTexture;
 		createEntryInList( 0, -0.2f, playerSacredpunchBM, playerSacredpunchBEList);
 		createEntryInList( 0, 0.2f, playerSacredpunchBM, playerSacredpunchBEList);
