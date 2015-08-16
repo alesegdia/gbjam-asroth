@@ -1,9 +1,11 @@
 package com.alesegdia.asroth.game;
 
 import com.alesegdia.asroth.asset.Gfx;
+import com.alesegdia.asroth.components.BuyerComponent;
 import com.alesegdia.asroth.components.HealthComponent;
 import com.alesegdia.asroth.components.MoneyComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
+import com.alesegdia.asroth.components.ShopComponent;
 import com.alesegdia.asroth.components.WeaponComponent;
 import com.alesegdia.asroth.components.WingsComponent;
 import com.alesegdia.asroth.ecs.Entity;
@@ -74,8 +76,9 @@ public class GdxGame extends ApplicationAdapter {
 		OrthographicCamera ocam = camera;
 		
 		customFont = new BitmapFont(Gdx.files.internal("visitor.fnt"));
+		font = new BitmapFont(Gdx.files.internal("visitor.fnt"));
+		font.getData().setScale(0.5f);
 		
-		font = new BitmapFont();
 		batch = new SpriteBatch();
 
 		srenderer = new ShapeRenderer();
@@ -223,6 +226,9 @@ public class GdxGame extends ApplicationAdapter {
 		batch.draw(Gfx.wingsHud, 118*3, 0, 0, 0,
 				Gfx.wingsHud.getRegionWidth(), Gfx.wingsHud.getRegionHeight(),
 				3,3, 0);
+		batch.draw(Gfx.upHudTexture, 0, 390, 0, 0,
+				Gfx.upHudTexture.getRegionWidth(), Gfx.upHudTexture.getRegionHeight(),
+				3,3, 0);
 		float trw = t.getRegionWidth();
 		float trh = t.getRegionHeight();
 		float s = 3;
@@ -244,8 +250,21 @@ public class GdxGame extends ApplicationAdapter {
 		//batch.setColor(48f/255f, 98f/255f, 48f/255f, 1f);
 		batch.setColor(1,0,0,1);
 		MoneyComponent mc = (MoneyComponent) pl.getComponent(MoneyComponent.class);
-		customFont.draw(batch, "" + mc.currency, 10, 310);
+		customFont.draw(batch, "X " + mc.currency, 70, 435);
 		batch.setColor(1f, 1f, 1f, 1f);
+		
+		BuyerComponent bc = (BuyerComponent) pl.getComponent(BuyerComponent.class);
+		if( bc.standingShop != null ) {
+			String text = "";
+			ShopComponent sc = (ShopComponent) bc.standingShop.getComponent(ShopComponent.class);
+			int price = ShopConfig.getPriceFor(sc.vendingProduct);
+			if( mc.currency - price >= 0 ) {
+				text = "Press B to buy [" + ShopConfig.getNameFor(sc.vendingProduct) + "] for " + price + " coins.";
+			} else {
+				text = "To buy [" + ShopConfig.getNameFor(sc.vendingProduct) + "], you need " + price + " coins.";
+			}
+			font.draw(batch, text, 10, 470);
+		}
 		batch.end();
 
 		physics.render(camera);

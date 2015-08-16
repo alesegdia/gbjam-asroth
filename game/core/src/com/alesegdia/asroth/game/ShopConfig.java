@@ -42,5 +42,16 @@ public class ShopConfig {
 		else if( i == 5 ) return ShopProduct.WINGSCAPACITY;
 		else return ShopProduct.HEALTHCAPACITY;		
 	}
+
+	public static String getNameFor(ShopProduct sp) {
+		if( sp == ShopProduct.FIREBALL ) return "Fireball";
+		else if( sp == ShopProduct.SINEGUN ) return "Sinegun";
+		else if( sp == ShopProduct.DEFAULTGUN ) return "Defogun";
+		else if( sp == ShopProduct.TRIPLASMA ) return "Triplasma";
+		else if( sp == ShopProduct.SACREDPUNCH ) return "Sacredpunch";
+		else if( sp == ShopProduct.WINGSCAPACITY ) return "Wings enhancer";
+		else if( sp == ShopProduct.HEALTHCAPACITY ) return "Invencibility";
+		else return "";
+	}
 	
 }

@@ -72,6 +72,7 @@ public class Gfx {
 	public static TextureRegion playerSacredpunchTexture;
 	public static TextureRegion playerTriplasmaTexture;
 	public static TextureRegion playerSinegunTexture;
+	public static TextureRegion upHudTexture;
 	
 	public static Spritesheet healthPickupSheet;
 	public static Spritesheet wingsPickupSheet;
@@ -87,6 +88,8 @@ public class Gfx {
 	public static TextureRegion fireballSymbol;
 	public static TextureRegion defaultSymbol;
 	public static TextureRegion wepslot;
+	public static Animation cryingMaskAnim;
+	public static Animation cherubAnim;
 	
 	
 	public static void Initialize() {
@@ -121,6 +124,9 @@ public class Gfx {
 		TextureRegion trget = new TextureRegion();
 		trget.setRegion(get);
 		groundExplosionSpritesheet = new Spritesheet(trget, 2,4);
+		
+		upHudTexture = new TextureRegion();
+		upHudTexture.setRegion(new Texture(Gdx.files.internal("uphud.png")));
 		
 		trget = new TextureRegion();
 		trget.setRegion(new Texture(Gdx.files.internal("GBhealthPickup.png")));
@@ -182,6 +188,9 @@ public class Gfx {
 		summonerWalk = new Animation(0.4f, summonerSheet.getRange(2, 3));
 		summonerAttack = new Animation(0.1f, summonerSheet.get(1));
 		summonerPrepare = new Animation(0.1f, summonerSheet.getRange(0,1));
+
+		cryingMaskAnim = new Animation(0.1f, cryingMaskSheet.getRange(0,5));
+		cherubAnim  = new Animation(0.1f, evilCherubSheet.getRange(0,2));
 		
 		demonWalk = new Animation(0.2f, demonSheet.getRange(0,2));
 		demonWalk.setPlayMode(PlayMode.LOOP_PINGPONG);
