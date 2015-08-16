@@ -149,7 +149,7 @@ public class HumanControllerSystem extends EntitySystem {
 			}
 			if( plc.dashingWall ) {
 				plc.dashingWall = false;
-				plc.releaseWallVelocity = -10 * (gc.flipX ? -1 : 1);
+				plc.releaseWallVelocity = -10 * (gc.flipX ? 1 : -1);
 				prevYlinear = 6;
 			}
 			//phc.body.applyForce(new Vector2(0,50), new Vector2(0,0), true);
