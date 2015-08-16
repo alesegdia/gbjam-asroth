@@ -68,6 +68,10 @@ public class Gfx {
 	public static Animation jumperAttack;
 	public static Animation jumperStand;
 	public static Animation jumperPrepare;
+	public static TextureRegion playerFireballTexture;
+	public static TextureRegion playerSacredpunchTexture;
+	public static TextureRegion playerTriplasmaTexture;
+	public static TextureRegion playerSinegunTexture;
 	
 	public static void Initialize() {
 		mapTilesTexture = new Texture(Gdx.files.internal("flyinGB_tiles.png"));
@@ -103,7 +107,19 @@ public class Gfx {
 		
 		playerBulletTexture = new TextureRegion();
 		playerBulletTexture.setRegion(new Texture(Gdx.files.internal("flyinGB_playerBullet.png")));
+		
+		playerFireballTexture = new TextureRegion();
+		playerFireballTexture.setRegion(new Texture(Gdx.files.internal("GBfireball.png")));
 
+		playerSacredpunchTexture = new TextureRegion();
+		playerSacredpunchTexture.setRegion(new Texture(Gdx.files.internal("GBsacred.png")));
+		
+		playerTriplasmaTexture = new TextureRegion();
+		playerTriplasmaTexture.setRegion(new Texture(Gdx.files.internal("GBtriplasma.png")));
+		
+		playerSinegunTexture = new TextureRegion();
+		playerSinegunTexture.setRegion(new Texture(Gdx.files.internal("sinegun.png")));
+		
 		cryingMaskSheet = new Spritesheet("cryingmask.png", 3, 2);
 		jumperSheet = new Spritesheet("jumpers.png", 1, 3);
 		threeHeadSheet = new Spritesheet("threeheaded.png", 1, 2);

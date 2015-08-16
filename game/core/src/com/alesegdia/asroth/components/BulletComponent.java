@@ -4,6 +4,6 @@ import com.alesegdia.asroth.ecs.Component;
 
 public class BulletComponent extends Component {
 
-	int power;
+	public int power;
 	
 }

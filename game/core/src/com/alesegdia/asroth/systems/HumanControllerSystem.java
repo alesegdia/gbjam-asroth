@@ -3,7 +3,9 @@ package com.alesegdia.asroth.systems;
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
+import com.alesegdia.asroth.components.ShootComponent;
 import com.alesegdia.asroth.components.TransformComponent;
+import com.alesegdia.asroth.components.WeaponComponent;
 import com.alesegdia.asroth.components.WingsComponent;
 import com.alesegdia.asroth.components.GraphicsComponent;
 import com.alesegdia.asroth.asset.Gfx;
@@ -11,6 +13,7 @@ import com.alesegdia.asroth.components.AnimationComponent;
 import com.alesegdia.asroth.components.AttackComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
+import com.alesegdia.asroth.game.BulletConfigs;
 import com.alesegdia.asroth.game.GameConfig;
 import com.alesegdia.asroth.game.GameWorld;
 import com.badlogic.gdx.Gdx;
@@ -113,7 +116,19 @@ public class HumanControllerSystem extends EntitySystem {
 		//if( Gdx.input.isKeyJustPressed(Input.Keys.A) ) { GameWorld.instance.makeSummoner(x, y); }
 		if( Gdx.input.isKeyJustPressed(Input.Keys.S) ) { GameWorld.instance.makeDemon(x, y); }
 		if( Gdx.input.isKeyJustPressed(Input.Keys.D) ) { GameWorld.instance.makeEvilCherub(x, y); }
-		if( Gdx.input.isKeyJustPressed(Input.Keys.F) ) { GameWorld.instance.makeCryingMask(x, y); }		
+		if( Gdx.input.isKeyJustPressed(Input.Keys.F) ) { GameWorld.instance.makeCryingMask(x, y); }
+		WeaponComponent wep = (WeaponComponent) e.getComponent(WeaponComponent.class);
+		if( Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) ) {
+			wep.weaponModel = BulletConfigs.defaultGun;
+		} else if( Gdx.input.isKeyJustPressed(Input.Keys.NUM_2) ) {
+			wep.weaponModel = BulletConfigs.fireball;
+		} else if( Gdx.input.isKeyJustPressed(Input.Keys.NUM_3) ) {
+			wep.weaponModel = BulletConfigs.sacredPunch;
+		} else if( Gdx.input.isKeyJustPressed(Input.Keys.NUM_4) ) {
+			wep.weaponModel = BulletConfigs.triplasma;
+		} else if( Gdx.input.isKeyJustPressed(Input.Keys.NUM_5) ) {
+			wep.weaponModel = BulletConfigs.sineGun;
+		}
 		
 		if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 			if( phc.grounded ) {

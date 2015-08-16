@@ -45,21 +45,35 @@ public class ShootingSystem extends EntitySystem {
 			for( BulletEntry be : sc.bulletConfigs ) {
 				// 	( float x, float y, float w, float h, float speed, boolean player, TextureRegion tr, boolean flipX ) {
 				BulletModel bm = be.bm;//sc.bulletModel;
-				if( sc.horizontal ) {
-					GameWorld.instance.addToEngine(GameWorld.instance.makeHorizontalBullet(
+				Entity b;
+				if( bm.horizontal ) {
+					System.out.println("CHUT");
+					b = GameWorld.instance.makeHorizontalBullet(
 								pc.position.x + be.origin.x * (flip?1:-1),
 								pc.position.y + be.origin.y,
-								bm.w, bm.h, 10, bm.isPlayer, bm.tr, flip, bm.destructionTime));
+								bm.w, bm.h, bm.speed, bm.isPlayer, bm.tr, flip, bm.destructionTime, bm.power);
 				} else {
 					TransformComponent plpc = GameWorld.playerPositionComponent;
-					System.out.println(gc.flipX);
-					System.out.println(gc.isFlipped);
-					Vector2 dir = new Vector2(plpc.position).sub(pc.position).nor().scl(bm.speed);
-					GameWorld.instance.addToEngine(GameWorld.instance.makeBullet(
+					Vector2 dir;
+					if( !bm.isPlayer ) {
+						dir = new Vector2(plpc.position).sub(pc.position).nor().scl(bm.speed);
+					} else {
+						dir = new Vector2(bm.dir);
+						dir.scl(bm.speed);
+						if( flip ) {
+							dir.x *= -1;
+						}
+					}
+					b = GameWorld.instance.makeBullet(
 							pc.position.x + be.origin.x * (flip?1:-1),
 							pc.position.y + be.origin.y,
-							bm.w, bm.h, dir, bm.isPlayer, bm.tr, bm.destructionTime));
+							bm.w, bm.h, dir, bm.isPlayer, bm.tr, bm.destructionTime, bm.power);
 				}
+				if( bm.sinegun ) {
+					SineMovementComponent smc = (SineMovementComponent) b.addComponent(new SineMovementComponent());
+					smc.baseY = pc.position.y + be.origin.y;
+				}
+				GameWorld.instance.addToEngine(b);
 			}
 		}
 	}
