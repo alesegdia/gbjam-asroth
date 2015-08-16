@@ -43,9 +43,9 @@ public class AIAgentFlyingSystem extends EntitySystem {
 			
 			float forceCap = 0;
 			if( mod > 5 ) {
-				forceCap = 10;
+				forceCap = aifc.farForceCap;
 			} else {
-				forceCap = 20;
+				forceCap = aifc.nearForceCap;
 			}
 			plpos.nor();
 			aifc.force = aifc.force.add(plpos);
@@ -54,7 +54,7 @@ public class AIAgentFlyingSystem extends EntitySystem {
 			
 			Vector2 attraction = new Vector2(aifc.force);
 			Vector2 repulsion = new Vector2(aifc.force);
-			repulsion.scl(-0.9f);
+			repulsion.scl(-aifc.repulsionFactor);
 			attraction.add(repulsion);
 			
 			lvc.linearVelocity.set(attraction);

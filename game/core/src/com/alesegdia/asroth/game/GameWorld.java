@@ -77,6 +77,7 @@ import com.alesegdia.asroth.systems.AIAgentPrepareAttackSystem;
 import com.alesegdia.asroth.systems.AIAgentSystem;
 import com.alesegdia.asroth.systems.SummoningZoneSystem;
 import com.alesegdia.asroth.systems.TakingDamageSystem;
+import com.alesegdia.asroth.systems.TextRenderingSystem;
 import com.alesegdia.asroth.systems.UpdatePhysicsSystem;
 import com.alesegdia.asroth.systems.VanishingSystem;
 import com.alesegdia.asroth.systems.WeaponChangeSystem;
@@ -110,6 +111,8 @@ public class GameWorld {
 	
 	
 	Entity player;
+
+	private TextRenderingSystem textRenderingSystem;
 
 	public GameWorld( Physics physics, SpriteBatch batch, Camera cam, TileMap tm ) {
 		this.physics = physics;
@@ -156,6 +159,9 @@ public class GameWorld {
 
 		engine.addSystem(new DrawingSystem(batch), true);
 		engine.addSystem(new ShopItemDrawingSystem(batch), true);
+		
+		//textRenderingSystem = new TextRenderingSystem(batch, cam);
+		//engine.addSystem(textRenderingSystem);
 		engine.addSystem(physics.physicsSystem);
 		
 		bulletCfgs = new BulletConfigs();
@@ -215,11 +221,11 @@ public class GameWorld {
 			xx = mz.xRange.x + size/2;
 
 			Entity s;
-			if( size < 5 ) {
+			if( size < 6 ) {
 				s = makeShopKeeper(0,0);
 			} else {
 				float r = RNG.rng.nextFloat();
-				if( r < 0.8 ) {
+				if(false){ //r < 0.7 ) {
 					s = makeSummoner(0,0,mz);
 				} else {
 					s = makeShopKeeper(0,0);
@@ -634,6 +640,11 @@ public class GameWorld {
 		AIAgentFlyingComponent aifc= (AIAgentFlyingComponent) e.addComponent(new AIAgentFlyingComponent());
 		LinearVelocityComponent lvc = (LinearVelocityComponent) e.addComponent(new LinearVelocityComponent());
 		
+		aifc.farForceCap += RNG.rng.nextInt(10);
+		aifc.nearForceCap += RNG.rng.nextInt(10);
+		aifc.repulsionFactor = 0.9f - RNG.rng.nextFloat()/5f;
+		
+		this.addEnemyAnimator(e, Gfx.cherubAnim, Gfx.cherubAnim, Gfx.cherubAnim, Gfx.cherubAnim);
 		addHealthDamage(e, 10f, 1f);
 		
 		return engine.addEntity(e);
@@ -687,12 +698,14 @@ public class GameWorld {
 		ac.attackCooldown = 0f;
 		ac.attackTimer = 0.2f;
 		ac.attackDuration = 0.3f;
+		
+		addEnemyAnimator(e, Gfx.cryingMaskAnim, Gfx.cryingMaskAnim, Gfx.cryingMaskAnim, Gfx.cryingMaskAnim);
 
 		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
 		sc.bulletConfigs = bulletCfgs.maskBEList;
 		
 		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
-		pac.attackCooldown = 3f;
+		pac.attackCooldown = 8f;
 
 		AIAgentAttackPreparationComponent aipac = (AIAgentAttackPreparationComponent) e.addComponent(new AIAgentAttackPreparationComponent());
 		aipac.timeToPrepare = 0.5f;
@@ -700,7 +713,7 @@ public class GameWorld {
 
 		StrikeAttackComponent sac = (StrikeAttackComponent) e.addComponent(new StrikeAttackComponent());
 		sac.strikeNum = 3;
-		sac.strikeCooldown = 0.8f;
+		sac.strikeCooldown = 0.5f;
 
 		addHealthDamage(e, 10f, 1f);
 		
