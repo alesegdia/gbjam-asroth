@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.alesegdia.asroth.components.AttackComponent;
-import com.alesegdia.asroth.components.SummonComponent;
+import com.alesegdia.asroth.components.SummonZoneComponent;
 import com.alesegdia.asroth.components.TransformComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
@@ -14,10 +14,10 @@ import com.alesegdia.platgen.map.MobZoneExtractor.MobZone;
 import com.alesegdia.platgen.util.RNG;
 import com.badlogic.gdx.Gdx;
 
-public class SummoningSystem extends EntitySystem {
+public class SummoningZoneSystem extends EntitySystem {
 
-	public SummoningSystem() {
-		super(SummonComponent.class, AttackComponent.class, TransformComponent.class);
+	public SummoningZoneSystem() {
+		super(SummonZoneComponent.class, AttackComponent.class, TransformComponent.class);
 	}
 	
 	@Override
@@ -27,7 +27,7 @@ public class SummoningSystem extends EntitySystem {
 
 	@Override
 	public void process(Entity e) {
-		SummonComponent sc = (SummonComponent) e.getComponent(SummonComponent.class);
+		SummonZoneComponent sc = (SummonZoneComponent) e.getComponent(SummonZoneComponent.class);
 		TransformComponent pc = (TransformComponent) e.getComponent(TransformComponent.class);
 		
 		AttackComponent ac = (AttackComponent) e.getComponent(AttackComponent.class);
@@ -47,7 +47,7 @@ public class SummoningSystem extends EntitySystem {
 			ac.attackedLastFrame = true;
 		}
 		
-		if( ac.doAttack && sc.summonedCreatures.size() < 4 ) {
+		if( ac.doAttack && sc.summonedCreatures.size() < sc.maxCreatures ) {
 			float prob = RNG.rng.nextFloat();
 			int i = 0;
 			while( i < 4 ) {
