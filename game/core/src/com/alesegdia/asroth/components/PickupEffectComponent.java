@@ -5,9 +5,10 @@ import java.util.List;
 
 import com.alesegdia.asroth.components.PickupItemComponent.PickupType;
 import com.alesegdia.asroth.ecs.Component;
+import com.alesegdia.asroth.ecs.Entity;
 
 public class PickupEffectComponent extends Component {
 
-	public List<PickupType> pickupsCollectedLastFrame = new LinkedList<PickupType>();
+	public List<Entity> pickupsCollectedLastFrame = new LinkedList<Entity>();
 	
 }

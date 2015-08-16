@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.alesegdia.asroth.components.DamageComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
+import com.alesegdia.asroth.components.PickupEffectComponent;
+import com.alesegdia.asroth.components.PickupItemComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.WalkingComponent;
 import com.alesegdia.asroth.ecs.Entity;
@@ -45,6 +47,25 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 				if( wc != null ) {
 					wc.walkingLeft = !wc.walkingLeft;
 				}
+			}
+
+			@Override
+			public void endCollision(Body b1, Body b2) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+		callbacks.add(new ICollisionCallback() {
+			{ setCategories( CollisionLayers.CATEGORY_PICKUP, CollisionLayers.CATEGORY_PLAYERLOGIC ); }
+			
+			@Override
+			public void startCollision(Body pickupB, Body playerB, Vector2 normal) {
+				Entity pickup = (Entity) pickupB.getUserData();
+				Entity player = (Entity) playerB.getUserData();
+				PickupEffectComponent pec = (PickupEffectComponent) player.getComponent(PickupEffectComponent.class);
+				pec.pickupsCollectedLastFrame.add(pickup);
 			}
 
 			@Override

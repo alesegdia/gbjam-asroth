@@ -47,7 +47,6 @@ public class ShootingSystem extends EntitySystem {
 				BulletModel bm = be.bm;//sc.bulletModel;
 				Entity b;
 				if( bm.horizontal ) {
-					System.out.println("CHUT");
 					b = GameWorld.instance.makeHorizontalBullet(
 								pc.position.x + be.origin.x * (flip?1:-1),
 								pc.position.y + be.origin.y,

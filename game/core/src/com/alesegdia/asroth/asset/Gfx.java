@@ -73,6 +73,14 @@ public class Gfx {
 	public static TextureRegion playerTriplasmaTexture;
 	public static TextureRegion playerSinegunTexture;
 	
+	public static Spritesheet healthPickupSheet;
+	public static Spritesheet wingsPickupSheet;
+	public static Spritesheet moneyPickupSheet;
+	public static Animation healthPickupAnim;
+	public static Animation wingsPickupAnim;
+	public static Animation moneyPickupAnim;
+	
+	
 	public static void Initialize() {
 		mapTilesTexture = new Texture(Gdx.files.internal("flyinGB_tiles.png"));
 		Texture pt = new Texture(Gdx.files.internal("flyinGB.png"));
@@ -101,6 +109,21 @@ public class Gfx {
 		TextureRegion trget = new TextureRegion();
 		trget.setRegion(get);
 		groundExplosionSpritesheet = new Spritesheet(trget, 2,4);
+		
+		trget = new TextureRegion();
+		trget.setRegion(new Texture(Gdx.files.internal("GBhealthPickup.png")));
+		healthPickupSheet = new Spritesheet(trget, 4, 1);
+		healthPickupAnim = new Animation(0.1f, healthPickupSheet.getRange(0,3));
+
+		trget = new TextureRegion();
+		trget.setRegion(new Texture(Gdx.files.internal("GBwingsPickup.png")));
+		wingsPickupSheet = new Spritesheet(trget, 4, 1);
+		wingsPickupAnim = new Animation(0.1f, wingsPickupSheet.getRange(0,3));
+		
+		trget = new TextureRegion();
+		trget.setRegion(new Texture(Gdx.files.internal("GBmoneyPickup.png")));
+		moneyPickupSheet = new Spritesheet(trget, 4, 1);
+		moneyPickupAnim = new Animation(0.1f, moneyPickupSheet.getRange(0,3));
 		
 		groundExplosion = new Animation(0.1f, groundExplosionSpritesheet.getRange(0,7));
 		groundExplosion.setPlayMode(PlayMode.LOOP);
@@ -161,8 +184,6 @@ public class Gfx {
 		jumperStand = new Animation(0.2f, jumperSheet.get(2));
 		jumperAttack = new Animation(0.2f, jumperSheet.get(0));
 		jumperPrepare = new Animation(0.2f, jumperSheet.get(0));
-		
-
 		
 	}
 	

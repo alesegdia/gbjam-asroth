@@ -10,6 +10,7 @@ import com.alesegdia.asroth.components.AttackComponent;
 import com.alesegdia.asroth.components.BulletComponent;
 import com.alesegdia.asroth.components.CountdownDestructionComponent;
 import com.alesegdia.asroth.components.DamageComponent;
+import com.alesegdia.asroth.components.DropPickupComponent;
 import com.alesegdia.asroth.components.AIAgentAttackPreparationComponent;
 import com.alesegdia.asroth.components.AIAgentAnimatorComponent;
 import com.alesegdia.asroth.components.AIAgentComponent;
@@ -20,9 +21,13 @@ import com.alesegdia.asroth.components.HealthComponent;
 import com.alesegdia.asroth.components.HideComponent;
 import com.alesegdia.asroth.components.JumperAttackComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
+import com.alesegdia.asroth.components.MoneyComponent;
 import com.alesegdia.asroth.components.AIAgentPeriodicAutoAttackComponent;
 import com.alesegdia.asroth.components.AIWarpComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
+import com.alesegdia.asroth.components.PickupEffectComponent;
+import com.alesegdia.asroth.components.PickupItemComponent;
+import com.alesegdia.asroth.components.PickupItemComponent.PickupType;
 import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.TransformComponent;
 import com.alesegdia.asroth.components.ShootComponent;
@@ -41,6 +46,7 @@ import com.alesegdia.asroth.systems.AnimationSystem;
 import com.alesegdia.asroth.systems.AttackTriggeringSystem;
 import com.alesegdia.asroth.systems.CountdownDestructionSystem;
 import com.alesegdia.asroth.systems.DrawingSystem;
+import com.alesegdia.asroth.systems.DropPickupSystem;
 import com.alesegdia.asroth.systems.AIAgentAnimationSystem;
 import com.alesegdia.asroth.systems.AIAgentFacePlayerAttackSystem;
 import com.alesegdia.asroth.systems.AIAgentFlyingSystem;
@@ -53,6 +59,7 @@ import com.alesegdia.asroth.systems.HumanControllerSystem;
 import com.alesegdia.asroth.systems.JumperAttackSystem;
 import com.alesegdia.asroth.systems.MovementSystem;
 import com.alesegdia.asroth.systems.PainSystem;
+import com.alesegdia.asroth.systems.PickupSystem;
 import com.alesegdia.asroth.systems.AIAgentStrikeAttackSystem;
 import com.alesegdia.asroth.systems.ShootingSystem;
 import com.alesegdia.asroth.systems.SineMovementSystem;
@@ -129,6 +136,8 @@ public class GameWorld {
 		engine.addSystem(new AIAgentJumperAnimControllerSystem());
 		engine.addSystem(new HideSystem());
 		engine.addSystem(new SineMovementSystem());
+		engine.addSystem(new DropPickupSystem());
+		engine.addSystem(new PickupSystem());
 
 		engine.addSystem(new DrawingSystem(batch), true);
 		engine.addSystem(physics.physicsSystem);
@@ -190,6 +199,36 @@ public class GameWorld {
 		
 	}
 	
+	public Entity makePickup( float x, float y, PickupType pt ) {
+		Entity e = new Entity();
+		TransformComponent tc = (TransformComponent) e.addComponent(new TransformComponent());
+		PhysicsComponent phc = (PhysicsComponent) e.addComponent(new PhysicsComponent());
+		GraphicsComponent gc = (GraphicsComponent) e.addComponent(new GraphicsComponent());
+		AnimationComponent ac = (AnimationComponent) e.addComponent(new AnimationComponent());
+		phc.body = physics.createPickupBody(x, y, 5);
+		PickupItemComponent pic = (PickupItemComponent) e.addComponent(new PickupItemComponent());
+		pic.pickupType = pt;
+		phc.body.setUserData(e);
+		switch( pt ) {
+		case HEALTH:
+			gc.drawElement = Gfx.healthPickupSheet.get(0);
+			gc.sprite = new Sprite(gc.drawElement);
+			ac.currentAnim = Gfx.healthPickupAnim;
+			break;
+		case WINGS:
+			gc.drawElement = Gfx.wingsPickupSheet.get(0);
+			gc.sprite = new Sprite(gc.drawElement);
+			ac.currentAnim = Gfx.wingsPickupAnim;
+			break;
+		case MONEY:
+			gc.drawElement = Gfx.moneyPickupSheet.get(0);
+			gc.sprite = new Sprite(gc.drawElement);
+			ac.currentAnim = Gfx.moneyPickupAnim;
+			break;
+		}
+		return engine.addEntity(e);
+	}
+	
 	public void adjustToTile( Entity e, int tx, int ty ) {
 		PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
 		GraphicsComponent gc = (GraphicsComponent) e.getComponent(GraphicsComponent.class);
@@ -243,6 +282,9 @@ public class GameWorld {
 		
 		WeaponComponent wep = (WeaponComponent) player.addComponent(new WeaponComponent());
 		wep.weaponModel = BulletConfigs.defaultGun;
+		
+		PickupEffectComponent pec = (PickupEffectComponent) player.addComponent(new PickupEffectComponent());
+		MoneyComponent mc = (MoneyComponent) player.addComponent(new MoneyComponent());
 		
 		engine.addEntity(player);
 	}
@@ -343,7 +385,13 @@ public class GameWorld {
 		
 		ActiveComponent actc = (ActiveComponent) e.addComponent(new ActiveComponent());
 		AIAgentComponent enc = (AIAgentComponent) e.addComponent(new AIAgentComponent());
-		addHealthDamage(e, 10, 1);
+		addHealthDamage(e, 3, 1);
+		
+		DropPickupComponent dpc = (DropPickupComponent) e.addComponent(new DropPickupComponent());
+		dpc.probDrop = 1;
+		dpc.probs[0] = 0.33f;
+		dpc.probs[1] = 0.66f;
+		dpc.probs[2] = 1f;
 
 		return e;
 	}

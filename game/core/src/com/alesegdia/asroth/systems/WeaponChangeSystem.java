@@ -23,7 +23,6 @@ public class WeaponChangeSystem extends EntitySystem {
 		WeaponComponent wep = (WeaponComponent) e.getComponent(WeaponComponent.class);
 		AttackComponent ac = (AttackComponent) e.getComponent(AttackComponent.class);
 		ShootComponent sc = (ShootComponent) e.getComponent(ShootComponent.class);
-		System.out.println("EXECING");
 		ac.attackCooldown = wep.weaponModel.rate;
 		sc.bulletConfigs = wep.weaponModel.bulletEntries;
 	}
