@@ -11,6 +11,7 @@ import com.alesegdia.asroth.components.GraphicsComponent;
 import com.alesegdia.asroth.asset.Gfx;
 import com.alesegdia.asroth.components.AnimationComponent;
 import com.alesegdia.asroth.components.AttackComponent;
+import com.alesegdia.asroth.components.BuyerComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
 import com.alesegdia.asroth.game.BulletConfigs;
@@ -178,6 +179,10 @@ public class HumanControllerSystem extends EntitySystem {
 			phc.body.setGravityScale(0);
 		}
 		
+		if( Gdx.input.isKeyJustPressed(Input.Keys.B) ) {
+			BuyerComponent bc = (BuyerComponent) e.getComponent(BuyerComponent.class);
+			bc.triedBuyLastFrame = true;
+		}
 	}
 
 	@Override

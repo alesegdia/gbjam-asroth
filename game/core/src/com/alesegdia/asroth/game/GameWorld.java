@@ -8,6 +8,7 @@ import com.alesegdia.asroth.components.ActiveComponent;
 import com.alesegdia.asroth.components.AnimationComponent;
 import com.alesegdia.asroth.components.AttackComponent;
 import com.alesegdia.asroth.components.BulletComponent;
+import com.alesegdia.asroth.components.BuyerComponent;
 import com.alesegdia.asroth.components.CountdownDestructionComponent;
 import com.alesegdia.asroth.components.DamageComponent;
 import com.alesegdia.asroth.components.DropPickupComponent;
@@ -30,9 +31,12 @@ import com.alesegdia.asroth.components.PickupItemComponent;
 import com.alesegdia.asroth.components.PickupItemComponent.PickupType;
 import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.TransformComponent;
+import com.alesegdia.asroth.components.VanishingComponent;
 import com.alesegdia.asroth.components.ShootComponent;
 import com.alesegdia.asroth.components.ShootComponent.BulletEntry;
 import com.alesegdia.asroth.components.ShootComponent.BulletModel;
+import com.alesegdia.asroth.components.ShopComponent.ShopProduct;
+import com.alesegdia.asroth.components.ShopComponent;
 import com.alesegdia.asroth.components.StrikeAttackComponent;
 import com.alesegdia.asroth.components.SummonComponent;
 import com.alesegdia.asroth.components.WalkingComponent;
@@ -62,6 +66,9 @@ import com.alesegdia.asroth.systems.PainSystem;
 import com.alesegdia.asroth.systems.PickupSystem;
 import com.alesegdia.asroth.systems.AIAgentStrikeAttackSystem;
 import com.alesegdia.asroth.systems.ShootingSystem;
+import com.alesegdia.asroth.systems.ShopItemDrawingSystem;
+import com.alesegdia.asroth.systems.ShopRefillingSystem;
+import com.alesegdia.asroth.systems.ShoppingSystem;
 import com.alesegdia.asroth.systems.SineMovementSystem;
 import com.alesegdia.asroth.systems.AIAgentPeriodicAttackSystem;
 import com.alesegdia.asroth.systems.AIAgentPrepareAttackSystem;
@@ -69,6 +76,7 @@ import com.alesegdia.asroth.systems.AIAgentSystem;
 import com.alesegdia.asroth.systems.SummoningSystem;
 import com.alesegdia.asroth.systems.TakingDamageSystem;
 import com.alesegdia.asroth.systems.UpdatePhysicsSystem;
+import com.alesegdia.asroth.systems.VanishingSystem;
 import com.alesegdia.asroth.systems.WeaponChangeSystem;
 import com.alesegdia.asroth.systems.WingsRecoverySystem;
 import com.alesegdia.asroth.systems.AIAgentWalkingSystem;
@@ -97,6 +105,7 @@ public class GameWorld {
 	public int getNumEntities() {
 		return engine.getNumEntities();
 	}
+	
 	
 	Entity player;
 
@@ -138,8 +147,12 @@ public class GameWorld {
 		engine.addSystem(new SineMovementSystem());
 		engine.addSystem(new DropPickupSystem());
 		engine.addSystem(new PickupSystem());
+		engine.addSystem(new ShoppingSystem());
+		engine.addSystem(new ShopRefillingSystem());
+		engine.addSystem(new VanishingSystem());
 
 		engine.addSystem(new DrawingSystem(batch), true);
+		engine.addSystem(new ShopItemDrawingSystem(batch), true);
 		engine.addSystem(physics.physicsSystem);
 		
 		bulletCfgs = new BulletConfigs();
@@ -194,6 +207,9 @@ public class GameWorld {
 			//Entity e = makeSummoner(0,0,mz);
 			//adjustToTile(e, mz.xRange.x + 3, mz.height + 1);
 
+			Entity s = makeShopKeeper(0,0);
+			adjustToTile(s, mz.xRange.x+3, mz.height+1);
+			
 			i++;
 		}
 		
@@ -286,6 +302,9 @@ public class GameWorld {
 		PickupEffectComponent pec = (PickupEffectComponent) player.addComponent(new PickupEffectComponent());
 		MoneyComponent mc = (MoneyComponent) player.addComponent(new MoneyComponent());
 		
+		BuyerComponent bc = (BuyerComponent) player.addComponent(new BuyerComponent());
+
+		
 		engine.addEntity(player);
 	}
 	
@@ -295,6 +314,31 @@ public class GameWorld {
 		hc.currentHP = (int) maxHP;
 		hc.maxHP = (int) maxHP;
 		dc.painCooldown = cooldownPain;
+	}
+	
+	public Entity makeShopKeeper( float x, float y ) {
+		Entity e = new Entity();
+		TransformComponent tc = (TransformComponent) e.addComponent(new TransformComponent());
+		PhysicsComponent phc = (PhysicsComponent) e.addComponent(new PhysicsComponent());
+		GraphicsComponent gc = (GraphicsComponent) e.addComponent(new GraphicsComponent());
+		AnimationComponent ac = (AnimationComponent) e.addComponent(new AnimationComponent());
+		phc.body = physics.createShopBody(x, y, 8, 15);
+		phc.body.setUserData(e);
+		phc.boxOffset.y = -1f;
+		
+		gc.drawElement = Gfx.shopSheet.get(0);
+		gc.sprite = new Sprite(gc.drawElement);
+		ac.currentAnim = Gfx.shopAnim;
+
+		ShopComponent sc = (ShopComponent) e.addComponent(new ShopComponent());
+		sc.vendingProduct = ShopConfig.chooseRandomProduct();
+		sc.refillingCooldown = 10f;
+		
+		VanishingComponent vc = (VanishingComponent) e.addComponent(new VanishingComponent());
+		vc.timeToVanish = 1f;
+		vc.isVanishing = false;
+		
+		return engine.addEntity(e);
 	}
 
 	public Entity makeBullet( float x, float y, float w, float h, Vector2 dir, boolean player, TextureRegion tr, float destructionTime, int power ) {

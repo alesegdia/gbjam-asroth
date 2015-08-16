@@ -3,7 +3,7 @@ package com.alesegdia.asroth.game;
 public class GameConfig {
 
 	public static final int WINDOW_WIDTH = 480;
-	public static final int WINDOW_HEIGHT = 320;
+	public static final int WINDOW_HEIGHT = 480;
 	
 	public static final float RATIO = ((float)WINDOW_WIDTH) / ((float)WINDOW_HEIGHT);
 	public static final float VIEWPORT_WIDTH = 9.f;

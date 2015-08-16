@@ -79,6 +79,14 @@ public class Gfx {
 	public static Animation healthPickupAnim;
 	public static Animation wingsPickupAnim;
 	public static Animation moneyPickupAnim;
+	public static Spritesheet shopSheet;
+	public static Animation shopAnim;
+	public static TextureRegion sineSymbol;
+	public static TextureRegion triplasmaSymbol;
+	public static TextureRegion sacredSymbol;
+	public static TextureRegion fireballSymbol;
+	public static TextureRegion defaultSymbol;
+	public static TextureRegion wepslot;
 	
 	
 	public static void Initialize() {
@@ -93,6 +101,10 @@ public class Gfx {
 		hpHud.setRegion(new Texture(Gdx.files.internal("hpHud.png")));
 		wingsHud = new TextureRegion();
 		wingsHud.setRegion(new Texture(Gdx.files.internal("wingsBar.png")));
+		
+		shopSheet = new Spritesheet("GBshoopkeeper.png", 1, 4);
+		shopAnim = new Animation(0.2f, shopSheet.getRange(0, 3));
+		shopAnim.setPlayMode(PlayMode.LOOP);
 		
 		playerSheet = new Spritesheet(tr, 3, 5);
 		
@@ -184,7 +196,24 @@ public class Gfx {
 		jumperStand = new Animation(0.2f, jumperSheet.get(2));
 		jumperAttack = new Animation(0.2f, jumperSheet.get(0));
 		jumperPrepare = new Animation(0.2f, jumperSheet.get(0));
+
+		defaultSymbol = new TextureRegion();
+		defaultSymbol.setRegion(new Texture(Gdx.files.internal("defaultSymbol.png")));
+
+		fireballSymbol = new TextureRegion();
+		fireballSymbol.setRegion(new Texture(Gdx.files.internal("fireballSymbol.png")));
+
+		sineSymbol = new TextureRegion();
+		sineSymbol.setRegion(new Texture(Gdx.files.internal("sinegunSymbol.png")));
+
+		triplasmaSymbol = new TextureRegion();
+		triplasmaSymbol.setRegion(new Texture(Gdx.files.internal("triplasmaSymbol.png")));
 		
+		sacredSymbol = new TextureRegion();
+		sacredSymbol.setRegion(new Texture(Gdx.files.internal("sacredPunchSymbol.png")));
+		
+		wepslot = new TextureRegion();
+		wepslot.setRegion(new Texture(Gdx.files.internal("wepslot.png")));
 	}
 	
 }

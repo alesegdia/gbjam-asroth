@@ -167,5 +167,12 @@ public class Physics {
 		return b;
 	}
 
+	public Body createShopBody(float x, float y, float w, float h) {
+		Body b = createRectBody(x, y, w * GameConfig.PIXELS_TO_METERS, h * GameConfig.PIXELS_TO_METERS,
+				CollisionLayers.CATEGORY_SHOP, CollisionLayers.MASK_SHOP, CollisionLayers.GROUP_SHOP, false, true);
+		b.setGravityScale(0);
+		return b;
+	}
+
 
 }

@@ -2,7 +2,9 @@ package com.alesegdia.asroth.game;
 
 import com.alesegdia.asroth.asset.Gfx;
 import com.alesegdia.asroth.components.HealthComponent;
+import com.alesegdia.asroth.components.MoneyComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
+import com.alesegdia.asroth.components.WeaponComponent;
 import com.alesegdia.asroth.components.WingsComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.map.MapPhysicsBuilderVisitor;
@@ -40,6 +42,7 @@ public class GdxGame extends ApplicationAdapter {
 	private BitmapFont font;
 	private SpriteBatch batch;
 	private SpriteBatch sprBatch;
+	BitmapFont customFont;
 	
 	Physics physics;
 	GameWorld gameWorld;
@@ -60,6 +63,8 @@ public class GdxGame extends ApplicationAdapter {
 		camera.zoom = 1f;
 
 		OrthographicCamera ocam = camera;
+		
+		customFont = new BitmapFont(Gdx.files.internal("visitor.fnt"));
 		
 		font = new BitmapFont();
 		batch = new SpriteBatch();
@@ -149,8 +154,39 @@ public class GdxGame extends ApplicationAdapter {
 		for( int i = 0; i < numBars; i++ ) {
 			batch.draw(Gfx.hpTexture, 146*3 - i * trw * s, 2*3, -trw*s, trh*s);	
 		}
+		
+
+		renderWeaponSlot(batch, 70, 6);
+		
+		//batch.setColor(48f/255f, 98f/255f, 48f/255f, 1f);
+		batch.setColor(1,0,0,1);
+		MoneyComponent mc = (MoneyComponent) pl.getComponent(MoneyComponent.class);
+		customFont.draw(batch, "" + mc.currency, 10, 310);
+		batch.setColor(1f, 1f, 1f, 1f);
 		batch.end();
 
 		physics.render(camera);
+	}
+
+	private void renderWeaponSlot(SpriteBatch batch2, int i, int j) {
+		Entity pl = gameWorld.getPlayer();
+
+		TextureRegion t;
+		float sw, sh;
+		t = Gfx.wepslot;
+		sw = t.getRegionWidth() * 3;
+		sh = t.getRegionHeight() * 3;
+		batch.draw(t, i*3,j*3, sw, sh);
+		
+		WeaponComponent wep = (WeaponComponent) pl.getComponent(WeaponComponent.class);
+		float trw, trh, tx, ty;
+		t = wep.weaponModel.tr;
+		trw = t.getRegionWidth() * 3;
+		trh = t.getRegionHeight() * 3;
+		tx = i * 3 + sw / 2 - trw / 2;
+		ty = j * 3 + sh / 2 - trh / 2;
+		
+		batch.draw(t, tx,ty, trw, trh);		
+		
 	}
 }

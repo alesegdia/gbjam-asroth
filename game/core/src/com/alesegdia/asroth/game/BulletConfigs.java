@@ -81,6 +81,7 @@ public class BulletConfigs {
 		createEntryInList( 0, 0, playerDefaultBM, playerDefaultBEList );
 		defaultGun.rate = 0.2f;
 		defaultGun.bulletEntries = playerDefaultBEList;
+		defaultGun.tr = Gfx.defaultSymbol;
 		
 		playerFireballBM.h = 5;
 		playerFireballBM.w = 5;
@@ -91,6 +92,7 @@ public class BulletConfigs {
 		createEntryInList( 0, 0, playerFireballBM, playerFireballBEList );
 		fireball.rate = 0.1f;
 		fireball.bulletEntries = playerFireballBEList;
+		fireball.tr = Gfx.fireballSymbol;
 		
 		playerSacredpunchBM.h = 5;
 		playerSacredpunchBM.w = 5;
@@ -103,6 +105,7 @@ public class BulletConfigs {
 		createEntryInList( 0, 0.2f, playerSacredpunchBM, playerSacredpunchBEList);
 		sacredPunch.rate = 0.05f;
 		sacredPunch.bulletEntries = playerSacredpunchBEList;
+		sacredPunch.tr = Gfx.sacredSymbol;
 		
 		playerTriplasmaBM_T.h = 5;
 		playerTriplasmaBM_T.w = 5;
@@ -135,6 +138,7 @@ public class BulletConfigs {
 		createEntryInList( 0, 0f, playerTriplasmaBM_B, playerTriplasmaBEList);
 		triplasma.rate = 0.05f;
 		triplasma.bulletEntries = playerTriplasmaBEList;
+		triplasma.tr = Gfx.triplasmaSymbol;
 
 		playerSinegunBM.h = 5;
 		playerSinegunBM.w = 5;
@@ -148,6 +152,7 @@ public class BulletConfigs {
 		createEntryInList( 0, 0, playerSinegunBM, playerSinegunBEList);
 		sineGun.rate = 0.05f;
 		sineGun.bulletEntries = playerSinegunBEList;
+		sineGun.tr = Gfx.sineSymbol;
 		
 	}
 	

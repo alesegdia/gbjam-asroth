@@ -16,6 +16,7 @@ public class WeaponComponent extends Component {
 	public static class WeaponModel {
 		public float rate;
 		public List<BulletEntry> bulletEntries;
+		public TextureRegion tr;
 	}
 	
 	public WeaponModel weaponModel;

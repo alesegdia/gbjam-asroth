@@ -3,11 +3,13 @@ package com.alesegdia.asroth.systems;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alesegdia.asroth.components.BuyerComponent;
 import com.alesegdia.asroth.components.DamageComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.PickupEffectComponent;
 import com.alesegdia.asroth.components.PickupItemComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
+import com.alesegdia.asroth.components.ShopComponent;
 import com.alesegdia.asroth.components.WalkingComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
@@ -72,6 +74,29 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			public void endCollision(Body b1, Body b2) {
 				// TODO Auto-generated method stub
 				
+			}
+			
+		});
+		
+		callbacks.add(new ICollisionCallback() {
+			{ setCategories( CollisionLayers.CATEGORY_SHOP, CollisionLayers.CATEGORY_PLAYERLOGIC ); }
+			
+			@Override
+			public void startCollision(Body shopB, Body playerB, Vector2 normal) {
+				Entity shop = (Entity) shopB.getUserData();
+				Entity player = (Entity) playerB.getUserData();
+				ShopComponent sc = (ShopComponent) shop.getComponent(ShopComponent.class);
+				BuyerComponent bc = (BuyerComponent) player.getComponent(BuyerComponent.class);
+				bc.standingShop = shop;
+			}
+
+			@Override
+			public void endCollision(Body shopB, Body playerB) {
+				Entity shop = (Entity) shopB.getUserData();
+				Entity player = (Entity) playerB.getUserData();
+				ShopComponent sc = (ShopComponent) shop.getComponent(ShopComponent.class);
+				BuyerComponent bc = (BuyerComponent) player.getComponent(BuyerComponent.class);
+				bc.standingShop = null;
 			}
 			
 		});
