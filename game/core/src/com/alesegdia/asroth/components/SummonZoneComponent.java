@@ -8,7 +8,7 @@ import com.alesegdia.asroth.ecs.Component;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.platgen.map.MobZoneExtractor.MobZone;
 
-public class SummonComponent extends Component {
+public class SummonZoneComponent extends Component {
 
 	public static enum SummonedCreature {
 		ZOMBIE, RUNNER, THREEHEADED, JUMPER
@@ -17,5 +17,6 @@ public class SummonComponent extends Component {
 	public float summonProb[] = new float[4];
 	public List<Entity> summonedCreatures = new LinkedList<Entity>();	
 	public MobZone actingZone;
+	public int maxCreatures = 4;
 
 }
