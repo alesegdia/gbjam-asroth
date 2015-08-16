@@ -38,7 +38,8 @@ import com.alesegdia.asroth.components.ShootComponent.BulletModel;
 import com.alesegdia.asroth.components.ShopComponent.ShopProduct;
 import com.alesegdia.asroth.components.ShopComponent;
 import com.alesegdia.asroth.components.StrikeAttackComponent;
-import com.alesegdia.asroth.components.SummonComponent;
+import com.alesegdia.asroth.components.SummonNearComponent;
+import com.alesegdia.asroth.components.SummonZoneComponent;
 import com.alesegdia.asroth.components.WalkingComponent;
 import com.alesegdia.asroth.components.WeaponComponent;
 import com.alesegdia.asroth.components.WingsComponent;
@@ -70,10 +71,11 @@ import com.alesegdia.asroth.systems.ShopItemDrawingSystem;
 import com.alesegdia.asroth.systems.ShopRefillingSystem;
 import com.alesegdia.asroth.systems.ShoppingSystem;
 import com.alesegdia.asroth.systems.SineMovementSystem;
+import com.alesegdia.asroth.systems.SummoningNearSystem;
 import com.alesegdia.asroth.systems.AIAgentPeriodicAttackSystem;
 import com.alesegdia.asroth.systems.AIAgentPrepareAttackSystem;
 import com.alesegdia.asroth.systems.AIAgentSystem;
-import com.alesegdia.asroth.systems.SummoningSystem;
+import com.alesegdia.asroth.systems.SummoningZoneSystem;
 import com.alesegdia.asroth.systems.TakingDamageSystem;
 import com.alesegdia.asroth.systems.UpdatePhysicsSystem;
 import com.alesegdia.asroth.systems.VanishingSystem;
@@ -132,7 +134,8 @@ public class GameWorld {
 		engine.addSystem(new WingsRecoverySystem());
 		engine.addSystem(new PainSystem());
 		engine.addSystem(new AIAgentWarpingSystem());
-		engine.addSystem(new SummoningSystem());
+		engine.addSystem(new SummoningZoneSystem());
+		engine.addSystem(new SummoningNearSystem());
 		engine.addSystem(new JumperAttackSystem());
 		engine.addSystem(new ShootingSystem());
 
@@ -207,8 +210,22 @@ public class GameWorld {
 			//Entity e = makeSummoner(0,0,mz);
 			//adjustToTile(e, mz.xRange.x + 3, mz.height + 1);
 
-			Entity s = makeShopKeeper(0,0);
-			adjustToTile(s, mz.xRange.x+3, mz.height+1);
+			int xx = mz.xRange.x;
+			int size = Math.abs(mz.xRange.y - mz.xRange.x);
+			xx = mz.xRange.x + size/2;
+
+			Entity s;
+			if( size < 5 ) {
+				s = makeShopKeeper(0,0);
+			} else {
+				float r = RNG.rng.nextFloat();
+				if( r < 0.8 ) {
+					s = makeSummoner(0,0,mz);
+				} else {
+					s = makeShopKeeper(0,0);
+				}
+			}
+			adjustToTile(s, xx, mz.height+1);
 			
 			i++;
 		}
@@ -252,7 +269,7 @@ public class GameWorld {
 		TextureRegion tr = gc.drawElement;
 		float dy = tr.getRegionHeight()/2 - dc + 1f;
 		System.out.println(dc);
-		float fx = (tx) * 10f * GameConfig.PIXELS_TO_METERS;
+		float fx = (tx+0.5f) * 10f * GameConfig.PIXELS_TO_METERS;
 		float fy = (ty) * 10f * GameConfig.PIXELS_TO_METERS + dy * GameConfig.PIXELS_TO_METERS;
 		pc.body.setTransform(fx, fy, 0);
 	}
@@ -289,7 +306,7 @@ public class GameWorld {
 		ShootComponent sc = (ShootComponent) player.addComponent(new ShootComponent());
 		sc.bulletConfigs = bulletCfgs.playerDefaultBEList;
 		
-		addHealthDamage(player, 10f, 1f);
+		addHealthDamage(player, 100f, 1f);
 		
 		WingsComponent wc = (WingsComponent) player.addComponent(new WingsComponent());
 		
@@ -341,9 +358,14 @@ public class GameWorld {
 		return engine.addEntity(e);
 	}
 
-	public Entity makeBullet( float x, float y, float w, float h, Vector2 dir, boolean player, TextureRegion tr, float destructionTime, int power ) {
+	public Entity makeBullet( float x, float y, float w, float h, Vector2 dir, boolean player, TextureRegion tr,
+			float destructionTime, int power, boolean trespassingEnabled ) {
 		Entity e = new Entity();
 
+		BulletComponent bc = (BulletComponent) e.addComponent(new BulletComponent());
+		bc.power = power;
+		bc.trespassingEnabled = trespassingEnabled;
+		
 		GraphicsComponent gc = (GraphicsComponent) e.addComponent(new GraphicsComponent());
 		gc.drawElement = tr;
 		gc.sprite = new Sprite(gc.drawElement);
@@ -378,8 +400,8 @@ public class GameWorld {
 		return e;
 	}
 	
-	public Entity makeHorizontalBullet( float x, float y, float w, float h, float speed, boolean player, TextureRegion tr, boolean flipX, float dt, int power ) {
-		Entity e = makeBullet(x, y, w, h, new Vector2(speed * (flipX ? -1 : 1), 0), player, tr, dt, power);
+	public Entity makeHorizontalBullet( float x, float y, float w, float h, float speed, boolean player, TextureRegion tr, boolean flipX, float dt, int power, boolean trespassingEnabled ) {
+		Entity e = makeBullet(x, y, w, h, new Vector2(speed * (flipX ? -1 : 1), 0), player, tr, dt, power, trespassingEnabled);
 		return e;
 	}
 	
@@ -405,6 +427,9 @@ public class GameWorld {
 		CountdownDestructionComponent cdc = (CountdownDestructionComponent) e.addComponent(new CountdownDestructionComponent());
 		cdc.timeToLive = 0.7f;
 		
+		BulletComponent bc = (BulletComponent) e.addComponent(new BulletComponent());
+		bc.power = 1;
+		
 		engine.addEntity(e);
 		return e;
 	}
@@ -429,7 +454,6 @@ public class GameWorld {
 		
 		ActiveComponent actc = (ActiveComponent) e.addComponent(new ActiveComponent());
 		AIAgentComponent enc = (AIAgentComponent) e.addComponent(new AIAgentComponent());
-		addHealthDamage(e, 3, 1);
 		
 		DropPickupComponent dpc = (DropPickupComponent) e.addComponent(new DropPickupComponent());
 		dpc.probDrop = 1;
@@ -504,6 +528,8 @@ public class GameWorld {
 		sac.strikeNum = 3;
 		sac.strikeCooldown = 0.8f;
 		
+		addHealthDamage(e, 10, 1);
+		
 		return engine.addEntity(e);
 	}
 	
@@ -533,6 +559,8 @@ public class GameWorld {
 		sac.strikeCooldown = 0.1f;
 */
 		
+		addHealthDamage(e, 8, 1);
+		
 		return engine.addEntity(e);
 	}
 	
@@ -555,6 +583,8 @@ public class GameWorld {
 		StrikeAttackComponent sac = (StrikeAttackComponent) e.addComponent(new StrikeAttackComponent());
 		sac.strikeNum = 10;
 		sac.strikeCooldown = 0.07f;
+		
+		addHealthDamage(e, 5, 1);
 		
 		return engine.addEntity(e);
 	}
@@ -589,30 +619,41 @@ public class GameWorld {
 		sac.strikeNum = 6;
 		sac.strikeCooldown = 0.1f;
 		
+		addHealthDamage(e, 10f, 1f);
+		
+		SummonNearComponent snc = (SummonNearComponent) e.addComponent(new SummonNearComponent());
+		snc.maxCreatures = 3;
+		snc.summonProb[0] = 0.5f;
+		snc.summonProb[1] = 1f;
+		
 		engine.addEntity(e);
 	}
 	
-	public void makeEvilCherub(float x, float y) {
+	public Entity makeEvilCherub(float x, float y) {
 		Entity e = makeEnemy(x,y,Gfx.evilCherubSheet.get(0), -10, 0, true);
 		AIAgentFlyingComponent aifc= (AIAgentFlyingComponent) e.addComponent(new AIAgentFlyingComponent());
 		LinearVelocityComponent lvc = (LinearVelocityComponent) e.addComponent(new LinearVelocityComponent());
-		engine.addEntity(e);
+		
+		addHealthDamage(e, 10f, 1f);
+		
+		return engine.addEntity(e);
 	}
 	
 	public Entity makeZombie(float x, float y) {
 		Entity e = makeEnemy(x,y,Gfx.zombieSheet.get(0), 0, 0);
 		letEnemyWalk( e, 6, 0, 1 );
 		addEnemyAnimator(e, Gfx.zombieWalk, Gfx.zombieStand, Gfx.zombieAttack);
+		addHealthDamage(e, 3, 1);
 		return engine.addEntity(e);
 	}
 	
 	public Entity makeSummoner(float x, float y, MobZone mz) {
 		Entity e = makeEnemy(x,y,Gfx.summonerSheet.get(0), -5, -1);
 
-		SummonComponent sc = (SummonComponent) e.addComponent(new SummonComponent());
-		sc.summonProb[0] = 0.1f;
-		sc.summonProb[1] = 0.2f;
-		sc.summonProb[2] = 0.3f;
+		SummonZoneComponent sc = (SummonZoneComponent) e.addComponent(new SummonZoneComponent());
+		sc.summonProb[0] = 0.25f;
+		sc.summonProb[1] = 0.5f;
+		sc.summonProb[2] = 0.75f;
 		sc.summonProb[3] = 1.f;
 		sc.actingZone = mz;
 
@@ -631,10 +672,13 @@ public class GameWorld {
 		AIAgentAttackPreparationComponent aipac = (AIAgentAttackPreparationComponent) e.addComponent(new AIAgentAttackPreparationComponent());
 		aipac.timeToPrepare = 3;
 		aipac.preparingTimer = 3;
+		
+		addHealthDamage(e, 20, 1);
+		
 		return engine.addEntity(e);
 	}
 	
-	public void makeCryingMask(float x, float y) {
+	public Entity makeCryingMask(float x, float y) {
 		Entity e = makeEnemy(x,y,Gfx.cryingMaskSheet.get(0), 0, 0, true);
 		AIAgentFlyingComponent aifc= (AIAgentFlyingComponent) e.addComponent(new AIAgentFlyingComponent());
 		LinearVelocityComponent lvc = (LinearVelocityComponent) e.addComponent(new LinearVelocityComponent());
@@ -645,7 +689,7 @@ public class GameWorld {
 		ac.attackDuration = 0.3f;
 
 		ShootComponent sc = (ShootComponent) e.addComponent(new ShootComponent());
-		sc.bulletConfigs = bulletCfgs.threeHeadedBEList;
+		sc.bulletConfigs = bulletCfgs.maskBEList;
 		
 		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
 		pac.attackCooldown = 3f;
@@ -658,8 +702,9 @@ public class GameWorld {
 		sac.strikeNum = 3;
 		sac.strikeCooldown = 0.8f;
 
+		addHealthDamage(e, 10f, 1f);
 		
-		engine.addEntity(e);
+		return engine.addEntity(e);
 	}
 	
 	public void setCam() {
