@@ -50,7 +50,8 @@ public class ShootingSystem extends EntitySystem {
 					b = GameWorld.instance.makeHorizontalBullet(
 								pc.position.x + be.origin.x * (flip?1:-1),
 								pc.position.y + be.origin.y,
-								bm.w, bm.h, bm.speed, bm.isPlayer, bm.tr, flip, bm.destructionTime, bm.power);
+								bm.w, bm.h, bm.speed, bm.isPlayer, bm.tr, flip, bm.destructionTime, bm.power,
+								bm.trespassingEnabled);
 				} else {
 					TransformComponent plpc = GameWorld.playerPositionComponent;
 					Vector2 dir;
@@ -66,7 +67,7 @@ public class ShootingSystem extends EntitySystem {
 					b = GameWorld.instance.makeBullet(
 							pc.position.x + be.origin.x * (flip?1:-1),
 							pc.position.y + be.origin.y,
-							bm.w, bm.h, dir, bm.isPlayer, bm.tr, bm.destructionTime, bm.power);
+							bm.w, bm.h, dir, bm.isPlayer, bm.tr, bm.destructionTime, bm.power, bm.trespassingEnabled);
 				}
 				if( bm.sinegun ) {
 					SineMovementComponent smc = (SineMovementComponent) b.addComponent(new SineMovementComponent());
