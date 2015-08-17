@@ -11,7 +11,7 @@ public class ShopConfig {
 	};
 		
 	static final int shopPrices[] = {
-		5,			5,			1, 			7,			10, 			50,			50, 		20, 		20
+		5,			5,			1, 			7,			10, 			12,			15, 		9, 			9
 	};
 	
 	public static int getPriceFor(ShopProduct sp) {
@@ -53,8 +53,8 @@ public class ShopConfig {
 		else if( sp == ShopProduct.DEFAULTGUN ) return "Defogun";
 		else if( sp == ShopProduct.TRIPLASMA ) return "Triplasma";
 		else if( sp == ShopProduct.SACREDPUNCH ) return "Sacredpunch";
-		else if( sp == ShopProduct.WINGSCAPACITY ) return "Wings enhancer";
-		else if( sp == ShopProduct.HEALTHCAPACITY ) return "Invencibility";
+		else if( sp == ShopProduct.WINGSCAPACITY ) return "InfiniteFly10";
+		else if( sp == ShopProduct.HEALTHCAPACITY ) return "Awesome10";
 		else if( sp == ShopProduct.MASH_NUMBER ) return "MashN";
 		else if( sp == ShopProduct.MASH_POWER ) return "MashP";
 		else return "";

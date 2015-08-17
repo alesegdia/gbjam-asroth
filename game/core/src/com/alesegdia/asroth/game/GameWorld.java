@@ -20,6 +20,8 @@ import com.alesegdia.asroth.components.AIAgentInhibitWalkComponent;
 import com.alesegdia.asroth.components.GraphicsComponent;
 import com.alesegdia.asroth.components.HealthComponent;
 import com.alesegdia.asroth.components.HideComponent;
+import com.alesegdia.asroth.components.InfiniteFlyComponent;
+import com.alesegdia.asroth.components.InvincibilityComponent;
 import com.alesegdia.asroth.components.JumperAttackComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
 import com.alesegdia.asroth.components.MashComponent;
@@ -53,6 +55,7 @@ import com.alesegdia.asroth.systems.AttackTriggeringSystem;
 import com.alesegdia.asroth.systems.CountdownDestructionSystem;
 import com.alesegdia.asroth.systems.DrawingSystem;
 import com.alesegdia.asroth.systems.DropPickupSystem;
+import com.alesegdia.asroth.systems.EnhancedSystem;
 import com.alesegdia.asroth.systems.AIAgentAnimationSystem;
 import com.alesegdia.asroth.systems.AIAgentFacePlayerAttackSystem;
 import com.alesegdia.asroth.systems.AIAgentFlyingSystem;
@@ -62,6 +65,8 @@ import com.alesegdia.asroth.systems.FarDeactivationSystem;
 import com.alesegdia.asroth.systems.FlipSystem;
 import com.alesegdia.asroth.systems.HideSystem;
 import com.alesegdia.asroth.systems.HumanControllerSystem;
+import com.alesegdia.asroth.systems.InfiniteFlySystem;
+import com.alesegdia.asroth.systems.InvincibilitySystem;
 import com.alesegdia.asroth.systems.JumperAttackSystem;
 import com.alesegdia.asroth.systems.MovementSystem;
 import com.alesegdia.asroth.systems.PainSystem;
@@ -158,6 +163,10 @@ public class GameWorld {
 		engine.addSystem(new ShopRefillingSystem());
 		engine.addSystem(new VanishingSystem());
 
+		engine.addSystem(new InvincibilitySystem());
+		engine.addSystem(new InfiniteFlySystem());
+		engine.addSystem(new EnhancedSystem());
+
 		engine.addSystem(new DrawingSystem(batch), true);
 		engine.addSystem(new ShopItemDrawingSystem(batch), true);
 		
@@ -222,11 +231,11 @@ public class GameWorld {
 			xx = mz.xRange.x + size/2;
 
 			Entity s;
-			if( true ) {//  size < 6 ) {
+			if(   size < 6 ) {
 				s = makeShopKeeper(0,0);
 			} else {
 				float r = RNG.rng.nextFloat();
-				if( r < 0.7 ) {
+				if( r < 0.4 ) {
 					s = makeSummoner(0,0,mz);
 				} else {
 					s = makeShopKeeper(0,0);
@@ -291,6 +300,12 @@ public class GameWorld {
 		pc.body.setUserData(player);
 		
 		MashComponent mac = (MashComponent) player.addComponent(new MashComponent());
+		
+		InvincibilityComponent ic = (InvincibilityComponent) player.addComponent(new InvincibilityComponent());
+		ic.invincibilityTime = 10f;
+		
+		InfiniteFlyComponent ifc = (InfiniteFlyComponent) player.addComponent(new InfiniteFlyComponent());
+		ifc.infiniteFlyTime = 10f;
 		
 		GraphicsComponent gc = (GraphicsComponent) player.addComponent(new GraphicsComponent());
 		gc.drawElement = Gfx.playerSheet.get(0);
@@ -361,7 +376,8 @@ public class GameWorld {
 		sc.refillingCooldown = 10f;
 		
 		VanishingComponent vc = (VanishingComponent) e.addComponent(new VanishingComponent());
-		vc.timeToVanish = 1f;
+		vc.timeToVanish = 2f;
+		vc.willTurn = RNG.rng.nextFloat() > 0.5f;
 		vc.isVanishing = false;
 		
 		return engine.addEntity(e);
@@ -607,6 +623,8 @@ public class GameWorld {
 		aiwc.unhiddenTime = 4f;
 		aiwc.maxWarpDistance = 2f;
 		aiwc.minKeepDistance = 3f;
+		aiwc.hiddenTimer = 0f;
+		aiwc.unhiddenTimer = 4f;
 		addEnemyAnimator(e, Gfx.demonWalk, Gfx.demonStand, Gfx.demonAttack, Gfx.demonAttack);
 
 		AttackComponent ac = (AttackComponent) e.addComponent(new AttackComponent());
@@ -629,7 +647,7 @@ public class GameWorld {
 		sac.strikeNum = 6;
 		sac.strikeCooldown = 0.1f;
 		
-		addHealthDamage(e, 10f, 1f);
+		addHealthDamage(e, 30f, 1f);
 		
 		SummonNearComponent snc = (SummonNearComponent) e.addComponent(new SummonNearComponent());
 		snc.maxCreatures = 3;

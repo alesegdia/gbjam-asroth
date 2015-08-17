@@ -3,6 +3,8 @@ package com.alesegdia.asroth.game;
 import com.alesegdia.asroth.asset.Gfx;
 import com.alesegdia.asroth.components.BuyerComponent;
 import com.alesegdia.asroth.components.HealthComponent;
+import com.alesegdia.asroth.components.InfiniteFlyComponent;
+import com.alesegdia.asroth.components.InvincibilityComponent;
 import com.alesegdia.asroth.components.MoneyComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.ShopComponent;
@@ -261,7 +263,11 @@ public class GdxGame extends ApplicationAdapter {
 			int price = ShopConfig.getPriceFor(sc.vendingProduct);
 			VanishingComponent vc = (VanishingComponent) bc.standingShop.getComponent(VanishingComponent.class);
 			if( vc.isVanishing ) {
-				text = "Nothing to do here... good luck!";
+				if( vc.willTurn ) {
+					text = "Hehehe... lets see what you can do!";
+				} else {
+					text = "Keep an eye on my brothers, pal.";
+				}
 			} else if( sc.refillingTimer <= 0 ) {
 				if( mc.currency - price >= 0 ) {
 					text = "Press B to buy [" + ShopConfig.getNameFor(sc.vendingProduct) + "] for " + price + " coins.";
@@ -269,7 +275,17 @@ public class GdxGame extends ApplicationAdapter {
 					text = "To buy [" + ShopConfig.getNameFor(sc.vendingProduct) + "], you need " + price + " coins.";
 				}
 			} else {
-				text = "We are replenishing, wait " + ((int)sc.refillingTimer) + " seconds.";
+				text = "Replenishing stock... wait " + ((int)sc.refillingTimer) + " seconds.";
+			}
+			font.draw(batch, text, 10, 470);
+		} else {
+			String text = "";
+			InvincibilityComponent ic = (InvincibilityComponent) pl.getComponent(InvincibilityComponent.class);
+			InfiniteFlyComponent ifc = (InfiniteFlyComponent) pl.getComponent(InfiniteFlyComponent.class);
+			if( ic.timer > 0 ) {
+				text = "You are AWESOME! " + ((int)ic.timer) + " seconds left.";
+			} else if( ifc.timer > 0 ) {
+				text = "Fly... fly... FLY! " + ((int)ifc.timer) + " seconds left.";
 			}
 			font.draw(batch, text, 10, 470);
 		}

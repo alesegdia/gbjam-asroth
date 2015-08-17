@@ -15,6 +15,6 @@ public class ShopComponent extends Component {
 	
 	public ShopProduct vendingProduct;
 	public boolean isSold = false;
-	public float refillingProb = 0.5f;
+	public float refillingProb = 0.6f;
 	
 }

@@ -2,14 +2,16 @@ package com.alesegdia.asroth.systems;
 
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
+import com.alesegdia.asroth.game.GameWorld;
 import com.badlogic.gdx.Gdx;
 import com.alesegdia.asroth.components.GraphicsComponent;
 import com.alesegdia.asroth.components.VanishingComponent;
+import com.alesegdia.asroth.components.TransformComponent;;
 
 public class VanishingSystem extends EntitySystem {
 
 	public VanishingSystem() {
-		super(VanishingComponent.class);
+		super(VanishingComponent.class, TransformComponent.class);
 	}
 	
 	@Override
@@ -34,6 +36,10 @@ public class VanishingSystem extends EntitySystem {
 				}
 			} else {
 				e.isDead = true;
+				if( vc.willTurn ) {
+					TransformComponent tc = (TransformComponent) e.getComponent(TransformComponent.class);
+					GameWorld.instance.makeDemon(tc.position.x, tc.position.y+1f);
+				}
 			}
 
 		}

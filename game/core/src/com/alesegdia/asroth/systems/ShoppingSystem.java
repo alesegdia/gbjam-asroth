@@ -10,6 +10,8 @@ import com.alesegdia.platgen.util.RNG;
 import sun.io.ByteToCharDBCS_ASCII;
 
 import com.alesegdia.asroth.components.BuyerComponent;
+import com.alesegdia.asroth.components.InfiniteFlyComponent;
+import com.alesegdia.asroth.components.InvincibilityComponent;
 import com.alesegdia.asroth.components.MashComponent;
 import com.alesegdia.asroth.components.MoneyComponent;
 import com.alesegdia.asroth.components.ShopComponent;
@@ -55,8 +57,12 @@ public class ShoppingSystem extends EntitySystem {
 						wc.weaponModel = BulletConfigs.sacredPunch;
 						break;
 					case WINGSCAPACITY:
+						InfiniteFlyComponent ifc = (InfiniteFlyComponent) e.getComponent(InfiniteFlyComponent.class);
+						ifc.timer = ifc.infiniteFlyTime;
 						break;
 					case HEALTHCAPACITY:
+						InvincibilityComponent ic = (InvincibilityComponent) e.getComponent(InvincibilityComponent.class);
+						ic.timer = ic.invincibilityTime;
 						break;
 					case MASH_POWER:
 						MashComponent mac = (MashComponent) e.getComponent(MashComponent.class);
