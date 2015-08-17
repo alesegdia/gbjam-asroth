@@ -288,6 +288,7 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			public void startCollision(Contact c, Body player, Body map, Vector2 normal) {
 				Entity e = (Entity) player.getUserData();
 				PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
+				plc.overOneWayPlat = true;
 				plc.canDash = false;
 				if( plc.mashing ) plc.justLandedMashing = true;
 				if( c.isEnabled()){
@@ -314,6 +315,7 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 				PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
 				pc.grounded = false;
 				PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
+				plc.overOneWayPlat = false;
 				if( !plc.isPressingDown ){
 					plc.jumping = true;
 					if( plc.dashingWall ) {
