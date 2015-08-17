@@ -103,6 +103,7 @@ public class BulletConfigs {
 		playerFireballBM.speed = 20;
 		playerFireballBM.tr = Gfx.playerFireballTexture;
 		playerFireballBM.destructionTime = 1f;
+		playerFireballBM.power = 3;
 		createEntryInList( 0, 0, playerFireballBM, playerFireballBEList );
 		fireball.rate = 0.1f;
 		fireball.bulletEntries = playerFireballBEList;
