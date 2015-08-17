@@ -6,6 +6,6 @@ public class DropPickupComponent extends Component {
 
 	public boolean hasDropped = false;
 	public float probDrop;
-	public float probs[] = new float[3]; // HEALTH, WINGS, MONEY
+	public float probs[] = new float[4]; // HEALTH, WINGS, MONEY, CROSS
 	
 }

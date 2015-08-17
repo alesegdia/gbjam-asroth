@@ -52,6 +52,11 @@ public class PickupSystem extends EntitySystem {
 				wasPicked = true;
 				mc.currency++;
 				break;
+			case CROSS:
+				CrossComponent cc = (CrossComponent) e.getComponent(CrossComponent.class);
+				cc.currentCrosses++;
+				wasPicked = true;
+				break;
 			}
 			pt.isDead = wasPicked;
 		}

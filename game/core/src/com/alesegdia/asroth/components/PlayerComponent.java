@@ -13,6 +13,8 @@ public class PlayerComponent extends Component{
 	public float releaseWallVelocity;
 	public boolean canDash;
 	public boolean isPressingDown;
+	public boolean minimapEnabled = false;
+	public boolean nearPortal = false;
 	
 
 }

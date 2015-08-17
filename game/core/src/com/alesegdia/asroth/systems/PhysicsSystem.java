@@ -179,6 +179,25 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 		});
 		
 		callbacks.add(new ICollisionCallback() {
+			{ setCategories( CollisionLayers.CATEGORY_PORTAL, CollisionLayers.CATEGORY_PLAYERLOGIC ); }
+			
+			@Override
+			public void startCollision(Contact c, Body b1, Body b2, Vector2 normal) {
+				Entity player = (Entity) b2.getUserData();
+				PlayerComponent plc = (PlayerComponent) player.getComponent(PlayerComponent.class);
+				plc.nearPortal = true;
+			}
+
+			@Override
+			public void endCollision(Contact c, Body b1, Body b2) {
+				Entity player = (Entity) b2.getUserData();
+				PlayerComponent plc = (PlayerComponent) player.getComponent(PlayerComponent.class);
+				plc.nearPortal = false;
+			}
+			
+		});
+		
+		callbacks.add(new ICollisionCallback() {
 			{ setCategories( CollisionLayers.CATEGORY_PLBULLETS, CollisionLayers.CATEGORY_ENEMYLOGIC ); }
 
 			@Override

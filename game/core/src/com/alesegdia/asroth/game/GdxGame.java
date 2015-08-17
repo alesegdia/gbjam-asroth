@@ -8,6 +8,7 @@ import com.alesegdia.asroth.components.InfiniteFlyComponent;
 import com.alesegdia.asroth.components.InvincibilityComponent;
 import com.alesegdia.asroth.components.MoneyComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
+import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.ShopComponent;
 import com.alesegdia.asroth.components.VanishingComponent;
 import com.alesegdia.asroth.components.WeaponComponent;
@@ -16,6 +17,7 @@ import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.map.MapPhysicsBuilderVisitor;
 import com.alesegdia.asroth.map.TiledTileMapConverter;
 import com.alesegdia.asroth.physics.Physics;
+import com.alesegdia.asroth.systems.CrossComponent;
 import com.alesegdia.platgen.config.Config;
 import com.alesegdia.platgen.config.ERDFSType;
 import com.alesegdia.platgen.config.ERegionGenerator;
@@ -199,8 +201,8 @@ public class GdxGame extends ApplicationAdapter {
 		GameWorld.instance = gameWorld;
 		
 		minimapRenderer = new SectorMinimapRendererVisitor(srenderer,
-				GameConfig.WINDOW_WIDTH/2 - tm.rows/2,
-				GameConfig.WINDOW_HEIGHT/2 - tm.cols/2);
+				GameConfig.WINDOW_WIDTH/2 - tm.rows/4,
+				GameConfig.WINDOW_HEIGHT/2 - tm.cols/4);
 
 	}
 	
@@ -289,30 +291,43 @@ public class GdxGame extends ApplicationAdapter {
 			String text = "";
 			InvincibilityComponent ic = (InvincibilityComponent) pl.getComponent(InvincibilityComponent.class);
 			InfiniteFlyComponent ifc = (InfiniteFlyComponent) pl.getComponent(InfiniteFlyComponent.class);
+			PlayerComponent plc = (PlayerComponent) pl.getComponent(PlayerComponent.class);
 			if( ic.timer > 0 ) {
 				text = "You are AWESOME! " + ((int)ic.timer) + " seconds left.";
 			} else if( ifc.timer > 0 ) {
 				text = "Fly... fly... FLY! " + ((int)ifc.timer) + " seconds left.";
+			} else if( plc.nearPortal ){
+				CrossComponent cc = (CrossComponent) pl.getComponent(CrossComponent.class);
+				int crossesLeft = cc.neededCrosses - cc.currentCrosses;
+				crossesLeft = Math.max(crossesLeft, 0);
+				if( crossesLeft != 0 ) {
+					text = crossesLeft + " [CrossK] to travel next dimension.";
+				} else {
+					text = "Press T to travel next dimension!";
+				}
+			} else {
+				text = "";
 			}
+			System.out.println(plc.nearPortal);
 			font.draw(batch, text, 10, 470);
 		}
 		batch.end();
 
-		//physics.render(camera);
-		/*
+		physics.render(camera);
 
-		srenderer.setColor(48f/255f, 98f/255f, 48f/255f, 1f);
-		srenderer.begin();
-		srenderer.set(ShapeType.Filled);
-		lm.regionTree.visit(minimapRenderer);
-
-
-		srenderer.setColor(1f,0f,0f, 1f);
-		srenderer.rect(
-				camera.position.x*1.5f, //+ GameConfig.WINDOW_WIDTH/2 - tm.rows*3/2+6,
-				camera.position.y *1.5f, //+ GameConfig.WINDOW_HEIGHT/2 - tm.cols*3/2+20,
-				2,2);
-						*/
+		PlayerComponent plc = (PlayerComponent) pl.getComponent(PlayerComponent.class);
+		if( plc.minimapEnabled ) {
+			srenderer.setColor(48f/255f, 98f/255f, 48f/255f, 1f);
+			srenderer.begin();
+			srenderer.set(ShapeType.Filled);
+			lm.regionTree.visit(minimapRenderer);
+	
+			srenderer.setColor(1f,0f,0f, 1f);
+			srenderer.rect(
+					camera.position.x + GameConfig.WINDOW_WIDTH/2 - tm.rows/4,
+					camera.position.y + GameConfig.WINDOW_HEIGHT/2 - tm.cols/4,
+					2,2);
+		}
 
 		srenderer.end();
 	}

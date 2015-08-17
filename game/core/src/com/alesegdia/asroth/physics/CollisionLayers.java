@@ -35,6 +35,9 @@ public class CollisionLayers {
 	public static final short CATEGORY_SHOP			= 0x0400;
 	public static final short GROUP_SHOP 			= -11;
 
+	public static final short CATEGORY_PORTAL		= 0x0800;
+	public static final short GROUP_PORTAL 			= -12;
+
 	/* MAP PHYSICS *************************************************************/
 	public static final short MASK_MAP =
 			CATEGORY_PLAYERPHYSIC 	| CATEGORY_PLBULLETS 	|
@@ -44,8 +47,8 @@ public class CollisionLayers {
 
 	/* PLAYER PHYSICS *************************************************************/
 	public static final short MASK_PLAYERPHYSIC = CATEGORY_ENBULLETS | CATEGORY_1WAYPLATS | CATEGORY_MAP;
-	public static final short MASK_PLAYERLOGIC = CATEGORY_ENEMYLOGIC | CATEGORY_ENBULLETS | CATEGORY_PICKUP | CATEGORY_SHOP;
-	public static final short MASK_PLBULLETS = CATEGORY_ENEMYLOGIC | CATEGORY_MAP;
+	public static final short MASK_PLAYERLOGIC = CATEGORY_ENEMYLOGIC | CATEGORY_ENBULLETS | CATEGORY_PICKUP | CATEGORY_SHOP | CATEGORY_PORTAL;
+	public static final short MASK_PLBULLETS = CATEGORY_ENEMYLOGIC | CATEGORY_MAP | CATEGORY_SHOP;
 
 	/* ENEMY PHYSICS *************************************************************/
 	public static final short MASK_ENEMYPHYSIC = CATEGORY_MAP;
@@ -56,7 +59,9 @@ public class CollisionLayers {
 	public static final short MASK_PICKUP = CATEGORY_PLAYERLOGIC;
 	
 	/* SHOPKEEPER ****************************************************************/
-	public static final short MASK_SHOP = CATEGORY_PLAYERLOGIC;
+	public static final short MASK_SHOP = CATEGORY_PLAYERLOGIC | CATEGORY_PLBULLETS;
+	
+	public static final short MASK_PORTAL = CATEGORY_PLAYERLOGIC;
 	
 
 }

@@ -30,7 +30,7 @@ public class DropPickupSystem extends EntitySystem {
 			if( RNG.rng.nextFloat() < dpc.probDrop ) {
 				int i = 0;
 				float dice = RNG.rng.nextFloat();
-				while( i < 3 ) {
+				while( i < 4 ) {
 					if( dice < dpc.probs[i] ) {
 						break;
 					}
@@ -42,6 +42,8 @@ public class DropPickupSystem extends EntitySystem {
 					GameWorld.instance.makePickup(tc.position.x, tc.position.y, PickupType.WINGS);
 				} else if( i == 2 ) {
 					GameWorld.instance.makePickup(tc.position.x, tc.position.y, PickupType.MONEY);
+				} else if( i == 3 ) {
+					GameWorld.instance.makePickup(tc.position.x, tc.position.y, PickupType.CROSS);
 				}
 			}
 		}

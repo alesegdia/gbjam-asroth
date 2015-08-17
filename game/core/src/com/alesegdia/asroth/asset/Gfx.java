@@ -92,6 +92,11 @@ public class Gfx {
 	public static Animation cherubAnim;
 	
 	public static Spritesheet mashShopItems;
+
+	public static Spritesheet crossSheet;
+	public static Animation crossAnim;
+	
+	public static TextureRegion portalTexture;
 	
 	
 	public static void Initialize() {
@@ -227,6 +232,18 @@ public class Gfx {
 		wepslot.setRegion(new Texture(Gdx.files.internal("wepslot.png")));
 		
 		mashShopItems = new Spritesheet("smashPowerups.png", 1, 2);
+		
+		
+		
+		crossSheet = new Spritesheet("cross.png", 1, 4);
+		crossAnim = new Animation(0.2f, crossSheet.getRange(0, 3));
+		
+		portalTexture = new TextureRegion();
+		portalTexture.setRegion(new Texture(Gdx.files.internal("portal.png")));
+
+		
+		
+		
 	}
 	
 }

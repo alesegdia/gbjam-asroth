@@ -83,6 +83,10 @@ public class HumanControllerSystem extends EntitySystem {
 		if( plc.mashing && !phc.grounded ) {
 			ac.currentAnim = Gfx.playerMashDown;
 		}
+		
+		if( plc.dashingWall ) {
+			plc.mashing = false;
+		}
 
 		int dx = 0; int dy = 0;
 		float prevYlinear = phc.body.getLinearVelocity().y;
@@ -197,6 +201,10 @@ public class HumanControllerSystem extends EntitySystem {
 		}
 		
 		plc.isPressingDown = Gdx.input.isKeyPressed(Input.Keys.DOWN);
+		
+		if( Gdx.input.isKeyJustPressed(Input.Keys.M) ) {
+			plc.minimapEnabled = !plc.minimapEnabled;
+		}
 	}
 
 	@Override

@@ -174,5 +174,12 @@ public class Physics {
 		return b;
 	}
 
+	public Body createPortalBody(float x, float y, int w, int h) {
+		Body b = createRectBody(x, y, w * GameConfig.PIXELS_TO_METERS, h * GameConfig.PIXELS_TO_METERS,
+				CollisionLayers.CATEGORY_PORTAL, CollisionLayers.MASK_PORTAL, CollisionLayers.GROUP_PORTAL, false, true);
+		b.setGravityScale(0);
+		return b;
+	}
+
 
 }

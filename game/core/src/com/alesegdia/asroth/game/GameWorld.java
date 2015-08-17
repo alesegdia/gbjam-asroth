@@ -11,6 +11,7 @@ import com.alesegdia.asroth.components.BulletComponent;
 import com.alesegdia.asroth.components.BuyerComponent;
 import com.alesegdia.asroth.components.CountdownDestructionComponent;
 import com.alesegdia.asroth.components.DamageComponent;
+import com.alesegdia.asroth.components.DebugComponent;
 import com.alesegdia.asroth.components.DropPickupComponent;
 import com.alesegdia.asroth.components.AIAgentAttackPreparationComponent;
 import com.alesegdia.asroth.components.AIAgentAnimatorComponent;
@@ -53,6 +54,8 @@ import com.alesegdia.asroth.physics.Physics;
 import com.alesegdia.asroth.systems.AnimationSystem;
 import com.alesegdia.asroth.systems.AttackTriggeringSystem;
 import com.alesegdia.asroth.systems.CountdownDestructionSystem;
+import com.alesegdia.asroth.systems.CrossComponent;
+import com.alesegdia.asroth.systems.DebugSystem;
 import com.alesegdia.asroth.systems.DrawingSystem;
 import com.alesegdia.asroth.systems.DropPickupSystem;
 import com.alesegdia.asroth.systems.EnhancedSystem;
@@ -83,7 +86,6 @@ import com.alesegdia.asroth.systems.AIAgentPrepareAttackSystem;
 import com.alesegdia.asroth.systems.AIAgentSystem;
 import com.alesegdia.asroth.systems.SummoningZoneSystem;
 import com.alesegdia.asroth.systems.TakingDamageSystem;
-import com.alesegdia.asroth.systems.TextRenderingSystem;
 import com.alesegdia.asroth.systems.UpdatePhysicsSystem;
 import com.alesegdia.asroth.systems.VanishingSystem;
 import com.alesegdia.asroth.systems.WeaponChangeSystem;
@@ -119,8 +121,6 @@ public class GameWorld {
 	
 	
 	Entity player;
-
-	private TextRenderingSystem textRenderingSystem;
 
 	public GameWorld( Physics physics, SpriteBatch batch, Camera cam, TileMap tm ) {
 		this.physics = physics;
@@ -169,6 +169,8 @@ public class GameWorld {
 		engine.addSystem(new InfiniteFlySystem());
 		engine.addSystem(new EnhancedSystem());
 
+		engine.addSystem(new DebugSystem());
+		
 		engine.addSystem(new DrawingSystem(batch), true);
 		engine.addSystem(new ShopItemDrawingSystem(batch), true);
 		
@@ -191,7 +193,9 @@ public class GameWorld {
 			}
 			if( x != -1 ) break;
 		}
-		makePlayer(x*10, y*10);
+		makePlayer(x*10, (y+2)*10);
+		makePortal(x*10, (y+1+0.5f)*10);
+		
 
 		AirPlatformExtractor ape = new AirPlatformExtractor();
 		List<AirPlatform> platforms = ape.computeMobZones(tm);
@@ -291,6 +295,11 @@ public class GameWorld {
 			gc.sprite = new Sprite(gc.drawElement);
 			ac.currentAnim = Gfx.moneyPickupAnim;
 			break;
+		case CROSS:
+			gc.drawElement = Gfx.crossSheet.get(0);
+			gc.sprite = new Sprite(gc.drawElement);
+			ac.currentAnim = Gfx.crossAnim;
+			break;
 		}
 		return engine.addEntity(e);
 	}
@@ -361,6 +370,8 @@ public class GameWorld {
 		
 		BuyerComponent bc = (BuyerComponent) player.addComponent(new BuyerComponent());
 
+		CrossComponent cc = (CrossComponent) player.addComponent(new CrossComponent());
+		cc.neededCrosses = 5;
 		
 		engine.addEntity(player);
 	}
@@ -398,6 +409,25 @@ public class GameWorld {
 		
 		return engine.addEntity(e);
 	}
+	
+	public Entity makePortal( float x, float y ) {
+		Entity e = new Entity();
+		TransformComponent tc = (TransformComponent) e.addComponent(new TransformComponent());
+		PhysicsComponent phc = (PhysicsComponent) e.addComponent(new PhysicsComponent());
+		GraphicsComponent gc = (GraphicsComponent) e.addComponent(new GraphicsComponent());
+
+		phc.body = physics.createPortalBody(x * GameConfig.PIXELS_TO_METERS, y * GameConfig.PIXELS_TO_METERS, 10, 10);
+		phc.body.setUserData(e);
+		//phc.boxOffset.y = -1f;
+		
+		gc.drawElement = Gfx.portalTexture;
+		gc.sprite = new Sprite(gc.drawElement);
+		gc.allowFlip = false;
+		
+		e.addComponent(new DebugComponent());
+		return engine.addEntity(e);
+	}
+
 
 	public Entity makeBullet( float x, float y, float w, float h, Vector2 dir, boolean player, TextureRegion tr,
 			float destructionTime, int power, boolean trespassingEnabled ) {
@@ -670,6 +700,12 @@ public class GameWorld {
 		snc.summonProb[0] = 0.5f;
 		snc.summonProb[1] = 1f;
 		
+		DropPickupComponent dpc = (DropPickupComponent) e.getComponent(DropPickupComponent.class);
+		dpc.probs[0] = 0f;
+		dpc.probs[1] = 0f;
+		dpc.probs[2] = 0f;
+		dpc.probs[3] = 1f;
+		
 		engine.addEntity(e);
 	}
 	
@@ -724,6 +760,13 @@ public class GameWorld {
 		aipac.preparingTimer = 3;
 		
 		addHealthDamage(e, 20, 1);
+		
+		DropPickupComponent dpc = (DropPickupComponent) e.getComponent(DropPickupComponent.class);
+		dpc.probs[0] = 0f;
+		dpc.probs[1] = 0f;
+		dpc.probs[2] = 0f;
+		dpc.probs[3] = 1f;
+		
 		
 		return engine.addEntity(e);
 	}
