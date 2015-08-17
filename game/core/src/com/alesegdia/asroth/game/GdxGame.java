@@ -6,6 +6,7 @@ import com.alesegdia.asroth.components.HealthComponent;
 import com.alesegdia.asroth.components.MoneyComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.ShopComponent;
+import com.alesegdia.asroth.components.VanishingComponent;
 import com.alesegdia.asroth.components.WeaponComponent;
 import com.alesegdia.asroth.components.WingsComponent;
 import com.alesegdia.asroth.ecs.Entity;
@@ -258,16 +259,23 @@ public class GdxGame extends ApplicationAdapter {
 			String text = "";
 			ShopComponent sc = (ShopComponent) bc.standingShop.getComponent(ShopComponent.class);
 			int price = ShopConfig.getPriceFor(sc.vendingProduct);
-			if( mc.currency - price >= 0 ) {
-				text = "Press B to buy [" + ShopConfig.getNameFor(sc.vendingProduct) + "] for " + price + " coins.";
+			VanishingComponent vc = (VanishingComponent) bc.standingShop.getComponent(VanishingComponent.class);
+			if( vc.isVanishing ) {
+				text = "Nothing to do here... good luck!";
+			} else if( sc.refillingTimer <= 0 ) {
+				if( mc.currency - price >= 0 ) {
+					text = "Press B to buy [" + ShopConfig.getNameFor(sc.vendingProduct) + "] for " + price + " coins.";
+				} else {
+					text = "To buy [" + ShopConfig.getNameFor(sc.vendingProduct) + "], you need " + price + " coins.";
+				}
 			} else {
-				text = "To buy [" + ShopConfig.getNameFor(sc.vendingProduct) + "], you need " + price + " coins.";
+				text = "We are replenishing, wait " + ((int)sc.refillingTimer) + " seconds.";
 			}
 			font.draw(batch, text, 10, 470);
 		}
 		batch.end();
 
-		physics.render(camera);
+		//physics.render(camera);
 		/*
 
 		srenderer.setColor(48f/255f, 98f/255f, 48f/255f, 1f);
