@@ -68,11 +68,7 @@ public class GdxGame extends ApplicationAdapter {
 	public void create () {
 		
 		Gfx.Initialize();
-		Sfx.Initialize();
-		
-		Sfx.music.setLooping(true);
-		Sfx.music.play();
-		
+		Sfx.Initialize();		
 		
 		rng = new RNG();
 		RNG.rng = rng;
@@ -87,6 +83,9 @@ public class GdxGame extends ApplicationAdapter {
 		customFont = new BitmapFont(Gdx.files.internal("visitor.fnt"));
 		font = new BitmapFont(Gdx.files.internal("visitor.fnt"));
 		font.getData().setScale(0.5f);
+		
+		customFont.setColor(139f/255f, 172f/255f, 15f/255f, 1f);
+		font.setColor(139f/255f, 172f/255f, 15f/255f, 1f);
 		
 		batch = new SpriteBatch();
 
@@ -209,6 +208,8 @@ public class GdxGame extends ApplicationAdapter {
 	public void render () {
 		float dt = Gdx.graphics.getRawDeltaTime();
 		
+		Sfx.PlayMusic();
+
 		gameWorld.step();
 		physics.step(dt);
 
@@ -276,9 +277,9 @@ public class GdxGame extends ApplicationAdapter {
 				}
 			} else if( sc.refillingTimer <= 0 ) {
 				if( mc.currency - price >= 0 ) {
-					text = "Press B to buy [" + ShopConfig.getNameFor(sc.vendingProduct) + "] for " + price + " coins.";
+					text = "Press B to buy [" + ShopConfig.getNameFor(sc.vendingProduct) + "] for " + price + "¢";
 				} else {
-					text = "To buy [" + ShopConfig.getNameFor(sc.vendingProduct) + "], you need " + price + " coins.";
+					text = "To buy [" + ShopConfig.getNameFor(sc.vendingProduct) + "], you need " + price + "¢";
 				}
 			} else {
 				text = "Replenishing stock... wait " + ((int)sc.refillingTimer) + " seconds.";

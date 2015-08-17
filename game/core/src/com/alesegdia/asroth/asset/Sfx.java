@@ -67,5 +67,12 @@ public class Sfx {
 			ids[sfx] = pwup2.play(1f);
 		}
 	}
+
+	public static void PlayMusic() {
+		if( !music.isPlaying() ) {
+			Sfx.music.setLooping(true);
+			Sfx.music.play();
+		}
+	}
 	
 }
