@@ -79,6 +79,10 @@ public class HumanControllerSystem extends EntitySystem {
 				ac.currentAnim = Gfx.playerMashDown;
 			}
 		}
+		
+		if( plc.mashing && !phc.grounded ) {
+			ac.currentAnim = Gfx.playerMashDown;
+		}
 
 		int dx = 0; int dy = 0;
 		float prevYlinear = phc.body.getLinearVelocity().y;

@@ -31,7 +31,7 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			// TODO Auto-generated method stub
 			
 		}
-		public abstract void endCollision(Body b1, Body b2);
+		public abstract void endCollision(Contact c, Body b1, Body b2);
 		public short B1_CATEGORY;
 		public short B2_CATEGORY;
 		public void setCategories( short c1, short c2 ) {
@@ -61,7 +61,7 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			}
 
 			@Override
-			public void endCollision(Body b1, Body b2) {
+			public void endCollision(Contact c, Body b1, Body b2) {
 				// TODO Auto-generated method stub
 				
 			}
@@ -80,7 +80,7 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			}
 
 			@Override
-			public void endCollision(Body b1, Body b2) {
+			public void endCollision(Contact c, Body b1, Body b2) {
 				// TODO Auto-generated method stub
 				
 			}
@@ -100,7 +100,7 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			}
 
 			@Override
-			public void endCollision(Body shopB, Body playerB) {
+			public void endCollision(Contact c, Body shopB, Body playerB) {
 				Entity shop = (Entity) shopB.getUserData();
 				Entity player = (Entity) playerB.getUserData();
 				ShopComponent sc = (ShopComponent) shop.getComponent(ShopComponent.class);
@@ -121,7 +121,7 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			}
 
 			@Override
-			public void endCollision(Body b1, Body b2) {
+			public void endCollision(Contact c, Body b1, Body b2) {
 				Entity e = (Entity) b1.getUserData();
 				PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
 				pc.grounded = false;
@@ -145,7 +145,7 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			}
 
 			@Override
-			public void endCollision(Body b1, Body b2) {
+			public void endCollision(Contact c, Body b1, Body b2) {
 				// TODO Auto-generated method stub
 				
 			}
@@ -165,7 +165,7 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			}
 
 			@Override
-			public void endCollision(Body b1, Body b2) {
+			public void endCollision(Contact c, Body b1, Body b2) {
 				// TODO Auto-generated method stub
 				
 			}
@@ -200,7 +200,7 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			}
 
 			@Override
-			public void endCollision(Body player, Body map) {
+			public void endCollision(Contact c, Body player, Body map) {
 				Entity e = (Entity) player.getUserData();
 				PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
 				pc.grounded = false;
@@ -218,27 +218,31 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			
 			@Override
 			public void startCollision(Contact c, Body player, Body map, Vector2 normal) {
+				System.out.println(normal);
 				Entity e = (Entity) player.getUserData();
 				PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
 				plc.canDash = false;
+				if( plc.mashing ) plc.justLandedMashing = true;
 				if( c.isEnabled()){
+					PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
+					if( normal.y == 1 ) pc.grounded = true;						
+
 					plc.releaseWallVelocity = 0f;
 					if( normal.y == 1 && !plc.isPressingDown) {
-						PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
-						
+						pc.grounded = true;						
 						if( plc.mashing ) {
 							plc.justLandedMashing = true;
 						}
-						
+						plc.mashing = false;
 						plc.flying = false;
 						plc.jumping = false;
-						pc.grounded = true;
 					}
 				}
 			}
 
 			@Override
-			public void endCollision(Body player, Body map) {
+			public void endCollision(Contact contact, Body player, Body map) {
+				contact.setEnabled(true);
 				Entity e = (Entity) player.getUserData();
 				PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
 				pc.grounded = false;
@@ -250,6 +254,7 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 					}
 					plc.dashingWall = false;
 				}
+
 			}
 			
 			@Override
@@ -257,7 +262,7 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 				Entity e = (Entity) b1.getUserData();
 				PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
 				PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
-				if( normal.y < 0.7f || Math.abs(normal.x) > 0.5f || plc.isPressingDown ) {
+				if( normal.y < 0.9f || Math.abs(normal.x) > 0.5f || plc.isPressingDown ) {
 					contact.setEnabled(false);
 				}
  			}
@@ -333,18 +338,18 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 		Body b2 = contact.getFixtureB().getBody();
 
 		for( ICollisionCallback icb : callbacks ) {
-			if( HandleEndCollision(cb1, cb2, b1, b2, icb) ) {
+			if( HandleEndCollision(contact, cb1, cb2, b1, b2, icb) ) {
 				break;
 			}
 		}		
 	}
 
-	private boolean HandleEndCollision(short cb1, short cb2, Body b1, Body b2, ICollisionCallback icb) {
+	private boolean HandleEndCollision(Contact contact, short cb1, short cb2, Body b1, Body b2, ICollisionCallback icb) {
 		if( CheckCollision(cb1, cb2, icb.B1_CATEGORY, icb.B2_CATEGORY) ) {
-			icb.endCollision(b1, b2);
+			icb.endCollision(contact, b1, b2);
 			return true;
 		} else if( CheckCollision(cb2, cb1, icb.B1_CATEGORY, icb.B2_CATEGORY) ) {
-			icb.endCollision(b2, b1);
+			icb.endCollision(contact, b2, b1);
 			return true;
 		}
 		return false;
