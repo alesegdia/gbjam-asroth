@@ -92,6 +92,7 @@ import com.alesegdia.asroth.systems.WeaponChangeSystem;
 import com.alesegdia.asroth.systems.WingsRecoverySystem;
 import com.alesegdia.asroth.systems.AIAgentWalkingSystem;
 import com.alesegdia.asroth.systems.AIAgentWarpingSystem;
+import com.alesegdia.asroth.systems.AccountStatsSystem;
 import com.alesegdia.platgen.map.AirPlatformExtractor;
 import com.alesegdia.platgen.map.MobZoneExtractor;
 import com.alesegdia.platgen.map.MobZoneExtractor.MobZone;
@@ -166,6 +167,8 @@ public class GameWorld {
 		engine.addSystem(new ShoppingSystem());
 		engine.addSystem(new ShopRefillingSystem());
 		engine.addSystem(new VanishingSystem());
+		engine.addSystem(new AccountStatsSystem());
+		
 
 		engine.addSystem(new InvincibilitySystem());
 		engine.addSystem(new InfiniteFlySystem());
@@ -513,7 +516,7 @@ public class GameWorld {
 		return e;
 	}
 	
-	public Entity makeEnemy( float x, float y, TextureRegion tr, float offw, float offh, boolean flying ) {
+	public Entity makeEnemy( float x, float y, TextureRegion tr, float offw, float offh, boolean flying, int agentType ) {
 		
 		Entity e = new Entity();
 		GraphicsComponent gc = (GraphicsComponent) e.addComponent(new GraphicsComponent());
@@ -533,6 +536,7 @@ public class GameWorld {
 		
 		ActiveComponent actc = (ActiveComponent) e.addComponent(new ActiveComponent());
 		AIAgentComponent enc = (AIAgentComponent) e.addComponent(new AIAgentComponent());
+		enc.agentType = agentType;
 		
 		DropPickupComponent dpc = (DropPickupComponent) e.addComponent(new DropPickupComponent());
 		dpc.probDrop = 1;
@@ -560,8 +564,8 @@ public class GameWorld {
 		return e;
 	}
 	
-	public Entity makeEnemy( float x, float y, TextureRegion tr, float offw, float offh) {
-		Entity e = makeEnemy(x, y, tr, offw, offh, false);
+	public Entity makeEnemy( float x, float y, TextureRegion tr, float offw, float offh, int agentType) {
+		Entity e = makeEnemy(x, y, tr, offw, offh, false, agentType);
 		return e;
 	}
 	
@@ -582,7 +586,7 @@ public class GameWorld {
 	}
 	
 	public Entity makeThreeHeaded( float x, float y ) {
-		Entity e = makeEnemy(x,y,Gfx.threeHeadSheet.get(0), 0, -2);
+		Entity e = makeEnemy(x,y,Gfx.threeHeadSheet.get(0), 0, -2, EnemyType.THREEHEADED);
 		
 		letEnemyWalk( e, 6, 0, 4 );
 		addEnemyAnimator(e, Gfx.threeHeadWalk, Gfx.threeHeadStand, Gfx.threeHeadAttack, Gfx.threeHeadPrepare);
@@ -613,7 +617,7 @@ public class GameWorld {
 	}
 	
 	public Entity makeRunner(float x, float y) {
-		Entity e = makeEnemy(x,y,Gfx.runnerSheet.get(0), 0, 0);
+		Entity e = makeEnemy(x,y,Gfx.runnerSheet.get(0), 0, 0, EnemyType.RUNNER);
 		letEnemyWalk( e, 10, 0, 6 + RNG.rng.nextFloat()*2 );
 		addEnemyAnimator(e, Gfx.runnerWalk, Gfx.runnerStand, Gfx.runnerAttack, Gfx.runnerPrepare);
 		
@@ -632,11 +636,9 @@ public class GameWorld {
 		aipac.timeToPrepare = 0.5f;
 		aipac.preparingTimer = 0.5f;
 
-		/*
 		StrikeAttackComponent sac = (StrikeAttackComponent) e.addComponent(new StrikeAttackComponent());
 		sac.strikeNum = 5;
 		sac.strikeCooldown = 0.1f;
-*/
 		
 		addHealthDamage(e, 8, 1);
 		
@@ -645,7 +647,7 @@ public class GameWorld {
 	
 	public Entity makeJumper(float x, float y) {
 		
-		Entity e = makeEnemy(x,y,Gfx.jumperSheet.get(2), 0, -14);
+		Entity e = makeEnemy(x,y,Gfx.jumperSheet.get(2), 0, -14, EnemyType.JUMPER);
 		this.addEnemyAnimator(e, Gfx.jumperWalk, Gfx.jumperStand, Gfx.jumperAttack, Gfx.jumperPrepare);
 		AttackComponent ac = (AttackComponent) e.addComponent(new AttackComponent());
 		ac.attackCooldown = 0.01f;
@@ -669,7 +671,7 @@ public class GameWorld {
 	}
 	
 	public void makeDemon(float x, float y) {
-		Entity e = makeEnemy(x,y,Gfx.demonSheet.get(0), 0, 0, true);
+		Entity e = makeEnemy(x,y,Gfx.demonSheet.get(0), 0, 0, true, EnemyType.DEMON);
 		AIWarpComponent aiwc = (AIWarpComponent) e.addComponent(new AIWarpComponent());
 		HideComponent hc = (HideComponent) e.addComponent(new HideComponent());
 		aiwc.hiddenTime = 1f;
@@ -717,7 +719,7 @@ public class GameWorld {
 	}
 	
 	public Entity makeEvilCherub(float x, float y) {
-		Entity e = makeEnemy(x,y,Gfx.evilCherubSheet.get(0), -10, 0, true);
+		Entity e = makeEnemy(x,y,Gfx.evilCherubSheet.get(0), -10, 0, true, EnemyType.CHERUB);
 		AIAgentFlyingComponent aifc= (AIAgentFlyingComponent) e.addComponent(new AIAgentFlyingComponent());
 		LinearVelocityComponent lvc = (LinearVelocityComponent) e.addComponent(new LinearVelocityComponent());
 		
@@ -732,7 +734,7 @@ public class GameWorld {
 	}
 	
 	public Entity makeZombie(float x, float y) {
-		Entity e = makeEnemy(x,y,Gfx.zombieSheet.get(0), 0, 0);
+		Entity e = makeEnemy(x,y,Gfx.zombieSheet.get(0), 0, 0, EnemyType.ZOMBIE);
 		letEnemyWalk( e, 6, 0, 1 );
 		addEnemyAnimator(e, Gfx.zombieWalk, Gfx.zombieStand, Gfx.zombieAttack);
 		addHealthDamage(e, 3, 1);
@@ -740,7 +742,7 @@ public class GameWorld {
 	}
 	
 	public Entity makeSummoner(float x, float y, MobZone mz) {
-		Entity e = makeEnemy(x,y,Gfx.summonerSheet.get(0), -5, -1);
+		Entity e = makeEnemy(x,y,Gfx.summonerSheet.get(0), -5, -1, EnemyType.SUMMONER);
 
 		SummonZoneComponent sc = (SummonZoneComponent) e.addComponent(new SummonZoneComponent());
 		sc.summonProb[0] = 0.25f;
@@ -779,7 +781,7 @@ public class GameWorld {
 	}
 	
 	public Entity makeCryingMask(float x, float y) {
-		Entity e = makeEnemy(x,y,Gfx.cryingMaskSheet.get(0), 0, 0, true);
+		Entity e = makeEnemy(x,y,Gfx.cryingMaskSheet.get(0), 0, 0, true, EnemyType.MASK);
 		AIAgentFlyingComponent aifc= (AIAgentFlyingComponent) e.addComponent(new AIAgentFlyingComponent());
 		LinearVelocityComponent lvc = (LinearVelocityComponent) e.addComponent(new LinearVelocityComponent());
 		

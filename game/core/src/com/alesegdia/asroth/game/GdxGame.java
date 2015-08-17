@@ -341,26 +341,31 @@ public class GdxGame extends ApplicationAdapter {
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			batch.begin();
 			font.draw(batch, midLevelText, 10, 470);
+			font.draw(batch, KillStatsComponent.instance.toString(), 10, 400);
 			batch.end();
 		} else if( currentState == GameState.WIN ) {
 			if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE) ) {
 				currentLevel = 0;
 				currentState = GameState.MAIN;
+				KillStatsComponent.instance.clear();
 			}
 			Gdx.gl.glClearColor(15f / 255f, 56f / 255f, 15f / 255f, 1f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			batch.begin();
 			font.draw(batch, "YOU FUCKING WON!", 10, 470);
+			font.draw(batch, KillStatsComponent.instance.toString(), 10, 400);
 			batch.end();
 		} else if( currentState == GameState.LOSE ) {
 			if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE) ) {
 				currentLevel = 0;
 				currentState = GameState.MAIN;
+				KillStatsComponent.instance.clear();
 			}
 			Gdx.gl.glClearColor(15f / 255f, 56f / 255f, 15f / 255f, 1f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			batch.begin();
 			font.draw(batch, "you suck.... loser!", 10, 470);
+			font.draw(batch, KillStatsComponent.instance.toString(), 10, 400);
 			batch.end();
 		}
 	}
