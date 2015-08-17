@@ -98,12 +98,17 @@ public class Gfx {
 	
 	public static TextureRegion portalTexture;
 	
+	public static Spritesheet mainScreen;
+	public static Animation mainAnim;
 	
 	public static void Initialize() {
 		mapTilesTexture = new Texture(Gdx.files.internal("flyinGB_tiles.png"));
 		Texture pt = new Texture(Gdx.files.internal("flyinGB.png"));
 		TextureRegion tr = new TextureRegion();
 		tr.setRegion(pt);
+		
+		mainScreen = new Spritesheet("main.png", 1, 4);
+		mainAnim = new Animation(0.2f, mainScreen.getRange(0, 3));
 		
 		hpTexture = new TextureRegion();
 		hpTexture.setRegion(new Texture(Gdx.files.internal("hpSlot.png")));

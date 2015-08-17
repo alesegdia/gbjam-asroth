@@ -18,7 +18,7 @@ public class DebugSystem extends EntitySystem {
 
 	@Override
 	public void process(Entity e) {
-		System.out.println(e.name);
+		//System.out.println(e.name);
 	}
 
 }

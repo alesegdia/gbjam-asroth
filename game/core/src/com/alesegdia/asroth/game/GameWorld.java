@@ -122,7 +122,9 @@ public class GameWorld {
 	
 	Entity player;
 
-	public GameWorld( Physics physics, SpriteBatch batch, Camera cam, TileMap tm ) {
+	private TileMap tm;
+
+	public GameWorld( Physics physics, SpriteBatch batch, Camera cam ) {
 		this.physics = physics;
 		this.cam = cam;
 		engine = new Engine();
@@ -180,6 +182,11 @@ public class GameWorld {
 		
 		bulletCfgs = new BulletConfigs();
 		
+	}
+	
+	void InitWorld(TileMap tm) {
+		engine.Clear();
+		this.tm = tm;
 		int x = -1;
 		int y = -1;
 		for( int i = 0; i < tm.cols; i++ ) {
@@ -355,7 +362,7 @@ public class GameWorld {
 		ShootComponent sc = (ShootComponent) player.addComponent(new ShootComponent());
 		sc.bulletConfigs = bulletCfgs.playerDefaultBEList;
 		
-		addHealthDamage(player, 100f, 1f);
+		addHealthDamage(player, 10f, 1f);
 		
 		WingsComponent wc = (WingsComponent) player.addComponent(new WingsComponent());
 		
@@ -821,6 +828,10 @@ public class GameWorld {
 
 	public Entity getPlayer() {
 		return player;
+	}
+
+	public boolean isPlayerDead() {
+		return player.isDead;
 	}
 	
 }

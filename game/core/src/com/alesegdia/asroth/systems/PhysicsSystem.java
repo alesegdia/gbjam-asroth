@@ -286,7 +286,6 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			
 			@Override
 			public void startCollision(Contact c, Body player, Body map, Vector2 normal) {
-				System.out.println(normal);
 				Entity e = (Entity) player.getUserData();
 				PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
 				plc.canDash = false;

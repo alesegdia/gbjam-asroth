@@ -6,6 +6,7 @@ import com.alesegdia.asroth.components.BuyerComponent;
 import com.alesegdia.asroth.components.HealthComponent;
 import com.alesegdia.asroth.components.InfiniteFlyComponent;
 import com.alesegdia.asroth.components.InvincibilityComponent;
+import com.alesegdia.asroth.components.MashComponent;
 import com.alesegdia.asroth.components.MoneyComponent;
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
@@ -31,6 +32,7 @@ import com.alesegdia.platgen.util.RNG;
 import com.alesegdia.platgen.util.Vec2;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -55,7 +57,7 @@ public class GdxGame extends ApplicationAdapter {
 	private SpriteBatch sprBatch;
 	BitmapFont customFont;
 	SectorMinimapRendererVisitor minimapRenderer;
-	
+
 	Physics physics;
 	GameWorld gameWorld;
 	
@@ -66,11 +68,14 @@ public class GdxGame extends ApplicationAdapter {
 	LogicMap lm;
 	TileMap tm;
 	
+	int currentLevel = 0;
+	
 	@Override
 	public void create () {
 		
 		Gfx.Initialize();
-		Sfx.Initialize();		
+		Sfx.Initialize();
+		GameLevelConfig.Initialize();
 		
 		rng = new RNG();
 		RNG.rng = rng;
@@ -80,8 +85,6 @@ public class GdxGame extends ApplicationAdapter {
 		camera.update();
 		camera.zoom = 1f;
 
-		OrthographicCamera ocam = camera;
-		
 		customFont = new BitmapFont(Gdx.files.internal("visitor.fnt"));
 		font = new BitmapFont(Gdx.files.internal("visitor.fnt"));
 		font.getData().setScale(0.5f);
@@ -94,87 +97,23 @@ public class GdxGame extends ApplicationAdapter {
 		srenderer = new ShapeRenderer();
 		srenderer.setAutoShapeType(true);
 
-		
-		/*
-		Config cfg = new Config();
-		cfg.mapSize = new Vec2(400,400);
-		cfg.regionGeneratorType = ERegionGenerator.BALANCED;
-		cfg.minK = 0.25f;
-		cfg.maxK = 0.75f;
-		cfg.numRegions = 20;
-		cfg.rdfsType = ERDFSType.COMBINED;
-		cfg.rasterRegionLimits = false;
+		physics = new Physics();
+		sprBatch = new SpriteBatch();
 
 		
-		GeneratorPipeline gp = new GeneratorPipeline();
-		TileMap tm = gp.generate(cfg);
+		gameWorld = new GameWorld(physics, sprBatch, camera);		
 		
-		PlatformGenerator pg = new PlatformGenerator();
-		pg.addLevel(new Level(10, 20, 10, 10));
-		pg.addLevel(new Level(10, 20, 15, 15));
-		pg.addLevel(new Level(10, 20, 25, 25));
-		tm = pg.generate(tm);
+	}
+	
+	void ClearWorld() {
+	}
+	
+	void GenLevel( ) {
 
-		*/
+		gameWorld.engine.Clear();
+		physics.Dispose();
 
-		/* LEVEL 1 **********************************************
-		Config cfg = new Config();
-		cfg.mapSize = new Vec2(100,100);
-		cfg.regionGeneratorType = ERegionGenerator.BALANCED;
-		cfg.minK = 0.25f;
-		cfg.maxK = 0.75f;
-		cfg.numRegions = 2;
-		cfg.rdfsType = ERDFSType.COMBINED;
-		cfg.rasterRegionLimits = false;
-		*********************************************************/
-
-
-		/* LEVEL 2 **********************************************
-		Config cfg = new Config();
-		cfg.mapSize = new Vec2(150,150);
-		cfg.regionGeneratorType = ERegionGenerator.BALANCED;
-		cfg.minK = 0.25f;
-		cfg.maxK = 0.75f;
-		cfg.numRegions = 5;
-		cfg.rdfsType = ERDFSType.COMBINED;
-		cfg.rasterRegionLimits = false;
-		*********************************************************/
-
-		
-		/* LEVEL 3 **********************************************
-		Config cfg = new Config();
-		cfg.mapSize = new Vec2(200,200);
-		cfg.regionGeneratorType = ERegionGenerator.BALANCED;
-		cfg.minK = 0.25f;
-		cfg.maxK = 0.75f;
-		cfg.numRegions = 10;
-		cfg.rdfsType = ERDFSType.COMBINED;
-		cfg.rasterRegionLimits = false;
-		*********************************************************/
-
-		/* LEVEL 4 **********************************************
-		Config cfg = new Config();
-		cfg.mapSize = new Vec2(300,300);
-		cfg.regionGeneratorType = ERegionGenerator.BALANCED;
-		cfg.minK = 0.25f;
-		cfg.maxK = 0.75f;
-		cfg.numRegions = 15;
-		cfg.rdfsType = ERDFSType.COMBINED;
-		cfg.rasterRegionLimits = false;
-		*********************************************************/
-		
-		/* LEVEL 5 **********************************************/
-		Config cfg = new Config();
-		cfg.mapSize = new Vec2(400,400);
-		cfg.regionGeneratorType = ERegionGenerator.BALANCED;
-		cfg.minK = 0.25f;
-		cfg.maxK = 0.75f;
-		cfg.numRegions = 30;
-		cfg.rdfsType = ERDFSType.COMBINED;
-		cfg.rasterRegionLimits = false;
-		/*********************************************************/
-		
-		
+		Config cfg = GameLevelConfig.configs[currentLevel];
 
 		GeneratorPipeline gp = new GeneratorPipeline();
 		tm = gp.generate(cfg);
@@ -191,37 +130,38 @@ public class GdxGame extends ApplicationAdapter {
 		map = ttmc.process();
 		renderer = new OrthogonalTiledMapRenderer(map, GameConfig.PIXELS_TO_METERS);
 		
-		physics = new Physics();
 		
 		MapPhysicsBuilderVisitor mpbv = new MapPhysicsBuilderVisitor(physics);
 		gp.getLogicMap().regionTree.visit(mpbv);
 
-		sprBatch = new SpriteBatch();
-		gameWorld = new GameWorld(physics, sprBatch, camera, tm);
+		gameWorld.InitWorld(tm);
 		GameWorld.instance = gameWorld;
 		
 		minimapRenderer = new SectorMinimapRendererVisitor(srenderer,
 				GameConfig.WINDOW_WIDTH/2 - tm.rows/4,
 				GameConfig.WINDOW_HEIGHT/2 - tm.cols/4);
-
+		
 	}
 	
-	@Override
-	public void render () {
-		float dt = Gdx.graphics.getRawDeltaTime();
+	public void gameStep() {
 		
-		Sfx.PlayMusic();
+		float dt = Gdx.graphics.getRawDeltaTime();
 
+		// step world
 		gameWorld.step();
 		physics.step(dt);
 
+		// prepare render
 		Gdx.gl.glClearColor(155f / 255f, 188f / 255f, 15f / 255f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		gameWorld.setCam();
 		camera.update();
+		
+		// render map
 		renderer.setView(camera);
 		renderer.render();
 
+		// render world
 		sprBatch.setProjectionMatrix(camera.combined);
 		sprBatch.begin();
 		gameWorld.render();
@@ -308,12 +248,11 @@ public class GdxGame extends ApplicationAdapter {
 			} else {
 				text = "";
 			}
-			System.out.println(plc.nearPortal);
 			font.draw(batch, text, 10, 470);
 		}
 		batch.end();
 
-		physics.render(camera);
+		//physics.render(camera);
 
 		PlayerComponent plc = (PlayerComponent) pl.getComponent(PlayerComponent.class);
 		if( plc.minimapEnabled ) {
@@ -330,7 +269,103 @@ public class GdxGame extends ApplicationAdapter {
 		}
 
 		srenderer.end();
+		
+		if( Gdx.input.isKeyJustPressed(Input.Keys.R) ) {
+			GenLevel();
+		}
+
 	}
+	
+	enum GameState {
+		MAIN, GAME, MIDLEVEL, WIN, LOSE
+	}
+	
+	GameState currentState = GameState.MAIN;
+
+	String midLevelText = "";
+	
+	void mainScreenStep() {
+		if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+			currentState = GameState.GAME;
+			GenLevel();
+		}
+		mainTimer += Gdx.graphics.getDeltaTime();
+		batch.begin();
+		batch.draw(Gfx.mainAnim.getKeyFrame(mainTimer, true), 0, 0);
+		batch.end();
+	}
+	
+	@Override
+	public void render () {
+		
+		Sfx.PlayMusic();
+
+		if(currentState == GameState.GAME) {
+			gameStep();
+			
+			// check if level is finished
+			CrossComponent cc = (CrossComponent) gameWorld.getPlayer().getComponent(CrossComponent.class);
+			PlayerComponent plc = (PlayerComponent) gameWorld.getPlayer().getComponent(PlayerComponent.class);
+			cc.currentCrosses = 10;
+			if( cc.currentCrosses >= cc.neededCrosses && Gdx.input.isKeyJustPressed(Input.Keys.T) && plc.nearPortal ) {
+				// ok this level
+				if( currentLevel < 4 ) {
+					midLevelText = "You are goin to dimension " + (currentLevel + 2);
+					currentState = GameState.MIDLEVEL;
+				} else {
+					currentState = GameState.WIN;
+				}
+			}
+			
+			// check if player has died
+			if( gameWorld.isPlayerDead() ) {
+				currentState = GameState.LOSE;
+			}
+		} else if( currentState == GameState.MAIN ) {
+			currentLevel = 0;
+			mainScreenStep();
+		} else if( currentState == GameState.MIDLEVEL ) {
+			if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE) ) {
+				currentLevel++;
+				MashComponent mc1 = (MashComponent) gameWorld.getPlayer().getComponent(MashComponent.class);
+				WeaponComponent wc1 = (WeaponComponent) gameWorld.getPlayer().getComponent(WeaponComponent.class);
+				GenLevel();
+				MashComponent mc2 = (MashComponent) gameWorld.getPlayer().getComponent(MashComponent.class);
+				WeaponComponent wc2 = (WeaponComponent) gameWorld.getPlayer().getComponent(WeaponComponent.class);
+				mc2.number = mc1.number;
+				mc2.power = mc2.power;
+				wc2.weaponModel = wc1.weaponModel;
+				currentState = GameState.GAME;
+			}
+			Gdx.gl.glClearColor(15f / 255f, 56f / 255f, 15f / 255f, 1f);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			batch.begin();
+			font.draw(batch, midLevelText, 10, 470);
+			batch.end();
+		} else if( currentState == GameState.WIN ) {
+			if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE) ) {
+				currentLevel = 0;
+				currentState = GameState.MAIN;
+			}
+			Gdx.gl.glClearColor(15f / 255f, 56f / 255f, 15f / 255f, 1f);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			batch.begin();
+			font.draw(batch, "YOU FUCKING WON!", 10, 470);
+			batch.end();
+		} else if( currentState == GameState.LOSE ) {
+			if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE) ) {
+				currentLevel = 0;
+				currentState = GameState.MAIN;
+			}
+			Gdx.gl.glClearColor(15f / 255f, 56f / 255f, 15f / 255f, 1f);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			batch.begin();
+			font.draw(batch, "you suck.... loser!", 10, 470);
+			batch.end();
+		}
+	}
+	
+	private float mainTimer = 0;
 
 	private void renderWeaponSlot(SpriteBatch batch2, int i, int j) {
 		Entity pl = gameWorld.getPlayer();

@@ -45,18 +45,23 @@ public class ShoppingSystem extends EntitySystem {
 					switch( sc.vendingProduct ) {
 					case DEFAULTGUN:
 						wc.weaponModel = BulletConfigs.defaultGun;
+						bc.lastWeaponBought = sc.vendingProduct;
 						break;
 					case SINEGUN:
 						wc.weaponModel = BulletConfigs.sineGun;
+						bc.lastWeaponBought = sc.vendingProduct;
 						break;
 					case FIREBALL:
 						wc.weaponModel = BulletConfigs.fireball;
+						bc.lastWeaponBought = sc.vendingProduct;
 						break;
 					case TRIPLASMA:
 						wc.weaponModel = BulletConfigs.triplasma;
+						bc.lastWeaponBought = sc.vendingProduct;
 						break;
 					case SACREDPUNCH:
 						wc.weaponModel = BulletConfigs.sacredPunch;
+						bc.lastWeaponBought = sc.vendingProduct;
 						break;
 					case WINGSCAPACITY:
 						InfiniteFlyComponent ifc = (InfiniteFlyComponent) e.getComponent(InfiniteFlyComponent.class);
@@ -69,10 +74,12 @@ public class ShoppingSystem extends EntitySystem {
 					case MASH_POWER:
 						MashComponent mac = (MashComponent) e.getComponent(MashComponent.class);
 						mac.power++;
+						bc.mashPowers++;
 						break;
 					case MASH_NUMBER:
 						MashComponent mac2 = (MashComponent) e.getComponent(MashComponent.class);
 						mac2.number++;
+						bc.mashNumbers++;
 						break;
 					}
 

@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 public class Physics {
 
@@ -23,6 +24,7 @@ public class Physics {
 	private static final float TIME_STEP = 1/60.f;
 	private static final int VELOCITY_ITERATIONS = 6;
 	private static final int POSITION_ITERATIONS = 2;
+	
 	
 	public PhysicsSystem physicsSystem;
 	
@@ -179,6 +181,14 @@ public class Physics {
 				CollisionLayers.CATEGORY_PORTAL, CollisionLayers.MASK_PORTAL, CollisionLayers.GROUP_PORTAL, false, true);
 		b.setGravityScale(0);
 		return b;
+	}
+
+	public void Dispose() {
+		Array<Body> bodies = new Array<Body>();
+		this.world.getBodies(bodies);
+		for( Body b : bodies ) {
+			b.getWorld().destroyBody(b);
+		}
 	}
 
 

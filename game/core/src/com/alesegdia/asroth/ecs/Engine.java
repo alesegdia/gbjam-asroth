@@ -68,4 +68,13 @@ public class Engine {
 		return entities.size();
 	}
 	
+	public void Clear() {
+		for( Entity e : this.entities ) {
+			for( EntitySystem es : systems ) {
+				es.entityRemoved(e);
+			}
+		}
+		this.entities.clear();
+	}
+	
 }
