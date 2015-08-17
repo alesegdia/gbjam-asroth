@@ -43,7 +43,7 @@ public class AIAgentWarpingSystem extends EntitySystem {
 				ppos.sub(posc.position);
 				float distToPlayer = ppos.len();
 				
-				if( distToPlayer < 10 ) {
+				if( distToPlayer < 20 ) {
 					float warpingDistance = distToPlayer - wc.minKeepDistance;
 					float angle = RNG.rng.nextInt(0,360);
 					float portion = warpingDistance / distToPlayer;
