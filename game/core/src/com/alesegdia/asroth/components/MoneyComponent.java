@@ -4,6 +4,6 @@ import com.alesegdia.asroth.ecs.Component;
 
 public class MoneyComponent extends Component {
 
-	public int currency;
+	public int currency = 0;
 	
 }
