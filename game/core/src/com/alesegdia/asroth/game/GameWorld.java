@@ -248,11 +248,11 @@ public class GameWorld {
 			xx = mz.xRange.x + size/2;
 
 			Entity s;
-			if(   size < 6 ) {
+			if(  size < GameConstants.MIN_MOBZONE_SIZE_SPAWN_SHOP ) {
 				s = makeShopKeeper(0,0);
 			} else {
 				float r = RNG.rng.nextFloat();
-				if( r < 0.4 ) {
+				if( r < GameConstants.SPAWN_SUMMONER_PROB ) {
 					s = makeSummoner(0,0,mz);
 				} else {
 					s = makeShopKeeper(0,0);
@@ -389,11 +389,11 @@ public class GameWorld {
 
 		ShopComponent sc = (ShopComponent) e.addComponent(new ShopComponent());
 		sc.vendingProduct = ShopConfig.chooseRandomProduct();
-		sc.refillingCooldown = 10f;
-		
+		sc.refillingCooldown = GameConstants.SHOP_REFILLING_TIME;
+
 		VanishingComponent vc = (VanishingComponent) e.addComponent(new VanishingComponent());
-		vc.timeToVanish = 2f;
-		vc.willTurn = RNG.rng.nextFloat() > 0.5f;
+		vc.timeToVanish = GameConstants.SHOP_VANISHING_TIME;
+		vc.willTurn = RNG.rng.nextFloat() < GameConstants.SHOP_TURN_PROB;
 		vc.isVanishing = false;
 		
 		return engine.addEntity(e);
