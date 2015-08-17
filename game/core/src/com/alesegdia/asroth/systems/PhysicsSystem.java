@@ -11,6 +11,7 @@ import com.alesegdia.asroth.components.PickupEffectComponent;
 import com.alesegdia.asroth.components.PickupItemComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.ShopComponent;
+import com.alesegdia.asroth.components.VanishingComponent;
 import com.alesegdia.asroth.components.WalkingComponent;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
@@ -150,6 +151,29 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 				Entity e = (Entity) b1.getUserData();
 				PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
 				pc.grounded = false;
+			}
+			
+		});
+		
+		callbacks.add(new ICollisionCallback() {
+			{ setCategories( CollisionLayers.CATEGORY_PLBULLETS, CollisionLayers.CATEGORY_SHOP ); }
+			
+			@Override
+			public void startCollision(Contact c, Body b1, Body b2, Vector2 normal) {
+				Entity b = (Entity) b1.getUserData();
+				Entity s = (Entity) b2.getUserData();
+				VanishingComponent vc = (VanishingComponent) s.getComponent(VanishingComponent.class);
+				if( !vc.isVanishing ) {
+					ShopComponent sc = (ShopComponent) s.getComponent(ShopComponent.class);
+					sc.isSold = true;
+					vc.isVanishing = true;
+					vc.vanishTimer = vc.timeToVanish;
+					vc.willTurn = true;
+				}
+			}
+
+			@Override
+			public void endCollision(Contact c, Body b1, Body b2) {
 			}
 			
 		});
