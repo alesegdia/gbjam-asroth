@@ -689,6 +689,7 @@ public class GameWorld {
 		sc.summonProb[2] = 0.75f;
 		sc.summonProb[3] = 1.f;
 		sc.actingZone = mz;
+		sc.maxCreatures = 8;
 
 		AttackComponent ac = (AttackComponent) e.addComponent(new AttackComponent());
 		ac.nextAttackAvailable = 3f;
