@@ -191,8 +191,6 @@ public class GameWorld {
 			}
 			if( x != -1 ) break;
 		}
-		System.out.println(x);
-		System.out.println(y);
 		makePlayer(x*10, y*10);
 
 		AirPlatformExtractor ape = new AirPlatformExtractor();
@@ -303,7 +301,6 @@ public class GameWorld {
 		float dc = pc.boxOffset.y * -1f;
 		TextureRegion tr = gc.drawElement;
 		float dy = tr.getRegionHeight()/2 - dc + 1f;
-		System.out.println(dc);
 		float fx = (tx+0.5f) * 10f * GameConfig.PIXELS_TO_METERS;
 		float fy = (ty) * 10f * GameConfig.PIXELS_TO_METERS + dy * GameConfig.PIXELS_TO_METERS;
 		pc.body.setTransform(fx, fy, 0);

@@ -39,7 +39,6 @@ public class ShootingSystem extends EntitySystem {
 			ac.attackedLastFrame = true;
 			boolean flip = false;
 			if( ac.forceFace != 0 ) {
-				System.out.println("FORCING!");
 				flip = (ac.forceFace == 1 ? true : false);
 			} else {
 				flip = !gc.flipX;

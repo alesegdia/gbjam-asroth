@@ -25,7 +25,6 @@ public class DropPickupSystem extends EntitySystem {
 		DropPickupComponent dpc = (DropPickupComponent) e.getComponent(DropPickupComponent.class);
 		if( e.isDead && !dpc.hasDropped ) {
 			dpc.hasDropped = true;
-			System.out.println("asdwe");
 
 			TransformComponent tc = (TransformComponent) e.getComponent(TransformComponent.class);
 			if( RNG.rng.nextFloat() < dpc.probDrop ) {

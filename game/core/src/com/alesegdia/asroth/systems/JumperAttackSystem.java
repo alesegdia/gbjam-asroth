@@ -33,7 +33,6 @@ public class JumperAttackSystem extends EntitySystem {
 
 		float xspeed = (posc.position.x-pposc.position.x > 0 ? -1 : 1) * 2;
 
-		System.out.println(Math.abs(pc.body.getLinearVelocity().y));
 		if( Math.abs(pc.body.getLinearVelocity().y) > 0.3f ) {
 			float dx = Math.abs(posc.position.x - pposc.position.x);
 			if( dx > 1 ) {
