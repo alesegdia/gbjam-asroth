@@ -22,6 +22,7 @@ import com.alesegdia.asroth.components.HealthComponent;
 import com.alesegdia.asroth.components.HideComponent;
 import com.alesegdia.asroth.components.JumperAttackComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
+import com.alesegdia.asroth.components.MashComponent;
 import com.alesegdia.asroth.components.MoneyComponent;
 import com.alesegdia.asroth.components.AIAgentPeriodicAutoAttackComponent;
 import com.alesegdia.asroth.components.AIWarpComponent;
@@ -221,11 +222,11 @@ public class GameWorld {
 			xx = mz.xRange.x + size/2;
 
 			Entity s;
-			if( size < 6 ) {
+			if( true ) {//  size < 6 ) {
 				s = makeShopKeeper(0,0);
 			} else {
 				float r = RNG.rng.nextFloat();
-				if(false){ //r < 0.7 ) {
+				if( r < 0.7 ) {
 					s = makeSummoner(0,0,mz);
 				} else {
 					s = makeShopKeeper(0,0);
@@ -288,6 +289,8 @@ public class GameWorld {
 		PhysicsComponent pc = (PhysicsComponent) player.addComponent(new PhysicsComponent());
 		pc.body = physics.createPlayerBody(x, y);
 		pc.body.setUserData(player);
+		
+		MashComponent mac = (MashComponent) player.addComponent(new MashComponent());
 		
 		GraphicsComponent gc = (GraphicsComponent) player.addComponent(new GraphicsComponent());
 		gc.drawElement = Gfx.playerSheet.get(0);
@@ -411,7 +414,7 @@ public class GameWorld {
 		return e;
 	}
 	
-	public Entity makeGroundExplosion(float x, float y) {
+	public Entity makeGroundExplosion(float x, float y, float power) {
 		Entity e = new Entity();
 
 		GraphicsComponent gc = (GraphicsComponent) e.addComponent(new GraphicsComponent());
@@ -434,7 +437,8 @@ public class GameWorld {
 		cdc.timeToLive = 0.7f;
 		
 		BulletComponent bc = (BulletComponent) e.addComponent(new BulletComponent());
-		bc.power = 1;
+		bc.power = (int) power;
+		bc.trespassingEnabled = true;
 		
 		engine.addEntity(e);
 		return e;
