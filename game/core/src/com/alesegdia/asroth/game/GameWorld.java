@@ -90,10 +90,12 @@ import com.alesegdia.asroth.systems.WeaponChangeSystem;
 import com.alesegdia.asroth.systems.WingsRecoverySystem;
 import com.alesegdia.asroth.systems.AIAgentWalkingSystem;
 import com.alesegdia.asroth.systems.AIAgentWarpingSystem;
+import com.alesegdia.platgen.map.AirPlatformExtractor;
 import com.alesegdia.platgen.map.MobZoneExtractor;
 import com.alesegdia.platgen.map.MobZoneExtractor.MobZone;
 import com.alesegdia.platgen.map.TileMap;
 import com.alesegdia.platgen.map.TileType;
+import com.alesegdia.platgen.map.AirPlatformExtractor.AirPlatform;
 import com.alesegdia.platgen.util.RNG;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -193,6 +195,23 @@ public class GameWorld {
 		System.out.println(y);
 		makePlayer(x*10, y*10);
 
+		AirPlatformExtractor ape = new AirPlatformExtractor();
+		List<AirPlatform> platforms = ape.computeMobZones(tm);
+		
+		for( AirPlatform ap : platforms ) {
+			float ww = Math.abs(ap.xRange.x - ap.xRange.y) * 10f / 2f + 5;
+			float xx = ap.xRange.x * 10 + ww;
+			float yy = ap.height * 10 + 9f;
+			float hh = 1f;
+			physics.createRectBody(
+					xx * GameConfig.PIXELS_TO_METERS,
+					yy * GameConfig.PIXELS_TO_METERS,
+					ww * GameConfig.PIXELS_TO_METERS,
+					hh * GameConfig.PIXELS_TO_METERS,
+					CollisionLayers.CATEGORY_1WAYPLATS, CollisionLayers.MASK_1WAYPLATS, CollisionLayers.GROUP_1WAYPLATS, false);
+
+		}
+		
 		MobZoneExtractor mze = new MobZoneExtractor();
 		List<MobZone> mobZones = mze.computeMobZones(tm);
 		int i = 0;

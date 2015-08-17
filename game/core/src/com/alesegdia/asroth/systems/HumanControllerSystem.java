@@ -191,6 +191,8 @@ public class HumanControllerSystem extends EntitySystem {
 			BuyerComponent bc = (BuyerComponent) e.getComponent(BuyerComponent.class);
 			bc.triedBuyLastFrame = true;
 		}
+		
+		plc.isPressingDown = Gdx.input.isKeyPressed(Input.Keys.DOWN);
 	}
 
 	@Override

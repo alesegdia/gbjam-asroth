@@ -11,6 +11,8 @@ public class PlayerComponent extends Component{
 	public boolean dashingWall;
 	public boolean releasingWall;
 	public float releaseWallVelocity;
+	public boolean canDash;
+	public boolean isPressingDown;
 	
 
 }
