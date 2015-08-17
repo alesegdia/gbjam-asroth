@@ -47,6 +47,8 @@ public class ShopItemDrawingSystem extends EntitySystem {
 			case SACREDPUNCH: tr = Gfx.sacredSymbol; break;
 			case WINGSCAPACITY: tr = Gfx.wingsPickupSheet.get(0); break;
 			case HEALTHCAPACITY:tr = Gfx.healthPickupSheet.get(0); break;
+			case MASH_NUMBER:tr = Gfx.mashShopItems.get(0); break;
+			case MASH_POWER:tr = Gfx.mashShopItems.get(1); break;
 			}
 			AnimationComponent ac = (AnimationComponent) e.getComponent(AnimationComponent.class);
 			int i = ac.currentAnim.getKeyFrameIndex(ac.currentTime);

@@ -10,6 +10,7 @@ import com.alesegdia.platgen.util.RNG;
 import sun.io.ByteToCharDBCS_ASCII;
 
 import com.alesegdia.asroth.components.BuyerComponent;
+import com.alesegdia.asroth.components.MashComponent;
 import com.alesegdia.asroth.components.MoneyComponent;
 import com.alesegdia.asroth.components.ShopComponent;
 import com.alesegdia.asroth.components.VanishingComponent;
@@ -56,6 +57,14 @@ public class ShoppingSystem extends EntitySystem {
 					case WINGSCAPACITY:
 						break;
 					case HEALTHCAPACITY:
+						break;
+					case MASH_POWER:
+						MashComponent mac = (MashComponent) e.getComponent(MashComponent.class);
+						mac.power++;
+						break;
+					case MASH_NUMBER:
+						MashComponent mac2 = (MashComponent) e.getComponent(MashComponent.class);
+						mac2.number++;
 						break;
 					}
 

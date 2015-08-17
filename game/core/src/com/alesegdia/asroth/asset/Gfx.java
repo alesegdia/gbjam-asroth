@@ -91,6 +91,8 @@ public class Gfx {
 	public static Animation cryingMaskAnim;
 	public static Animation cherubAnim;
 	
+	public static Spritesheet mashShopItems;
+	
 	
 	public static void Initialize() {
 		mapTilesTexture = new Texture(Gdx.files.internal("flyinGB_tiles.png"));
@@ -223,6 +225,8 @@ public class Gfx {
 		
 		wepslot = new TextureRegion();
 		wepslot.setRegion(new Texture(Gdx.files.internal("wepslot.png")));
+		
+		mashShopItems = new Spritesheet("smashPowerups.png", 1, 2);
 	}
 	
 }

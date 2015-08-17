@@ -2,6 +2,7 @@ package com.alesegdia.asroth.systems;
 
 import com.alesegdia.asroth.components.PhysicsComponent;
 import com.alesegdia.asroth.components.LinearVelocityComponent;
+import com.alesegdia.asroth.components.MashComponent;
 import com.alesegdia.asroth.components.PlayerComponent;
 import com.alesegdia.asroth.components.ShootComponent;
 import com.alesegdia.asroth.components.TransformComponent;
@@ -43,12 +44,13 @@ public class HumanControllerSystem extends EntitySystem {
 			x = posc.position.x;
 			y = posc.position.y;
 			float yOffset = 2.6f * GameConfig.PIXELS_TO_METERS;
-			GameWorld.instance.makeGroundExplosion(x-0.6f, y-yOffset);
-			GameWorld.instance.makeGroundExplosion(x-1.1f, y-yOffset);
-			GameWorld.instance.makeGroundExplosion(x-1.6f, y-yOffset);
-			GameWorld.instance.makeGroundExplosion(x+0.6f, y-yOffset);
-			GameWorld.instance.makeGroundExplosion(x+1.1f, y-yOffset);
-			GameWorld.instance.makeGroundExplosion(x+1.6f, y-yOffset);
+			MashComponent mc = (MashComponent) e.getComponent(MashComponent.class);
+			for( int i = 0; i < mc.number; i++ ) {
+				GameWorld.instance.makeGroundExplosion(x-0.6f - i * 0.5f, y-yOffset, mc.power);
+			}
+			for( int i = 0; i < mc.number; i++ ) {
+				GameWorld.instance.makeGroundExplosion(x+0.6f + i * 0.5f, y-yOffset, mc.power);
+			}
 			plc.justLandedMashing = false;
 		}
 		

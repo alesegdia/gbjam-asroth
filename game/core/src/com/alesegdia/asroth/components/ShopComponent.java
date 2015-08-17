@@ -6,7 +6,8 @@ public class ShopComponent extends Component {
 
 	public static enum ShopProduct {
 		FIREBALL, SINEGUN, DEFAULTGUN, TRIPLASMA, SACREDPUNCH,
-		WINGSCAPACITY, HEALTHCAPACITY
+		WINGSCAPACITY, HEALTHCAPACITY,
+		MASH_POWER, MASH_NUMBER
 	}
 	
 	public float refillingCooldown = 10f;
