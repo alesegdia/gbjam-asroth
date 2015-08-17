@@ -10,6 +10,7 @@ import com.alesegdia.asroth.components.WeaponComponent;
 import com.alesegdia.asroth.components.WingsComponent;
 import com.alesegdia.asroth.components.GraphicsComponent;
 import com.alesegdia.asroth.asset.Gfx;
+import com.alesegdia.asroth.asset.Sfx;
 import com.alesegdia.asroth.components.AnimationComponent;
 import com.alesegdia.asroth.components.AttackComponent;
 import com.alesegdia.asroth.components.BuyerComponent;
@@ -39,6 +40,7 @@ public class HumanControllerSystem extends EntitySystem {
 		GraphicsComponent gc = (GraphicsComponent) e.getComponent(GraphicsComponent.class);
 		
 		if( plc.justLandedMashing ) {
+			Sfx.Play(3);
 			TransformComponent posc = (TransformComponent) e.getComponent(TransformComponent.class);
 			float x, y;
 			x = posc.position.x;
@@ -135,6 +137,8 @@ public class HumanControllerSystem extends EntitySystem {
 		
 		if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 			if( phc.grounded ) {
+				Sfx.Play(0);
+
 				plc.jumping = true;
 				plc.flying = false;
 				plc.mashing = false;
@@ -143,6 +147,7 @@ public class HumanControllerSystem extends EntitySystem {
 				prevYlinear = 6;
 
 			} else if( wc.currentBoost > 0 ) {
+				Sfx.Play(0);
 				wc.currentBoost--;
 				plc.flying = true;
 				plc.jumping = false;
@@ -151,6 +156,7 @@ public class HumanControllerSystem extends EntitySystem {
 				prevYlinear = 6;
 			}
 			if( plc.dashingWall ) {
+				Sfx.Play(0);
 				plc.dashingWall = false;
 				plc.releaseWallVelocity = -10 * (gc.flipX ? 1 : -1);
 				prevYlinear = 6;

@@ -27,6 +27,8 @@ public class ShootComponent extends Component {
 		public boolean trespassingEnabled = false;
 	}
 	
+	public int soundIndex = 1;
+	
 	public static class BulletEntry {
 		public BulletModel bm;
 		public Vector2 origin;

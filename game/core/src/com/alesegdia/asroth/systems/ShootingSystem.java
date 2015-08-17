@@ -3,6 +3,7 @@ package com.alesegdia.asroth.systems;
 import com.alesegdia.asroth.components.AttackComponent;
 import com.alesegdia.asroth.components.TransformComponent;
 import com.alesegdia.asroth.components.ShootComponent;
+import com.alesegdia.asroth.asset.Sfx;
 import com.alesegdia.asroth.components.ActiveComponent;
 import com.alesegdia.asroth.components.ShootComponent.BulletEntry;
 import com.alesegdia.asroth.components.ShootComponent.BulletModel;
@@ -34,6 +35,7 @@ public class ShootingSystem extends EntitySystem {
 		ActiveComponent actc = (ActiveComponent) e.getComponent(ActiveComponent.class);
 		
 		if( ac.doAttack && actc.isActive ) {
+			Sfx.Play(sc.soundIndex);
 			ac.attackedLastFrame = true;
 			boolean flip = false;
 			if( ac.forceFace != 0 ) {

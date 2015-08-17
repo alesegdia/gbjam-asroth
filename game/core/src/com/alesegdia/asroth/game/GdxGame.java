@@ -1,6 +1,7 @@
 package com.alesegdia.asroth.game;
 
 import com.alesegdia.asroth.asset.Gfx;
+import com.alesegdia.asroth.asset.Sfx;
 import com.alesegdia.asroth.components.BuyerComponent;
 import com.alesegdia.asroth.components.HealthComponent;
 import com.alesegdia.asroth.components.InfiniteFlyComponent;
@@ -67,6 +68,11 @@ public class GdxGame extends ApplicationAdapter {
 	public void create () {
 		
 		Gfx.Initialize();
+		Sfx.Initialize();
+		
+		Sfx.music.setLooping(true);
+		Sfx.music.play();
+		
 		
 		rng = new RNG();
 		RNG.rng = rng;

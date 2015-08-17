@@ -1,5 +1,6 @@
 package com.alesegdia.asroth.systems;
 
+import com.alesegdia.asroth.asset.Sfx;
 import com.alesegdia.asroth.components.DamageComponent;
 import com.alesegdia.asroth.components.HealthComponent;
 import com.alesegdia.asroth.ecs.Entity;
@@ -25,6 +26,7 @@ public class PainSystem extends EntitySystem {
 
 		if( dc.painTimer <= 0 ) {
 			if( dc.damageDealtLastFrame > 0 ) {
+				Sfx.Play(dc.soundIndex);
 				hc.currentHP -= dc.damageDealtLastFrame;
 				dc.painTimer = dc.painCooldown;
 			}

@@ -5,6 +5,7 @@ import com.alesegdia.asroth.ecs.EntitySystem;
 import com.alesegdia.asroth.components.PickupEffectComponent;
 import com.alesegdia.asroth.components.PickupItemComponent;
 import com.alesegdia.asroth.components.PickupItemComponent.PickupType;
+import com.alesegdia.asroth.asset.Sfx;
 import com.alesegdia.asroth.components.HealthComponent;
 import com.alesegdia.asroth.components.WingsComponent;
 import com.alesegdia.asroth.components.MoneyComponent;
@@ -24,10 +25,13 @@ public class PickupSystem extends EntitySystem {
 	@Override
 	public void process(Entity e) {
 		PickupEffectComponent pec = (PickupEffectComponent) e.getComponent(PickupEffectComponent.class);
+		if( pec.pickupsCollectedLastFrame.size() > 0 ) {
+			Sfx.Play(4);
+		}
 		for( Entity pt : pec.pickupsCollectedLastFrame ) {
 			PickupItemComponent pic = (PickupItemComponent) pt.getComponent(PickupItemComponent.class);
 			boolean wasPicked = false;
-			System.out.println("pickup!");
+			
 			switch( pic.pickupType ) {
 			case HEALTH:
 				HealthComponent hc = (HealthComponent) e.getComponent(HealthComponent.class);

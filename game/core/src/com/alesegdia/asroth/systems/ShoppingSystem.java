@@ -9,6 +9,7 @@ import com.alesegdia.platgen.util.RNG;
 
 import sun.io.ByteToCharDBCS_ASCII;
 
+import com.alesegdia.asroth.asset.Sfx;
 import com.alesegdia.asroth.components.BuyerComponent;
 import com.alesegdia.asroth.components.InfiniteFlyComponent;
 import com.alesegdia.asroth.components.InvincibilityComponent;
@@ -40,6 +41,7 @@ public class ShoppingSystem extends EntitySystem {
 				ShopComponent sc = (ShopComponent) bc.standingShop.getComponent(ShopComponent.class);
 				if( !sc.isSold && mc.currency - ShopConfig.getPriceFor(sc.vendingProduct) >= 0 ) {
 					WeaponComponent wc = (WeaponComponent) e.getComponent(WeaponComponent.class);
+					Sfx.Play(5);
 					switch( sc.vendingProduct ) {
 					case DEFAULTGUN:
 						wc.weaponModel = BulletConfigs.defaultGun;

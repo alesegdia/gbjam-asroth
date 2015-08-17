@@ -9,6 +9,7 @@ public class DamageComponent extends Component {
 	
 	public float painCooldown; 		// time to be able to be damaged again
 	public float painTimer;
+	public int soundIndex = 2;
 	
 	
 }
