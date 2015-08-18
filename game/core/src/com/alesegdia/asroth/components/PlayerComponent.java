@@ -15,6 +15,7 @@ public class PlayerComponent extends Component{
 	public boolean isPressingDown;
 	public boolean minimapEnabled = false;
 	public boolean nearPortal = false;
+	public boolean overOneWayPlat;
 	
 
 }

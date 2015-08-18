@@ -104,9 +104,9 @@ public class HumanControllerSystem extends EntitySystem {
 
 			if( plc.overOneWayPlat || (!plc.overOneWayPlat && !phc.grounded) ) {
 				plc.mashing = true;
+				plc.flying = false;
+				plc.jumping = false;
 			}
-			plc.flying = false;
-			plc.jumping = false;
 		} else if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
 			dy = 1;
 		}
