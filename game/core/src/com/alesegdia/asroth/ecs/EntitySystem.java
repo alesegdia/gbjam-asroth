@@ -1,12 +1,13 @@
 package com.alesegdia.asroth.ecs;
 
-import java.util.BitSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.badlogic.gdx.utils.Bits;
+
 public abstract class EntitySystem implements IEntityListener {
 
-	private BitSet familyBits;
+	private Bits familyBits;
 	private List<Entity> entities = new LinkedList<Entity>();
 	public String name;
 	
@@ -15,14 +16,15 @@ public abstract class EntitySystem implements IEntityListener {
 	}
 	
 	public void setComponentsFamily(Class<? extends Component>... componentClasses) {
-		familyBits = new BitSet(64);
+		familyBits = new Bits(64);
 		for( Class<? extends Component> c : componentClasses ) {
 			familyBits.set(ComponentType.getIndexFor(c));
 		}
 	}
 
 	boolean checkEntityBits( Entity e ) {
-		BitSet result = (BitSet) familyBits.clone();
+		Bits result = new Bits(familyBits.length());
+		result.or(familyBits);
 		result.and(e.getBits());
 		return result.equals(familyBits);
 	}

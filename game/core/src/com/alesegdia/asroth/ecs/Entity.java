@@ -1,16 +1,11 @@
 package com.alesegdia.asroth.ecs;
 
-import java.util.BitSet;
-import java.util.LinkedList;
-import java.util.List;
-
-import com.alesegdia.asroth.components.AnimationComponent;
-import com.alesegdia.asroth.components.GraphicsComponent;
+import com.badlogic.gdx.utils.Bits;
 
 public class Entity {
 
 	public boolean isDead = false;
-	private BitSet bits = new BitSet(32);
+	private Bits bits = new Bits(32);
 	public String name;
 	Component[] components;
 	
@@ -28,7 +23,7 @@ public class Entity {
 		return c1;
 	}
 
-	public BitSet getBits() {
+	public Bits getBits() {
 		return bits;
 	}
 	

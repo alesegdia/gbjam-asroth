@@ -2,11 +2,13 @@ package com.alesegdia.asroth.ecs;
 
 import java.util.Hashtable;
 
+import com.badlogic.gdx.utils.ObjectMap;
+
 public class ComponentType {
 
 	public static int lastIndex = 0;
-	public static Hashtable<Class<? extends Component>, ComponentType> registeredComponentTypes =
-			new Hashtable<Class<? extends Component>, ComponentType>();
+	public static ObjectMap<Class<? extends Component>, ComponentType> registeredComponentTypes =
+			new ObjectMap<Class<? extends Component>, ComponentType>();
 	
 	public static ComponentType IsComponentRegistered( Component c ) {
 		return registeredComponentTypes.get(c.getClass());
