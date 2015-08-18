@@ -124,6 +124,7 @@ public class HumanControllerSystem extends EntitySystem {
 		WingsComponent wc = (WingsComponent) e.getComponent(WingsComponent.class);
 		wc.isRecovering = phc.grounded;
 		
+		/*
 		if( Gdx.input.isKeyJustPressed(Input.Keys.Q) ) { GameWorld.instance.makeThreeHeaded(x, y); }
 		if( Gdx.input.isKeyJustPressed(Input.Keys.W) ) { GameWorld.instance.makeRunner(x, y); }
 		if( Gdx.input.isKeyJustPressed(Input.Keys.E) ) { GameWorld.instance.makeJumper(x, y); }
@@ -132,6 +133,7 @@ public class HumanControllerSystem extends EntitySystem {
 		if( Gdx.input.isKeyJustPressed(Input.Keys.S) ) { GameWorld.instance.makeDemon(x, y); }
 		if( Gdx.input.isKeyJustPressed(Input.Keys.D) ) { GameWorld.instance.makeEvilCherub(x, y); }
 		if( Gdx.input.isKeyJustPressed(Input.Keys.F) ) { GameWorld.instance.makeCryingMask(x, y); }
+
 		WeaponComponent wep = (WeaponComponent) e.getComponent(WeaponComponent.class);
 		if( Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) ) {
 			wep.weaponModel = BulletConfigs.defaultGun;
@@ -144,6 +146,7 @@ public class HumanControllerSystem extends EntitySystem {
 		} else if( Gdx.input.isKeyJustPressed(Input.Keys.NUM_5) ) {
 			wep.weaponModel = BulletConfigs.sineGun;
 		}
+		*/
 		
 		if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 			if( phc.grounded ) {

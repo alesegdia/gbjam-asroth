@@ -168,8 +168,10 @@ public class GdxGame extends ApplicationAdapter {
 		sprBatch.end();
 		
 		batch.begin();
+		/*
 		font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
 		font.draw(batch, "entities: " + gameWorld.getNumEntities(), 80, 20);
+		*/
 		TextureRegion t = Gfx.hpTexture;
 
 		batch.draw(Gfx.hpHud, 0, 0, 0, 0,
@@ -270,10 +272,6 @@ public class GdxGame extends ApplicationAdapter {
 
 		srenderer.end();
 		
-		if( Gdx.input.isKeyJustPressed(Input.Keys.R) ) {
-			GenLevel();
-		}
-
 	}
 	
 	enum GameState {
@@ -306,7 +304,6 @@ public class GdxGame extends ApplicationAdapter {
 			// check if level is finished
 			CrossComponent cc = (CrossComponent) gameWorld.getPlayer().getComponent(CrossComponent.class);
 			PlayerComponent plc = (PlayerComponent) gameWorld.getPlayer().getComponent(PlayerComponent.class);
-			cc.currentCrosses = 10;
 			if( cc.currentCrosses >= cc.neededCrosses && Gdx.input.isKeyJustPressed(Input.Keys.T) && plc.nearPortal ) {
 				// ok this level
 				if( currentLevel < 4 ) {
@@ -352,7 +349,7 @@ public class GdxGame extends ApplicationAdapter {
 			Gdx.gl.glClearColor(15f / 255f, 56f / 255f, 15f / 255f, 1f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			batch.begin();
-			font.draw(batch, "YOU FUCKING WON!", 10, 470);
+			font.draw(batch, "Asroth managed to escape!", 10, 470);
 			font.draw(batch, KillStatsComponent.instance.toString(), 10, 400);
 			batch.end();
 		} else if( currentState == GameState.LOSE ) {
@@ -364,7 +361,7 @@ public class GdxGame extends ApplicationAdapter {
 			Gdx.gl.glClearColor(15f / 255f, 56f / 255f, 15f / 255f, 1f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			batch.begin();
-			font.draw(batch, "you suck.... loser!", 10, 470);
+			font.draw(batch, "Asroth has died!", 10, 470);
 			font.draw(batch, KillStatsComponent.instance.toString(), 10, 400);
 			batch.end();
 		}
