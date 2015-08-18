@@ -11,7 +11,7 @@ public class ShopConfig {
 	};
 		
 	static final int shopPrices[] = {
-		5,			3,			1, 			7,			10, 			7,			7, 			9, 			8
+		4,			3,			1, 			6,			8, 				5,			5, 			6, 			6
 	};
 	
 	public static int getPriceFor(ShopProduct sp) {
