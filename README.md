@@ -1,10 +1,15 @@
 # gbjam-asroth
 
 
-## Plot
+# Overview
+Asroth is a roguelike platformer with procedural generated levels. Coded and designed for the #gbjam . Done for #gbjam 4th edition.
+
+Sorry for those bugs you may encounter. You can check the known bugs list or submit a new one here: https://github.com/alesegdia/gbjam-asroth/labels/bug
+
+# Plot
 Asroth is a deserted angel sent to the midlands for defying God, a no man's land where no one lives, placed somewhere between Heaven and Hell. One day, the Lord of Hell, decides to bring fate to their opposites at Heaven, and Asroth is in in the middle of the dark side travel to the uplands. Help Asroth survive in the midlands, once a quiet place, now filled with all kind of evil creatures coming directly from Hell.
 
-## Controls
+# Controls
 Key | Action
 --------------------|----------------
 **Left/Right** | Horizontal movement
@@ -15,9 +20,11 @@ Key | Action
 **B** | Buy items (at shopkeepers)
 **T** | Use portal (if able)
 
-## Game guide
+# Game guide
 
-In order to pass through the game stages, you have to get **crosses** to be able to travel through dimensions. These can be obtained from **demons** and **summoners**. The game is hard for starters, but if you manage your way to get some better weapons, you can pass through it relatively easy. When you have enough crosses, you can go to the next level by using the portal near the place where you spawn. You can know how many more crosses you need to be able to travel there.
+In order to pass through the game stages, you have to get **crosses** to be able to travel through dimensions. These can be obtained from **demons** and **summoners**. When you have enough crosses, you can go to the next level by using the portal near the place where you spawn. You can know how many more crosses you need to be able to travel there.
+
+The game is hard for starters, but if you manage your way to get some better weapons, you can pass through it relatively easy. 
 
 The first weapon you should get is the **sinegun** for 3 coins. With this weapon, you can kill ground enemies easily by standing in a platform away from them, because of the wave pattern of this gun. It's not too much powerfull, but it has trespassing.
 
@@ -25,34 +32,33 @@ Shopkeepers have a chance to refill their stock when you buy from them, so it's 
 
 Also, I would encourage you can get **smash number** and **smash power** upgrades from the shop to enhance the **ground smashing** ability. 
 
-### Weapons
+## Weapons
 
 Weapon | Power | Speed | Range | Number of shots | Trespassing
-----------|---------|--------|---------|---------|----------
+----------|---------|--------|---------|-------------------|----------
 Defogun|  2            |              1 |              2 |               1 | No
-Sinegun  |  5              | 1             |             2 |                 1 |Yes
-Fireball   |  8              | 3             |             4 |                 1 |No
+Sinegun  |  2              | 1             |             2 |                 1 |Yes
+Fireball   |  6              | 3             |             4 |                 1 |No
 Triplasma   |  3              | 3             |             2 |                 3 |No
 Sacred Punch   |  6              | 2             |             1 |                 2 |Yes
 
-### Shop prices
+## Shop prices
 
 Item | Price | Details
 ------|------|--------
-Defogun | 1 | Starter weapon
 Sinegun | 3 | Good utility weapon
-Fireball | 4 | Direct quick damage
-Triplasma | 6 | High spread
-Sacred punch | 8 | For great justice!
-InfiHP | 5 | Infinite HP for 30 seconds
-InfiFly | 5 | Infinite flight for 60 seconds
+Fireball | 6 | Direct quick damage
+Triplasma | 9 | High spread
+Sacred punch | 10 | For great justice!
+InfiHP | 9 | +1 HP tank (max. 12) and invencibility for 10 seconds
+InfiFLY | 8 | +1 FLY tank (max. 16) and infinite flight for 20 seconds
 MashNum | 6 | Permanent smashing ability explosion number +1
 MashPow | 6 | Permanent smashing ability explosion power +1
 
-### Enemies
+## Enemies
 
 Name                |  HP     | Movement          | Speed           | Attack        | Num bullets | Strike
----------------------|-------|------------------|--------------------|---------------|--------|---------
+---------------|-------|------------------|-------------|---------------|-------------|-------
 Zombie            |7           |  Ground                | Slow              | -                     | -                     | -
 Runner            |10         | Ground                 | Quick          | Horizontal shoot   | 1                           | 5
 Threehead    |20           | Ground                | Mid              | Horizontal  shoot | 3                           | 3
