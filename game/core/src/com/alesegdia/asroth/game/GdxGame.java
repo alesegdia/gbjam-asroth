@@ -179,12 +179,6 @@ public class GdxGame extends ApplicationAdapter {
 		*/
 		TextureRegion t = Gfx.hpTexture;
 
-		batch.draw(Gfx.hpHud, 0, 0, 0, 0,
-				Gfx.hpHud.getRegionWidth(), Gfx.hpHud.getRegionHeight(),
-				3,3, 0);
-		batch.draw(Gfx.wingsHud, 118*3, 0, 0, 0,
-				Gfx.wingsHud.getRegionWidth(), Gfx.wingsHud.getRegionHeight(),
-				3,3, 0);
 		batch.draw(Gfx.upHudTexture, 0, 390, 0, 0,
 				Gfx.upHudTexture.getRegionWidth(), Gfx.upHudTexture.getRegionHeight(),
 				3,3, 0);
@@ -192,17 +186,44 @@ public class GdxGame extends ApplicationAdapter {
 		float trh = t.getRegionHeight();
 		float s = 3;
 		Entity pl = gameWorld.getPlayer();
+		
+		/* HEALTH BAR ********************************************************/
 		HealthComponent hc = (HealthComponent) pl.getComponent(HealthComponent.class);
 		int numBars = (int) Math.floor(hc.currentHP * 8 / hc.maxHP);
+		
+		batch.draw(Gfx.hpHud.getTexture(),    0,    0, 14*3, 12*3, 0, 0, 14, 12, false, false);
+		int capacity = hc.maxHP/5;
+		numBars = hc.currentHP/5;
+		for( int i = 0; i < capacity; i++ ) {
+			float x = 14*3 + i * 3*3;
+			float y = 0;
+			float w = 3*3;
+			float h = 12 * 3;
+			batch.draw(Gfx.hpHud.getTexture(), x, y, w, h, 14, 0, 3, 12, false, false);			
+		}
+		batch.draw(Gfx.hpHud.getTexture(),    14*3 + (capacity) * 3 * 3,    0, 3*3, 12*3, 38, 0, 3, 12, false, false);
 		for( int i = 0; i < numBars; i++ ) {
 			batch.draw(Gfx.hpTexture, 14*3 + i * trw * s, 2*3, trw*s, trh*s);	
 		}
+
+		/* WINGS BAR *********************************************************/
 		WingsComponent wc = (WingsComponent) pl.getComponent(WingsComponent.class);
-		numBars = (int) Math.floor(wc.currentBoost * 8 / wc.maxCapacity);
-		for( int i = 0; i < numBars; i++ ) {
-			batch.draw(Gfx.hpTexture, 146*3 - i * trw * s, 2*3, -trw*s, trh*s);	
+		capacity = wc.maxCapacity / 5;
+		numBars = wc.currentBoost / 5;
+		batch.draw(Gfx.wingsHud.getTexture(), GameConfig.WINDOW_WIDTH - 14*3, 0, 14*3, 12*3, 28, 0, 14, 12, false, false);
+		for( int i = 0; i < capacity; i++ ) {
+			float x = GameConfig.WINDOW_WIDTH - 14*3 - (i+1) * 3 * 3;
+			float y = 0;
+			float w = 3*3;
+			float h = 12 * 3;
+			batch.draw(Gfx.wingsHud.getTexture(), x, y, w, h, 4, 0, 3, 12, false, false);
 		}
-		
+		batch.draw(Gfx.wingsHud.getTexture(), GameConfig.WINDOW_WIDTH - 14*3 - (capacity+1) * 3 * 3 - 3,    0, 4*3, 12*3, 0, 0, 4, 12, false, false);
+
+		for( int i = 0; i < numBars; i++ ) {
+			batch.draw(Gfx.hpTexture, 146*3 - i * trw * s, 2*3, -trw*s, trh*s);
+		}
+		/**********************************************************************/
 
 		renderWeaponSlot(batch, 70, 6);
 		
@@ -344,12 +365,15 @@ public class GdxGame extends ApplicationAdapter {
 				currentLevel++;
 				MashComponent mc1 = (MashComponent) gameWorld.getPlayer().getComponent(MashComponent.class);
 				WeaponComponent wc1 = (WeaponComponent) gameWorld.getPlayer().getComponent(WeaponComponent.class);
+				MoneyComponent moc1 = (MoneyComponent) gameWorld.getPlayer().getComponent(MoneyComponent.class);
 				GenLevel();
 				MashComponent mc2 = (MashComponent) gameWorld.getPlayer().getComponent(MashComponent.class);
 				WeaponComponent wc2 = (WeaponComponent) gameWorld.getPlayer().getComponent(WeaponComponent.class);
+				MoneyComponent moc2 = (MoneyComponent) gameWorld.getPlayer().getComponent(MoneyComponent.class);
 				mc2.number = mc1.number;
 				mc2.power = mc2.power;
 				wc2.weaponModel = wc1.weaponModel;
+				moc2.currency = moc1.currency;
 				CrossComponent cc = (CrossComponent) gameWorld.getPlayer().getComponent(CrossComponent.class);
 				cc.neededCrosses = this.currentLevel+1;
 				currentState = GameState.GAME;
