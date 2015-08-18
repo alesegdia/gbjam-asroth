@@ -53,6 +53,7 @@ public class GdxGame extends ApplicationAdapter {
 	private TiledMapRenderer renderer;
 	private OrthographicCamera camera;
 	private BitmapFont font;
+	private BitmapFont warningFont;
 	private SpriteBatch batch;
 	private SpriteBatch sprBatch;
 	BitmapFont customFont;
@@ -89,8 +90,12 @@ public class GdxGame extends ApplicationAdapter {
 		font = new BitmapFont(Gdx.files.internal("visitor.fnt"));
 		font.getData().setScale(0.5f);
 		
+		warningFont = new BitmapFont(Gdx.files.internal("visitor.fnt"));
+		warningFont.getData().setScale(2f);
+		
 		customFont.setColor(139f/255f, 172f/255f, 15f/255f, 1f);
 		font.setColor(139f/255f, 172f/255f, 15f/255f, 1f);
+		warningFont.setColor(15f/255f, 56f/255f,  15f/255f, 1f);
 		
 		batch = new SpriteBatch();
 
@@ -272,7 +277,20 @@ public class GdxGame extends ApplicationAdapter {
 
 		srenderer.end();
 		
+		warningTimer += Gdx.graphics.getDeltaTime();
+		
+		if( camera.position.y < 0 ) {
+			float sin = (float) Math.sin(warningTimer*20);
+			if( sin > 0 ) {
+				batch.begin();
+				warningFont.draw(batch, "WARNING!", 50, 300);
+				batch.end();
+			}
+		}
+		
 	}
+	
+	float warningTimer = 0;
 	
 	enum GameState {
 		MAIN, GAME, MIDLEVEL, WIN, LOSE
