@@ -15,14 +15,14 @@ public class GameConstants {
 	public static final int NEEDED_CROSSES = 1;
 	public static final float PLAYER_PAIN_COOLDOWN = 0.5f;
 
-	public static final float THREEHEADED_HP = 40;
-	public static final float RUNNER_HP = 30;
-	public static final float JUMPER_HP = 30;
+	public static final float THREEHEADED_HP = 20;
+	public static final float RUNNER_HP = 10;
+	public static final float JUMPER_HP = 15;
 	public static final float DEMON_HP = 80;
-	public static final float CHERUB_HP = 20;
-	public static final float ZOMBIE_HP = 10;
+	public static final float CHERUB_HP = 15;
+	public static final float ZOMBIE_HP = 7;
 	public static final float SUMMONER_HP = 60;
-	public static final float MASK_HP = 30;
+	public static final float MASK_HP = 15;
 	
 	public static final float INFINITE_HP_TIME = 30f;
 	public static final float INFINITE_WINGS_TIME = 60f;
