@@ -59,17 +59,17 @@ public class SummoningZoneSystem extends EntitySystem {
 			MobZone mz = sc.actingZone;
 			float sx, sy;
 			sy = mz.height+1;
-			int size = mz.xRange.x - mz.xRange.y + 1;
+			int size = Math.abs(mz.xRange.x - mz.xRange.y);
 			if( size < 4 ) {
 				sx = pc.position.x;
 			} else {
-				int r = RNG.rng.nextInt(0,size);
+				int r = size/2;//RNG.rng.nextInt(size,size);
 				sx = mz.xRange.x + r;
 			}
 			//sx *= 10 * GameConfig.PIXELS_TO_METERS;
 			//sy *= 10 * GameConfig.PIXELS_TO_METERS;
 			Entity c;
-			sx = mz.xRange.x + 2;
+			//sx = mz.xRange.x + 2;
 			if( i == 0 ) {
 				c = GameWorld.instance.makeZombie(sx, sy);
 				GameWorld.instance.adjustToTile(c, ((int)sx), ((int)sy));

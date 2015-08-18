@@ -203,7 +203,7 @@ public class GameWorld {
 			}
 			if( x != -1 ) break;
 		}
-		makePlayer(x*10, (y+2)*10);
+		makePlayer((x+1)*10, (y+2)*10);
 		makePortal(x*10, (y+1+0.5f)*10);
 		
 
