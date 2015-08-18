@@ -206,6 +206,7 @@ public class GameWorld {
 		}
 		makePortal(x*10, (y+1+0.5f)*10);
 		makePlayer((x+1)*10, (y+2)*10);
+		adjustToTile(this.player, x+2, y+1);
 		
 
 		AirPlatformExtractor ape = new AirPlatformExtractor();
@@ -542,7 +543,7 @@ public class GameWorld {
 		
 		DropPickupComponent dpc = (DropPickupComponent) e.addComponent(new DropPickupComponent());
 		dpc.probDrop = 1;
-		dpc.probs[0] = 0.25f;
+		dpc.probs[0] = 0.30f;
 		dpc.probs[1] = 0.50f;
 		dpc.probs[2] = 1f;
 
@@ -603,7 +604,7 @@ public class GameWorld {
 		sc.horizontal = true;
 		
 		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
-		pac.attackCooldown = 3f;
+		pac.attackCooldown = 6f;
 
 		AIAgentAttackPreparationComponent aipac = (AIAgentAttackPreparationComponent) e.addComponent(new AIAgentAttackPreparationComponent());
 		aipac.timeToPrepare = 0.5f;
@@ -632,7 +633,7 @@ public class GameWorld {
 		sc.bulletConfigs = bulletCfgs.runnerBEList;
 		
 		AIAgentPeriodicAutoAttackComponent pac = (AIAgentPeriodicAutoAttackComponent) e.addComponent(new AIAgentPeriodicAutoAttackComponent());
-		pac.attackCooldown = 3f;
+		pac.attackCooldown = 5f;
 
 		AIAgentAttackPreparationComponent aipac = (AIAgentAttackPreparationComponent) e.addComponent(new AIAgentAttackPreparationComponent());
 		aipac.timeToPrepare = 0.5f;
@@ -664,8 +665,8 @@ public class GameWorld {
 		sc.bulletConfigs = bulletCfgs.jumperBEList;
 		
 		StrikeAttackComponent sac = (StrikeAttackComponent) e.addComponent(new StrikeAttackComponent());
-		sac.strikeNum = 10;
-		sac.strikeCooldown = 0.07f;
+		sac.strikeNum = 5;
+		sac.strikeCooldown = 0.14f;
 		
 		addHealthDamage(e, GameConstants.JUMPER_HP, GameConstants.ENEMY_PAIN_COOLDOWN);
 		
