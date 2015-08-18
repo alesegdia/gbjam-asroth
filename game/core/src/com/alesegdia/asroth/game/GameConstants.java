@@ -9,6 +9,7 @@ public class GameConstants {
 	public static final float SPAWN_SUMMONER_PROB = 0.4f; // rest is shopkeeper
 	public static final float ENEMY_PAIN_COOLDOWN = 0.25f;
 	public static final float PLAYER_HEALTH = 40;
+	public static final float PLAYER_FLY = 35;
 	public static final float WINGS_HEAL_PERCENTAGE = 0.2f;
 	public static final float HEALTH_HEAL_PERCENTAGE = 0.2f;
 	public static final int STARTING_MONEY = 0;
@@ -23,6 +24,9 @@ public class GameConstants {
 	public static final float ZOMBIE_HP = 7;
 	public static final float SUMMONER_HP = 60;
 	public static final float MASK_HP = 15;
+	
+	public static final int HP_TANK_SIZE = 5;
+	public static final int FLY_TANK_SIZE = 5;
 	
 	public static final float INFINITE_HP_TIME = 30f;
 	public static final float INFINITE_WINGS_TIME = 60f;

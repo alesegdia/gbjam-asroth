@@ -208,8 +208,8 @@ public class GdxGame extends ApplicationAdapter {
 
 		/* WINGS BAR *********************************************************/
 		WingsComponent wc = (WingsComponent) pl.getComponent(WingsComponent.class);
-		capacity = wc.maxCapacity / 5;
-		numBars = wc.currentBoost / 5;
+		capacity = wc.maxCapacity / GameConstants.FLY_TANK_SIZE;
+		numBars = wc.currentBoost / GameConstants.FLY_TANK_SIZE;
 		batch.draw(Gfx.wingsHud.getTexture(), GameConfig.WINDOW_WIDTH - 14*3, 0, 14*3, 12*3, 28, 0, 14, 12, false, false);
 		for( int i = 0; i < capacity; i++ ) {
 			float x = GameConfig.WINDOW_WIDTH - 14*3 - (i+1) * 3 * 3;

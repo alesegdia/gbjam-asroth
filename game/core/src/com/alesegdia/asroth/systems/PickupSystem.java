@@ -37,7 +37,7 @@ public class PickupSystem extends EntitySystem {
 			case HEALTH:
 				HealthComponent hc = (HealthComponent) e.getComponent(HealthComponent.class);
 				if( hc.currentHP < hc.maxHP ) {
-					hc.currentHP += hc.maxHP * GameConstants.HEALTH_HEAL_PERCENTAGE;
+					hc.currentHP += GameConstants.HP_TANK_SIZE;
 					if( hc.currentHP > hc.maxHP ) {
 						hc.currentHP = hc.maxHP;
 					}
@@ -47,7 +47,7 @@ public class PickupSystem extends EntitySystem {
 			case WINGS:
 				WingsComponent wc = (WingsComponent) e.getComponent(WingsComponent.class);
 				if( wc.currentBoost < wc.maxCapacity ) {
-					wc.currentBoost += wc.maxCapacity * GameConstants.WINGS_HEAL_PERCENTAGE;
+					wc.currentBoost += GameConstants.FLY_TANK_SIZE;
 					if( wc.currentBoost > wc.maxCapacity ) {
 						wc.currentBoost = wc.maxCapacity;
 					}

@@ -370,6 +370,8 @@ public class GameWorld {
 		addHealthDamage(player, GameConstants.PLAYER_HEALTH, GameConstants.PLAYER_PAIN_COOLDOWN);
 		
 		WingsComponent wc = (WingsComponent) player.addComponent(new WingsComponent());
+		wc.maxCapacity = (int) GameConstants.PLAYER_FLY;
+		wc.currentBoost = wc.maxCapacity;
 		
 		ActiveComponent actc = (ActiveComponent) player.addComponent(new ActiveComponent());
 		actc.isActive = true;
