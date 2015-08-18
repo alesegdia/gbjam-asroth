@@ -3,12 +3,14 @@ package com.alesegdia.asroth.systems;
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
 import com.alesegdia.asroth.game.BulletConfigs;
+import com.alesegdia.asroth.game.GameConstants;
 import com.alesegdia.asroth.game.GameWorld;
 import com.alesegdia.asroth.game.ShopConfig;
 import com.alesegdia.platgen.util.RNG;
 
 import com.alesegdia.asroth.asset.Sfx;
 import com.alesegdia.asroth.components.BuyerComponent;
+import com.alesegdia.asroth.components.HealthComponent;
 import com.alesegdia.asroth.components.InfiniteFlyComponent;
 import com.alesegdia.asroth.components.InvincibilityComponent;
 import com.alesegdia.asroth.components.MashComponent;
@@ -16,6 +18,7 @@ import com.alesegdia.asroth.components.MoneyComponent;
 import com.alesegdia.asroth.components.ShopComponent;
 import com.alesegdia.asroth.components.VanishingComponent;
 import com.alesegdia.asroth.components.WeaponComponent;
+import com.alesegdia.asroth.components.WingsComponent;
 
 public class ShoppingSystem extends EntitySystem {
 
@@ -64,10 +67,20 @@ public class ShoppingSystem extends EntitySystem {
 					case WINGSCAPACITY:
 						InfiniteFlyComponent ifc = (InfiniteFlyComponent) e.getComponent(InfiniteFlyComponent.class);
 						ifc.timer = ifc.infiniteFlyTime;
+						WingsComponent wic = (WingsComponent) e.getComponent(WingsComponent.class);
+						wic.maxCapacity += GameConstants.FLY_TANK_SIZE;
+						if( wic.maxCapacity > GameConstants.PLAYER_MAX_UPGRADE_FLY ) {
+							wic.maxCapacity = (int) GameConstants.PLAYER_MAX_UPGRADE_FLY;
+						}
 						break;
 					case HEALTHCAPACITY:
 						InvincibilityComponent ic = (InvincibilityComponent) e.getComponent(InvincibilityComponent.class);
 						ic.timer = ic.invincibilityTime;
+						HealthComponent hc = (HealthComponent) e.getComponent(HealthComponent.class);
+						hc.maxHP += GameConstants.HP_TANK_SIZE;
+						if( hc.maxHP > GameConstants.PLAYER_MAX_UPGRADE_HEALTH ) {
+							hc.maxHP = (int) GameConstants.PLAYER_MAX_UPGRADE_HEALTH;
+						}
 						break;
 					case MASH_POWER:
 						MashComponent mac = (MashComponent) e.getComponent(MashComponent.class);

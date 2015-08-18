@@ -7,11 +7,11 @@ public class ShopConfig {
 	
 	static final float shopProbs[] = {
 	// 	FIREBALL, 	SINEGUN,	DEFAULTGUN,	TRIPLASMA,	SACREDPUNCH, 	WINGSINV,	HEALTHINV, 	MASHNUM, 	MASHPOW
-		0.15f, 		0.3f, 		0.45f, 		0.60f, 		0.75f, 			0.80f, 		0.85f, 		0.95f, 		1f
+		0.15f, 		0.3f, 		0f, 		0.45f, 		0.60f, 			0.7f, 		0.8f, 		0.9f, 		1f
 	};
-		
+
 	static final int shopPrices[] = {
-		6,			3,			1, 			9,			10, 			5,			5, 			6, 			6
+		6,			3,			1, 			9,			10, 			8,			9, 			6, 			6
 	};
 	
 	public static int getPriceFor(ShopProduct sp) {
@@ -48,13 +48,13 @@ public class ShopConfig {
 	}
 
 	public static String getNameFor(ShopProduct sp) {
-		if( sp == ShopProduct.FIREBALL ) return "Fireball";
-		else if( sp == ShopProduct.SINEGUN ) return "Sinegun";
+		if( sp == ShopProduct.FIREBALL ) return "FireB";
+		else if( sp == ShopProduct.SINEGUN ) return "SineG";
 		else if( sp == ShopProduct.DEFAULTGUN ) return "Defogun";
-		else if( sp == ShopProduct.TRIPLASMA ) return "Triplasma";
-		else if( sp == ShopProduct.SACREDPUNCH ) return "Sacredpunch";
-		else if( sp == ShopProduct.WINGSCAPACITY ) return "InfiniteFly10";
-		else if( sp == ShopProduct.HEALTHCAPACITY ) return "Awesome10";
+		else if( sp == ShopProduct.TRIPLASMA ) return "TriP";
+		else if( sp == ShopProduct.SACREDPUNCH ) return "SacredP";
+		else if( sp == ShopProduct.WINGSCAPACITY ) return "InfiFLY";
+		else if( sp == ShopProduct.HEALTHCAPACITY ) return "InfiHP";
 		else if( sp == ShopProduct.MASH_NUMBER ) return "MashN";
 		else if( sp == ShopProduct.MASH_POWER ) return "MashP";
 		else return "";
