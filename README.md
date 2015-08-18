@@ -52,7 +52,7 @@ MashPow | 6 | Permanent smashing ability explosion power +1
 ### Enemies
 
 Name                |  HP     | Movement          | Speed           | Attack        | Num bullets | Strike
----------------|-------|------------------|-------------|---------------|--------
+---------------------|-------|------------------|--------------------|---------------|--------|---------
 Zombie            |7           |  Ground                | Slow              | -                     | -                     | -
 Runner            |10         | Ground                 | Quick          | Horizontal shoot   | 1                           | 5
 Threehead    |20           | Ground                | Mid              | Horizontal  shoot | 3                           | 3
