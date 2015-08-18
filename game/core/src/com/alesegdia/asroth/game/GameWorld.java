@@ -59,6 +59,7 @@ import com.alesegdia.asroth.systems.DebugSystem;
 import com.alesegdia.asroth.systems.DrawingSystem;
 import com.alesegdia.asroth.systems.DropPickupSystem;
 import com.alesegdia.asroth.systems.EnhancedSystem;
+import com.alesegdia.asroth.systems.FallingSystem;
 import com.alesegdia.asroth.systems.AIAgentAnimationSystem;
 import com.alesegdia.asroth.systems.AIAgentFacePlayerAttackSystem;
 import com.alesegdia.asroth.systems.AIAgentFlyingSystem;
@@ -174,7 +175,7 @@ public class GameWorld {
 		engine.addSystem(new InfiniteFlySystem());
 		engine.addSystem(new EnhancedSystem());
 
-		engine.addSystem(new DebugSystem());
+		engine.addSystem(new FallingSystem());
 		
 		engine.addSystem(new DrawingSystem(batch), true);
 		engine.addSystem(new ShopItemDrawingSystem(batch), true);
@@ -203,8 +204,8 @@ public class GameWorld {
 			}
 			if( x != -1 ) break;
 		}
-		makePlayer((x+1)*10, (y+2)*10);
 		makePortal(x*10, (y+1+0.5f)*10);
+		makePlayer((x+1)*10, (y+2)*10);
 		
 
 		AirPlatformExtractor ape = new AirPlatformExtractor();
@@ -337,10 +338,10 @@ public class GameWorld {
 		MashComponent mac = (MashComponent) player.addComponent(new MashComponent());
 		
 		InvincibilityComponent ic = (InvincibilityComponent) player.addComponent(new InvincibilityComponent());
-		ic.invincibilityTime = 10f;
+		ic.invincibilityTime = GameConstants.INFINITE_HP_TIME;
 		
 		InfiniteFlyComponent ifc = (InfiniteFlyComponent) player.addComponent(new InfiniteFlyComponent());
-		ifc.infiniteFlyTime = 10f;
+		ifc.infiniteFlyTime = GameConstants.INFINITE_WINGS_TIME;
 		
 		GraphicsComponent gc = (GraphicsComponent) player.addComponent(new GraphicsComponent());
 		gc.drawElement = Gfx.playerSheet.get(0);
@@ -365,7 +366,7 @@ public class GameWorld {
 		ShootComponent sc = (ShootComponent) player.addComponent(new ShootComponent());
 		sc.bulletConfigs = bulletCfgs.playerDefaultBEList;
 		
-		addHealthDamage(player, 10f, 1f);
+		addHealthDamage(player, GameConstants.PLAYER_HEALTH, GameConstants.PLAYER_PAIN_COOLDOWN);
 		
 		WingsComponent wc = (WingsComponent) player.addComponent(new WingsComponent());
 		
@@ -377,11 +378,12 @@ public class GameWorld {
 		
 		PickupEffectComponent pec = (PickupEffectComponent) player.addComponent(new PickupEffectComponent());
 		MoneyComponent mc = (MoneyComponent) player.addComponent(new MoneyComponent());
+		mc.currency = GameConstants.STARTING_MONEY;
 		
 		BuyerComponent bc = (BuyerComponent) player.addComponent(new BuyerComponent());
 
 		CrossComponent cc = (CrossComponent) player.addComponent(new CrossComponent());
-		cc.neededCrosses = 5;
+		cc.neededCrosses = GameConstants.NEEDED_CROSSES;
 		
 		engine.addEntity(player);
 	}
@@ -540,8 +542,8 @@ public class GameWorld {
 		
 		DropPickupComponent dpc = (DropPickupComponent) e.addComponent(new DropPickupComponent());
 		dpc.probDrop = 1;
-		dpc.probs[0] = 0.33f;
-		dpc.probs[1] = 0.66f;
+		dpc.probs[0] = 0.25f;
+		dpc.probs[1] = 0.50f;
 		dpc.probs[2] = 1f;
 
 		return e;
@@ -611,7 +613,7 @@ public class GameWorld {
 		sac.strikeNum = 3;
 		sac.strikeCooldown = 0.8f;
 		
-		addHealthDamage(e, 10, 1);
+		addHealthDamage(e, GameConstants.THREEHEADED_HP, GameConstants.ENEMY_PAIN_COOLDOWN);
 		
 		return engine.addEntity(e);
 	}
@@ -640,7 +642,7 @@ public class GameWorld {
 		sac.strikeNum = 5;
 		sac.strikeCooldown = 0.1f;
 		
-		addHealthDamage(e, 8, 1);
+		addHealthDamage(e, GameConstants.RUNNER_HP, GameConstants.ENEMY_PAIN_COOLDOWN);
 		
 		return engine.addEntity(e);
 	}
@@ -665,7 +667,7 @@ public class GameWorld {
 		sac.strikeNum = 10;
 		sac.strikeCooldown = 0.07f;
 		
-		addHealthDamage(e, 5, 1);
+		addHealthDamage(e, GameConstants.JUMPER_HP, GameConstants.ENEMY_PAIN_COOLDOWN);
 		
 		return engine.addEntity(e);
 	}
@@ -702,7 +704,7 @@ public class GameWorld {
 		sac.strikeNum = 6;
 		sac.strikeCooldown = 0.1f;
 		
-		addHealthDamage(e, 30f, 1f);
+		addHealthDamage(e, GameConstants.DEMON_HP, GameConstants.ENEMY_PAIN_COOLDOWN);
 		
 		SummonNearComponent snc = (SummonNearComponent) e.addComponent(new SummonNearComponent());
 		snc.maxCreatures = 3;
@@ -728,7 +730,7 @@ public class GameWorld {
 		aifc.repulsionFactor = 0.9f - RNG.rng.nextFloat()/5f;
 		
 		this.addEnemyAnimator(e, Gfx.cherubAnim, Gfx.cherubAnim, Gfx.cherubAnim, Gfx.cherubAnim);
-		addHealthDamage(e, 10f, 1f);
+		addHealthDamage(e, GameConstants.CHERUB_HP, GameConstants.ENEMY_PAIN_COOLDOWN);
 		
 		return engine.addEntity(e);
 	}
@@ -737,7 +739,7 @@ public class GameWorld {
 		Entity e = makeEnemy(x,y,Gfx.zombieSheet.get(0), 0, 0, EnemyType.ZOMBIE);
 		letEnemyWalk( e, 6, 0, 1 );
 		addEnemyAnimator(e, Gfx.zombieWalk, Gfx.zombieStand, Gfx.zombieAttack);
-		addHealthDamage(e, 3, 1);
+		addHealthDamage(e, GameConstants.ZOMBIE_HP, GameConstants.ENEMY_PAIN_COOLDOWN);
 		return engine.addEntity(e);
 	}
 	
@@ -768,7 +770,7 @@ public class GameWorld {
 		aipac.timeToPrepare = 3;
 		aipac.preparingTimer = 3;
 		
-		addHealthDamage(e, 20, 1);
+		addHealthDamage(e, GameConstants.SUMMONER_HP, GameConstants.ENEMY_PAIN_COOLDOWN);
 		
 		DropPickupComponent dpc = (DropPickupComponent) e.getComponent(DropPickupComponent.class);
 		dpc.probs[0] = 0f;
@@ -806,7 +808,7 @@ public class GameWorld {
 		sac.strikeNum = 3;
 		sac.strikeCooldown = 0.5f;
 
-		addHealthDamage(e, 10f, 1f);
+		addHealthDamage(e, GameConstants.MASK_HP, GameConstants.ENEMY_PAIN_COOLDOWN);
 		
 		return engine.addEntity(e);
 	}

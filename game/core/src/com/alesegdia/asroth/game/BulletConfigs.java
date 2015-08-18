@@ -103,7 +103,7 @@ public class BulletConfigs {
 		playerFireballBM.speed = 20;
 		playerFireballBM.tr = Gfx.playerFireballTexture;
 		playerFireballBM.destructionTime = 1f;
-		playerFireballBM.power = 3;
+		playerFireballBM.power = 8;
 		createEntryInList( 0, 0, playerFireballBM, playerFireballBEList );
 		fireball.rate = 0.1f;
 		fireball.bulletEntries = playerFireballBEList;
@@ -112,9 +112,9 @@ public class BulletConfigs {
 		playerSacredpunchBM.h = 5;
 		playerSacredpunchBM.w = 5;
 		playerSacredpunchBM.isPlayer = true;
-		playerSacredpunchBM.power = 5;
+		playerSacredpunchBM.power = 6;
 		playerSacredpunchBM.speed = 15;
-		playerSacredpunchBM.destructionTime = 0.2f;
+		playerSacredpunchBM.destructionTime = 0.18f;
 		playerSacredpunchBM.trespassingEnabled = true;
 		playerSacredpunchBM.tr = Gfx.playerSacredpunchTexture;
 		createEntryInList( 0, -0.2f, playerSacredpunchBM, playerSacredpunchBEList);
@@ -126,8 +126,8 @@ public class BulletConfigs {
 		playerTriplasmaBM_T.h = 5;
 		playerTriplasmaBM_T.w = 5;
 		playerTriplasmaBM_T.isPlayer = true;
-		playerTriplasmaBM_T.power = 2;
-		playerTriplasmaBM_T.speed = 10;
+		playerTriplasmaBM_T.power = 3;
+		playerTriplasmaBM_T.speed = 20;
 		playerTriplasmaBM_T.destructionTime = 0.5f;
 		playerTriplasmaBM_T.tr = Gfx.playerTriplasmaTexture;
 		playerTriplasmaBM_T.dir = new Vector2(1, 0.3f);
@@ -136,8 +136,8 @@ public class BulletConfigs {
 		playerTriplasmaBM_M.h = 5;
 		playerTriplasmaBM_M.w = 5;
 		playerTriplasmaBM_M.isPlayer = true;
-		playerTriplasmaBM_M.power = 2;
-		playerTriplasmaBM_M.speed = 10;
+		playerTriplasmaBM_M.power = 3;
+		playerTriplasmaBM_M.speed = 20;
 		playerTriplasmaBM_M.destructionTime = 0.5f;
 		playerTriplasmaBM_M.tr = Gfx.playerTriplasmaTexture;
 		playerTriplasmaBM_M.horizontal = true;
@@ -145,8 +145,8 @@ public class BulletConfigs {
 		playerTriplasmaBM_B.h = 5;
 		playerTriplasmaBM_B.w = 5;
 		playerTriplasmaBM_B.isPlayer = true;
-		playerTriplasmaBM_B.power = 2;
-		playerTriplasmaBM_B.speed = 10;
+		playerTriplasmaBM_B.power = 3;
+		playerTriplasmaBM_B.speed = 20;
 		playerTriplasmaBM_B.destructionTime = 0.5f;
 		playerTriplasmaBM_B.tr = Gfx.playerTriplasmaTexture;
 		playerTriplasmaBM_B.dir = new Vector2(1, -0.3f);
@@ -159,12 +159,13 @@ public class BulletConfigs {
 		playerSinegunBM.h = 5;
 		playerSinegunBM.w = 5;
 		playerSinegunBM.isPlayer = true;
-		playerSinegunBM.power = 1;
+		playerSinegunBM.power = 5;
 		playerSinegunBM.speed = 10;
 		playerSinegunBM.destructionTime = 1f;
 		playerSinegunBM.tr = Gfx.playerSinegunTexture;
 		playerSinegunBM.horizontal = true;
 		playerSinegunBM.sinegun = true;
+		playerSinegunBM.trespassingEnabled = true;
 		createEntryInList( 0, 0, playerSinegunBM, playerSinegunBEList);
 		sineGun.rate = 0.05f;
 		sineGun.bulletEntries = playerSinegunBEList;

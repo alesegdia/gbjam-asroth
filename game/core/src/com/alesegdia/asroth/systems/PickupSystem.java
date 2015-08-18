@@ -2,6 +2,7 @@ package com.alesegdia.asroth.systems;
 
 import com.alesegdia.asroth.ecs.Entity;
 import com.alesegdia.asroth.ecs.EntitySystem;
+import com.alesegdia.asroth.game.GameConstants;
 import com.alesegdia.asroth.components.PickupEffectComponent;
 import com.alesegdia.asroth.components.PickupItemComponent;
 import com.alesegdia.asroth.components.PickupItemComponent.PickupType;
@@ -36,14 +37,14 @@ public class PickupSystem extends EntitySystem {
 			case HEALTH:
 				HealthComponent hc = (HealthComponent) e.getComponent(HealthComponent.class);
 				if( hc.currentHP < hc.maxHP ) {
-					hc.currentHP++;
+					hc.currentHP += hc.maxHP * GameConstants.HEALTH_HEAL_PERCENTAGE;
 					wasPicked = true;
 				}
 				break;
 			case WINGS:
 				WingsComponent wc = (WingsComponent) e.getComponent(WingsComponent.class);
 				if( wc.currentBoost < wc.maxCapacity ) {
-					wc.currentBoost++;
+					wc.currentBoost += wc.maxCapacity * GameConstants.WINGS_HEAL_PERCENTAGE;
 					wasPicked = true;
 				}
 				break;

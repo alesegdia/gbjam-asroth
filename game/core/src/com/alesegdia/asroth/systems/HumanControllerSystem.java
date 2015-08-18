@@ -147,6 +147,7 @@ public class HumanControllerSystem extends EntitySystem {
 			wep.weaponModel = BulletConfigs.sineGun;
 		}
 		*/
+
 		
 		if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 			if( phc.grounded ) {

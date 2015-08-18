@@ -11,7 +11,7 @@ public class ShopConfig {
 	};
 		
 	static final int shopPrices[] = {
-		5,			5,			1, 			7,			10, 			12,			15, 		9, 			9
+		5,			3,			1, 			7,			10, 			7,			7, 			9, 			8
 	};
 	
 	public static int getPriceFor(ShopProduct sp) {
@@ -42,8 +42,8 @@ public class ShopConfig {
 		else if( i == 3 ) return ShopProduct.TRIPLASMA;
 		else if( i == 4 ) return ShopProduct.SACREDPUNCH;
 		else if( i == 5 ) return ShopProduct.WINGSCAPACITY;
-		else if( i == 5 ) return ShopProduct.HEALTHCAPACITY;
-		else if( i == 5 ) return ShopProduct.MASH_NUMBER;
+		else if( i == 6 ) return ShopProduct.HEALTHCAPACITY;
+		else if( i == 7 ) return ShopProduct.MASH_NUMBER;
 		else return ShopProduct.MASH_POWER;		
 	}
 

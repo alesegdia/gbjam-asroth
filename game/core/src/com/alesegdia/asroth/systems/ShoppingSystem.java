@@ -7,8 +7,6 @@ import com.alesegdia.asroth.game.GameWorld;
 import com.alesegdia.asroth.game.ShopConfig;
 import com.alesegdia.platgen.util.RNG;
 
-import sun.io.ByteToCharDBCS_ASCII;
-
 import com.alesegdia.asroth.asset.Sfx;
 import com.alesegdia.asroth.components.BuyerComponent;
 import com.alesegdia.asroth.components.InfiniteFlyComponent;

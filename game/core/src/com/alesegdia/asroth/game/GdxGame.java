@@ -350,6 +350,8 @@ public class GdxGame extends ApplicationAdapter {
 				mc2.number = mc1.number;
 				mc2.power = mc2.power;
 				wc2.weaponModel = wc1.weaponModel;
+				CrossComponent cc = (CrossComponent) gameWorld.getPlayer().getComponent(CrossComponent.class);
+				cc.neededCrosses = this.currentLevel+1;
 				currentState = GameState.GAME;
 			}
 			Gdx.gl.glClearColor(15f / 255f, 56f / 255f, 15f / 255f, 1f);
