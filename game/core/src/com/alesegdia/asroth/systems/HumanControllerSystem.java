@@ -208,6 +208,10 @@ public class HumanControllerSystem extends EntitySystem {
 		
 		plc.isPressingDown = Gdx.input.isKeyPressed(Input.Keys.DOWN);
 		
+		if( plc.dashingWall ) {
+			ac.currentAnim = Gfx.playerWall;
+		}
+		
 		if( Gdx.input.isKeyJustPressed(Input.Keys.M) ) {
 			plc.minimapEnabled = !plc.minimapEnabled;
 		}
