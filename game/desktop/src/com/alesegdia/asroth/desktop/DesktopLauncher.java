@@ -10,6 +10,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = GameConfig.WINDOW_WIDTH;
 		config.height = GameConfig.WINDOW_HEIGHT;
+		config.title = "Asroth, The Demon Crusher";
 		new LwjglApplication(new GdxGame(), config);
 	}
 }
